@@ -125,6 +125,22 @@ function sanphamDH(msp,sl,thanhtien){
 	this.soluong=sl;
 	this.thanhtien=thanhtien;
 }
+function onLoad() {
+	var loadingConext = document.createElement("div");
+	loadingConext.className = 'modal';
+	loadingConext.id = 'ld';
+	loadingConext.innerHTML = '<div id="loading"></div>';
+	loadingConext.style.display = 'block';
+	$("body").append(loadingConext);
+	var $loading = $('#ld').hide();
+	$(document)
+		.ajaxStart(function () {
+			$loading.show();
+		})
+		.ajaxStop(function () {
+			$loading.fadeOut(1000);
+		});
+}
 //-------------------------------------------------------------code function here-------------------------------------------------------------------//
 function isLogin(errorCode){
 	if(Number(errorCode)==0) alert('Mật khẩu không hợp lệ');
