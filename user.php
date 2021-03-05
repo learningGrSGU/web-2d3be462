@@ -12,6 +12,20 @@
 <script src="javascript/moment-with-locales.js"></script>
 <script>
 window.addEventListener('load',function(){
+    var loadingConext = document.createElement("div");
+    loadingConext.className = 'modal';
+    loadingConext.id = 'ld';
+    loadingConext.innerHTML = '<div id="loading"></div>';
+    loadingConext.style.display = 'block';
+    $("body").append(loadingConext);
+    var $loading = $('#ld').hide();
+    $(document)
+        .ajaxStart(function () {
+            $loading.show();
+        })
+        .ajaxStop(function () {
+            $loading.hide();
+        });
     isLogin(<?php include 'php/xuly.php'; isLogin(); ?>)
 	user();
 	Home();

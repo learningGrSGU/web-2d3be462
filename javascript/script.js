@@ -61,7 +61,7 @@ function update(sp, toDo){
 		data:{sp:sp},
 		success: function(result){
 		console.log(result);
-		if(result==1) alert('Sửa thành công');
+		if(Number(result)==1) alert('Sửa thành công');
 		else alert('Sản phẩm đã tồn tại! '+result);
 		}
 	});
@@ -152,7 +152,7 @@ function Home(){
 					var sp="";
 					for(var i=0;i<result.length;i++){
 						var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result[i]['Giá cả']);
-						sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["Hình ảnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["Tên điện thoại"])+'</span><button style="text-align:center;width:100%;color:red;">'+curr+'</button></div>';		
+						sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["Hình ảnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["Tên điện thoại"])+'</span><button style="text-align:center;width:100%;color:#ff0000;">'+curr+'</button></div>';
 					}
 					document.getElementById("sp").innerHTML=sp;
 				} else {
@@ -900,24 +900,38 @@ function xlDh(pNum){
 	}
 }
 function thanhToan(){
-	if(getCookie('id')==null) {alert("vui lòng đăng nhập để tiếp tục");}
-	else {
-		var sanPhamDH=JSON.parse(localStorage.getItem("sanPhamDH"));
-		$.ajax({
-			url: 'php/xuly.php?action=donhang',
-			type: 'POST',
-			async: false,
-			data: {DH:JSON.stringify(sanPhamDH),date:new moment(new Date()).format('YYYY-MM-DD HH:mm:ss')},
-			success: function(result){
-				if(result==1) {
-					localStorage.removeItem("sanPhamDH");
-					Cart();
-					alert('Thanh toán thành công');
-				}
-				else alert('Giao dịch thất bại! '+result);
+	var url = 'php/xuly.php?action=isLogin&checkuser=0';
+	$.ajax({
+		url: url,
+		async: false,
+		success: function(answer) {
+			switch (Number(answer)) {
+				case 1:
+					var sanPhamDH = JSON.parse(localStorage.getItem("sanPhamDH"));
+					$.ajax({
+						url: 'php/xuly.php?action=donhang',
+						type: 'POST',
+						async: false,
+						data: {
+							DH: JSON.stringify(sanPhamDH),
+							date: new moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+						},
+						success: function (result) {
+							if (Number(result) == 1) {
+								localStorage.removeItem("sanPhamDH");
+								Cart();
+								alert('Thanh toán thành công');
+							} else alert('Giao dịch thất bại! ' + result);
+						}
+					});
+				break;
+				case -1:
+					alert('Vui lòng đăng nhập để thanh toán!');
+				break;
+				default: break;
 			}
-		});
-	}
+		}
+	});
 }
 function delAll(){
 	localStorage.removeItem("sanPhamDH");
@@ -1145,7 +1159,7 @@ function checkUser(){
 		type: "POST",
 		data: {username: JSON.stringify(form.user.value)},
 		success: function(result){
-			if(result==1) $(".Valid")[1].innerHTML="Tên đăng nhập đã tồn tại";
+			if(Number(result)==1) $(".Valid")[1].innerHTML="Tên đăng nhập đã tồn tại";
 			else {
 				if($(".Valid")[1].innerHTML=="Tên đăng nhập đã tồn tại") $(".Valid")[1].innerHTML="";
 			}

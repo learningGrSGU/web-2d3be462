@@ -65,6 +65,9 @@ if(isset($_GET['action'])){
 		case "checkUser":
 			checkUser();
 			break;
+		case "isLogin":
+			isLogin();
+			break;
 		case "logout": 
 			logout();
 			break;
@@ -329,9 +332,9 @@ function TKDH(){
 	else echo -1;
 }
 function numPagelsgd($lsgd1Page){
-	if(isset($_GET['LSGD'])&&isset($_GET['pageActive'])&&isset($_COOKIE['id'])){
+	if(isset($_GET['LSGD'])&&isset($_GET['pageActive'])&&isset($_SESSION['id'])){
 		include_once 'DBConnect.php';
-		$makh = replace_regex($_COOKIE['id']);
+		$makh = replace_regex($_SESSION['id']);
 		$sqlNum="SELECT COUNT(`Mã đơn hàng`) FROM `đơn hàng` where `Mã người dùng`='$makh'";
 		$num = DBconnect::getInstance()->execSQL($sqlNum);
 		$numPage = ceil($num[0][0]/$lsgd1Page);	
@@ -340,9 +343,9 @@ function numPagelsgd($lsgd1Page){
 	else return -1;
 }
 function lsgd($lsgd1Page){
-	if(isset($_GET['LSGD'])&&isset($_GET['pageActive'])&&isset($_COOKIE['id'])) {
+	if(isset($_GET['LSGD'])&&isset($_GET['pageActive'])&&isset($_SESSION['id'])) {
 		include_once 'DBConnect.php';
-		$makh = replace_regex($_COOKIE['id']);
+		$makh = replace_regex($_SESSION['id']);
 		$limits = DBconnect::getInstance()->execSQL("select count(ctdh.`Mã đơn hàng`) count from `chi tiết đơn hàng` ctdh join `đơn hàng` dh on dh.`Mã đơn hàng`=ctdh.`Mã đơn hàng` where dh.`Mã người dùng`='$makh' group by ctdh.`Mã đơn hàng` limit ".($_GET['pageActive']-1)*$lsgd1Page.",$lsgd1Page");
 		$limit=0;
 		if($limits!=0) for($i=0;$i<count($limits);$i++) $limit+=$limits[$i]['count'];
@@ -469,13 +472,13 @@ function numPageDH($DH1Page){
 	else return -1;
 }
 function donhang(){
-	if(isset($_POST['DH'])&&isset($_POST['date'])&&isset($_COOKIE['id'])){
+	if(isset($_POST['DH'])&&isset($_POST['date'])&&isset($_SESSION['id'])){
+		include_once 'DBConnect.php';
 		$DH = json_decode($_POST['DH'],true);
-		$maKH = replace_regex($_COOKIE['id']);
+		$maKH = replace_regex($_SESSION['id']);
 		$date = $_POST['date'];
 		$tongtien = 0;
 		$sql2='insert into `chi tiết đơn hàng`(`Mã đơn hàng`, `Mã sản phẩm`, `Số lượng`, `Tổng tiền`, `tình trạng đơn hàng`) values';
-		include_once 'DBConnect.php';
 		$maDH=DBconnect::getInstance()->execSQL("select max(`Mã đơn hàng`) from `đơn hàng`");
 		$insMaDH=(int)$maDH[0][0] + 1;
 		for($i=0;$i<count($DH);$i++){
@@ -507,7 +510,7 @@ function searchSP(){
 	}	
 }
 function logout(){
-	session_unset();
+	session_destroy();
 }
 function isLogin(){
 	include_once 'DBConnect.php';
@@ -515,8 +518,9 @@ function isLogin(){
 		$sql = "select `Mật khẩu` from user where `Tên đăng nhập`='".replace_regex($_SESSION['user'])."'";
 		$pass = DBconnect::getInstance()->execSQL($sql);
 		if($pass[0]['Mật khẩu']===$_SESSION['pass']) {
-			if ($_SESSION['user'] === "admin" && $_SERVER['PHP_SELF'] != '/nhom3/admin.php') header('location:/nhom3/admin.php');
-			if ($_SESSION['user'] !== "admin" && $_SERVER['PHP_SELF'] != '/nhom3/user.php') header('location:/nhom3/user.php');
+			if(isset($_GET['checkuser'])) echo 1;
+			else if ($_SESSION['user'] === "admin" && $_SERVER['PHP_SELF'] != '/nhom3/admin.php') header('location:/nhom3/admin.php');
+			else if ($_SESSION['user'] !== "admin" && $_SERVER['PHP_SELF'] != '/nhom3/user.php') header('location:/nhom3/user.php');
 		} else {
 			if($_SERVER['PHP_SELF']!='/nhom3/index.php') {
 				echo 0;
@@ -525,7 +529,8 @@ function isLogin(){
 		}
 	}
 	if(!(isset($_SESSION['name'])&&isset($_SESSION['user'])&&isset($_SESSION['pass']))&&$_SERVER['PHP_SELF']!='/nhom3/index.php') {
-		header('location:/nhom3/index.php');
+		if(isset($_GET['checkuser'])) echo -1;
+		else header('location:/nhom3/index.php');
 	}
 }
 function checkUser(){
@@ -547,6 +552,7 @@ function xulyDK(){
 			$sql="insert into user values ('$insMaKH','".replace_regex($_POST['user'])."','$cryptedPass','".replace_regex($_POST['ht'])."','".replace_regex($_POST['address'])."','".$_POST['sdt']."','".replace_regex($_POST['email'])."',2,1)";
 			if(DBconnect::getInstance()->execUpdate($sql)) {
 				if(!isset($_GET['admin'])){
+					$_SESSION['id']=$insMaKH;
 					$_SESSION['name']=$_POST['ht'];
 					$_SESSION['user']=$_POST['user'];
 					$_SESSION['pass']=$cryptedPass;
@@ -565,6 +571,7 @@ function xuLyDN(){
 			$user = DBconnect::getInstance()->execSQL($sql);
 			if(password_verify($_POST['pass'],$user[0]['Mật khẩu'])){
 				if($user[0]['Mở/Khoá']==1) {
+					$_SESSION['id']=$user[0]['Mã người dùng'];
 					$_SESSION['name']=$user[0]['Tên'];
 					$_SESSION['user']=$_POST['user'];
 					$_SESSION['pass']=$user[0]['Mật khẩu'];
