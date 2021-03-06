@@ -1,4 +1,36 @@
-﻿function exportExcel(title, Headers, Data, filename, sheetname){
+﻿function customDialog(msg, btnMsgs, icons, functionCalls){
+	let dialog = document.createElement('div');
+	dialog.innerHTML = msg;
+	let Default = "Tôi hiểu";
+	let buttons = [];
+	if(btnMsgs==null) {
+		btnMsgs = Default;
+		buttons =
+			[{
+				text: btnMsgs,
+				icon: "ui-icon-check",
+				click: function() {
+					$( this ).dialog( "close" );
+				}
+			}]; }
+	else {
+		for(let i=0; i<btnMsgs.length; i++) {
+			buttons.push({
+				text: btnMsgs[i],
+				icon: icons[i],
+				click: function(){
+					functionCalls[i]()
+				}
+			});
+		}
+	}
+	$(dialog).dialog({
+		position: {my: "center bottom", at: "center center", of: window},
+		dialogClass: "no-close",
+		buttons: buttons
+	});
+}
+function exportExcel(title, Headers, Data, filename, sheetname){
 	objectExporter({
 		exportable: Data,
 		headers: Headers,
@@ -936,13 +968,13 @@ function thanhToan(){
 							if (Number(result) == 1) {
 								localStorage.removeItem("sanPhamDH");
 								Cart();
-								alert('Thanh toán thành công');
-							} else alert('Giao dịch thất bại! ' + result);
+								customDialog('Thanh toán thành công');
+							} else customDialog('Giao dịch thất bại! ' + result);
 						}
 					});
 				break;
 				case -1:
-					alert('Vui lòng đăng nhập để thanh toán!');
+					customDialog('Vui lòng đăng nhập để thanh toán!');
 				break;
 				default: break;
 			}
