@@ -1,0 +1,14 @@
+{
+    "name": "pttk/web",
+    "description": "web using php",
+    "authors": [
+        {
+            "name": "webpttk",
+            "email": "webpttk@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "laminas/laminas-server": "3.0.x-dev"
+    }
+}

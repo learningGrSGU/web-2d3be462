@@ -519,18 +519,18 @@ function isLogin(){
 		$pass = DBconnect::getInstance()->execSQL($sql);
 		if($pass[0]['Mật khẩu']===$_SESSION['pass']) {
 			if(isset($_GET['checkuser'])) echo 1;
-			else if ($_SESSION['user'] === "admin" && $_SERVER['PHP_SELF'] != '/nhom3/admin.php') header('location:/nhom3/admin.php');
-			else if ($_SESSION['user'] !== "admin" && $_SERVER['PHP_SELF'] != '/nhom3/user.php') header('location:/nhom3/user.php');
+			else if ($_SESSION['user'] === "admin" && $_SERVER['PHP_SELF'] != '/pttk/admin.php') header('location:/pttk/admin.php');
+			else if ($_SESSION['user'] !== "admin" && $_SERVER['PHP_SELF'] != '/pttk/user.php') header('location:/pttk/user.php');
 		} else {
-			if($_SERVER['PHP_SELF']!='/nhom3/index.php') {
+			if($_SERVER['PHP_SELF']!='/pttk/index.php') {
 				echo 0;
-				header('location:/nhom3/index.php');
+				header('location:/pttk/index.php');
 			}
 		}
 	}
-	if(!(isset($_SESSION['name'])&&isset($_SESSION['user'])&&isset($_SESSION['pass']))&&$_SERVER['PHP_SELF']!='/nhom3/index.php') {
+	if(!(isset($_SESSION['name'])&&isset($_SESSION['user'])&&isset($_SESSION['pass']))&&$_SERVER['PHP_SELF']!='/pttk/index.php') {
 		if(isset($_GET['checkuser'])) echo -1;
-		else header('location:/nhom3/index.php');
+		else header('location:/pttk/index.php');
 	}
 }
 function checkUser(){
@@ -557,8 +557,8 @@ function xulyDK(){
 					$_SESSION['user']=$_POST['user'];
 					$_SESSION['pass']=$cryptedPass;
 					setcookie(session_name(),session_id(),time()+172800,'/');
-				header('location:/nhom3/user.php');
-				} else header('location:/nhom3/admin.php?qltk');
+				header('location:/pttk/user.php');
+				} else header('location:/pttk/admin.php?qltk');
 			}	
 		}
 	}
@@ -578,9 +578,9 @@ function xuLyDN(){
 					if($_POST['remember']==true){
 						setcookie(session_name(),session_id(),time()+172800,'/');
 					}
-					header('location:/nhom3/index.php');
+					header('location:/pttk/index.php');
 				}
-				else header('location:/nhom3/index.php?errorLock=true');
+				else header('location:/pttk/index.php?errorLock=true');
 			}
 			else {
 				if(!isset($_SESSION['error'])) $_SESSION['error'] = 0;
@@ -589,7 +589,7 @@ function xuLyDN(){
 					DBconnect::getInstance()->execUpdate("update user set `Mở/Khoá`=0 where `Tên đăng nhập`='".replace_regex($_POST['user'])."'");
 					session_unset();
 				}
-				header('location:/nhom3/index.php?error=true&user='.$_POST['user']);
+				header('location:/pttk/index.php?error=true&user='.$_POST['user']);
 			}
 		}
 	}

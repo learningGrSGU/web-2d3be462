@@ -1131,7 +1131,7 @@ function logout(){
 		async:false,
 		type: 'POST',
 		success: function(){
-			location.assign('/nhom3/index.php');
+			location.assign('/pttk/index.php');
 		}
 	});	
 }
