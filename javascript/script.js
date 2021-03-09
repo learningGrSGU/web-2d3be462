@@ -1,5 +1,6 @@
 ﻿function customDialog(msg, btnMsgs, icons, functionCalls){
 	let dialog = document.createElement('div');
+	dialog.id = "dialog";
 	dialog.innerHTML = msg;
 	let Default = "Tôi hiểu";
 	let buttons = [];
