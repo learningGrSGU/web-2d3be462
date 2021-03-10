@@ -14,7 +14,7 @@
 <script src="javascript/jquery-3.5.1.js"></script>
 <script src="javascript/moment-with-locales.js"></script>
 <script>
-    $.noConflict();
+    let jq351 = $.noConflict(true);
 window.addEventListener('load',function(){
     onLoad();
     isLogin(<?php include 'php/xuly.php'; isLogin(); ?>)

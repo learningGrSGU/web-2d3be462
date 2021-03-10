@@ -68,7 +68,7 @@ function getCookie(cname) {
 function upload(file, masp, toDo){
 	var form = new FormData();
 	form.append('fileToUpload',file);
-	$.ajax({
+	jq351.ajax({
  	 	url: 'php/xuly.php?action=uploadImg&masp='+masp+'&do='+toDo,
   		type: 'POST',
 		async: false,
@@ -87,7 +87,7 @@ function upload(file, masp, toDo){
  		});
 }
 function update(sp, toDo){
-	$.ajax({
+	jq351.ajax({
 		url: 'php/xuly.php?action=updateSP&do='+toDo,
 		type: 'POST',
 		async: false,
@@ -111,20 +111,20 @@ function escapeHtml(text) {
   return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 function check_num(number){
-	var check=/^\d+$/g;
+	var check=/^\d+jq351/g;
 	return check.test(number);
 }
 function checkEmail(email){
-	var check=/^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/i;
+	var check=/^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}jq351/i;
 	return check.test(email);
 }
 function checkNumber(number){
-	var check=/^(09|03|07|08|05)([0-9]{8})$/g;
+	var check=/^(09|03|07|08|05)([0-9]{8})jq351/g;
 	return check.test(number);
 }
 function vanceOption(id, func){
-	$(function(){
-		$.ajax({
+	jq351(function(){
+		jq351.ajax({
 		url: 'php/xuly.php?action=getTL',
 		async: false,
 		success: function(results){
@@ -138,7 +138,7 @@ function vanceOption(id, func){
 			var span = document.createElement('span');
 			span.innerHTML = 'Chọn Thương Hiệu: '+s;
 			span.style='color:white;background-color:black;';
-			$(id).append(span);
+			jq351(id).append(span);
 		}
 	});
 	var s='<select onchange=\''+func+'\'><option value="none"></option><option value="0-2tr">0 - 2 triệu</option><option value="2-4tr">2 - 4 triệu</option><option value="4-6tr">4 - 6 triệu</option><option value="6-8tr">6 - 8 triệu</option><option value="8-12tr">8 - 12 triệu</option><option value="12-20tr">12 - 20 triệu</option><option value=">20tr">trên 20 triệu</option>';
@@ -146,7 +146,7 @@ function vanceOption(id, func){
 	span.style.marginLeft='5px';
 	span.innerHTML = 'Chọn Mức Giá: '+s;
 	span.style="color:white;background-color:black;";
-	$(id).append(span);
+	jq351(id).append(span);
 	});
 }
 function showErrorLogin(error){
@@ -164,9 +164,9 @@ function onLoad() {
 	loadingConext.id = 'ld';
 	loadingConext.innerHTML = '<div id="loading"></div>';
 	loadingConext.style.display = 'block';
-	$("body").append(loadingConext);
-	var $loading = $('#ld').hide();
-	$(document)
+	jq351("body").append(loadingConext);
+	var $loading = jq351('#ld').hide();
+	jq351(document)
 		.ajaxStart(function () {
 			$loading.show();
 		})
@@ -185,13 +185,13 @@ function Homead(){
 		var eDate = new moment(new Date()).format('YYYY-MM-DD');
 			var opt ='<div id="DHVance"></div><input id="startDate" type="date" onchange="onchangeTkDH(1)" value="'+sDate+'"><input id="endDate" type="date" onchange="onchangeTkDH(1)" value="'+eDate+'">';
 			document.getElementById("opt").innerHTML=opt;
-			$(function(){xlDhVance(1);});
+			jq351(function(){xlDhVance(1);});
 	}
 }
 function Home(){
 	var url = location.href.split('/');
 	if(url[url.length-1]=='index.php'||url[url.length-1]=='user.php'){
-		$.ajax({
+		jq351.ajax({
 			url: 'php/xuly.php?action=home',
 			success: function(results){
 				console.log(results);
@@ -217,7 +217,7 @@ function spmoi(pActive){
  	if(url[1]=='maymoi'){
 	var sDate = new moment(new Date()).subtract(20,'days').format('YYYY-MM-DD');
 	var eDate = new moment(new Date()).format('YYYY-MM-DD');
-		$.ajax({
+		jq351.ajax({
 			url: 'php/xuly.php?action=maymoi',
 			data: {sDate:sDate,eDate:eDate},
 			type: 'POST',
@@ -242,7 +242,7 @@ function spmoi(pActive){
 }
 function Search(pActive){	
 var url = 'php/xuly.php?action=searchVance';
-var data = escapeHtml($('#dataSearch').val());
+var data = escapeHtml(jq351('#dataSearch').val());
 if(data!=''){
 var brandOption = document.getElementById('vance').getElementsByTagName('select')[0].value;
 var priceOption = document.getElementById('vance').getElementsByTagName('select')[1].value;
@@ -277,7 +277,7 @@ var priceOption = document.getElementById('vance').getElementsByTagName('select'
 			break;
 		default: break;
 	}
-	$.ajax({
+	jq351.ajax({
 		url: url,
 		async: false,
 		data: {dataSearch:data,each:5,pActive:pActive},
@@ -292,23 +292,23 @@ var priceOption = document.getElementById('vance').getElementsByTagName('select'
 				var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result[i]['Giá cả']);
 				sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["Hình ảnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["Tên điện thoại"])+'</span><button style="text-align:center;width:100%;color:red;">'+curr+'</button></div>';		
 					}
-				$('#spSearch').html(sp);
+				jq351('#spSearch').html(sp);
 				page('tr',result[result.length-1],'Search',pActive);
 				}
 				else {
-					$('#spSearch').html('');
-					$('#tr').html('');
+					jq351('#spSearch').html('');
+					jq351('#tr').html('');
 				}
 			}
 		}
 	});
 	}else {
-		$('#spSearch').html('');
-		$('#tr').html('');
+		jq351('#spSearch').html('');
+		jq351('#tr').html('');
 	}
 }
 function del(x, pActive){
-	$.ajax({
+	jq351.ajax({
 		url: 'php/xuly.php?action=del',
 		data: {user: x},
 		type: 'POST',
@@ -321,7 +321,7 @@ function del(x, pActive){
 	qltk(pActive);
 }
 function Unlock_lock(x, l, pActive){
-	$.ajax({
+	jq351.ajax({
 		url: 'php/xuly.php?action=unlock_lock',
 		data: {user: x, do: l},
 		type: 'POST',
@@ -336,9 +336,9 @@ function Unlock_lock(x, l, pActive){
 function qltk(pActive){
 	var url = location.href.split('?');
  	if(url[1]=='qltk'){
-		$(function(){
-		$('#opt').html('<button class="themtk" onclick="document.getElementById(\'id02\').style.display=\'block\';">Thêm tài khoản mới</button>');
-		$.ajax({
+		jq351(function(){
+		jq351('#opt').html('<button class="themtk" onclick="document.getElementById(\'id02\').style.display=\'block\';">Thêm tài khoản mới</button>');
+		jq351.ajax({
 			url: 'php/xuly.php?action=qltk',
 			success: function(results){
 				console.log(results);
@@ -355,12 +355,12 @@ function qltk(pActive){
 					}
 					}
 					accs+='</div>';
-					$('#sp').html(accs);
+					jq351('#sp').html(accs);
 					page('trang',result[result.length-1],'qltk',pActive);
 				}
 				else {
-					$('#sp').html('Hiện chưa có tài khoản nào!');
-					$('#trang').html('');
+					jq351('#sp').html('Hiện chưa có tài khoản nào!');
+					jq351('#trang').html('');
 				}
 			}
 		});
@@ -373,7 +373,7 @@ function ok(x,pActive){
 	if(xacnhan=="admin") {
 		var check = false;
 		if(x['Tên điện thoại']!=input[1].value){
-		$.ajax({
+		jq351.ajax({
 			url: 'php/xuly.php?action=checkSP',
 			type: 'POST',
 			async: false,
@@ -425,7 +425,7 @@ function ok(x,pActive){
 }
 function delSp(x,pActive){
 	if(confirm("Bạn có chắc chắn muốn xóa?")) {
-	$.ajax({
+	jq351.ajax({
 			url: 'php/xuly.php?action=delSp',
 			type: 'POST',
 			async: false,
@@ -561,7 +561,7 @@ function showAddSp(){
 	});
 }
 function productList(pActive){
-	$(function(){
+	jq351(function(){
 	document.addEventListener('keydown',function(ev){
 		ev.preventDefault();
 		if(ev.ctrlKey && ev.altKey && ev.key === 'n'){
@@ -571,7 +571,7 @@ function productList(pActive){
 	var sDate = document.getElementById('startDate').value;
 	var eDate = document.getElementById('endDate').value;
 	var url = 'php/xuly.php?action=productList';
-	var data = escapeHtml($('#productSearch').val());
+	var data = escapeHtml(jq351('#productSearch').val());
 	if(data!='') url+='&dataSearch='+data;
 	var brandOption = document.getElementById('PDvance').getElementsByTagName('select')[0].value;
 	var priceOption = document.getElementById('PDvance').getElementsByTagName('select')[1].value;
@@ -607,7 +607,7 @@ function productList(pActive){
 		default: break;
 	}
 	console.log(url);
-		$.ajax({
+		jq351.ajax({
 			url: url,
 			type: 'POST',
 			async: false,
@@ -629,8 +629,8 @@ function productList(pActive){
 			var but=sanP.getElementsByTagName("button");
 			for(var t=0;t<but.length;t++) but[t].style.width="100%";
 					} else {
-						$('#sp').html('Không tìm thấy sản phẩm!');
-						$('#trang').html('');
+						jq351('#sp').html('Không tìm thấy sản phẩm!');
+						jq351('#trang').html('');
 					}
 				}
 			}
@@ -643,11 +643,11 @@ function product(){
 		var sDate = new moment(new Date()).subtract(1,'month').format('YYYY-MM-DD');
 		var eDate = new moment(new Date()).format('YYYY-MM-DD');
 		document.getElementById('opt').innerHTML='<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập mã sản phẩm hoặc tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="'+sDate+'"><input id="endDate" type="date" onchange="productList(1)" value="'+eDate+'"><button class="AProd" onclick="showAddSp();">Thêm sản phẩm</button>';
-		$(function(){productList(1);});
+		jq351(function(){productList(1);});
 	}
 }
 function onchangeTkDH(pActive){
-	$(function(){
+	jq351(function(){
 	var dh = '';
 	var tc = 0;
 	var sDate = document.getElementById('startDate').value;
@@ -687,7 +687,7 @@ function onchangeTkDH(pActive){
 			break;
 		default: break;
 	}
-	$.ajax({
+	jq351.ajax({
 			url: url,
 			type: 'POST',
 			async: false,
@@ -761,7 +761,7 @@ function tkDH(){
 		var eDate = new moment(new Date()).format('YYYY-MM-DD');
 		var opt ='<div id="DHvance"></div><input id="startDate" type="date" onchange="onchangeTkDH(1)" value="'+sDate+'"><input id="endDate" type="date" onchange="onchangeTkDH(1)" value="'+eDate+'">';
 		document.getElementById("opt").innerHTML=opt;
-		$(function(){onchangeTkDH(1);});
+		jq351(function(){onchangeTkDH(1);});
 	}
 }
 function LsGd(lsgdJSON,pActive,pNum){
@@ -800,7 +800,7 @@ function thanhToan(){
 	if(getCookie('user')==null&&getCookie('name')==null) {alert("vui lòng đăng nhập để tiếp tục");}
 	else {
 		var sanPhamDH=JSON.parse(localStorage.getItem("sanPhamDH"));
-		$.ajax({
+		jq351.ajax({
 			url: 'php/xuly.php?action=donhang',
 			type: 'POST',
 			async: false,
@@ -820,7 +820,7 @@ function xnDh(x,input, pActive){
 	var check;
 	if(input.checked==true) check=1;
 	else check=0; 
-	$.ajax({
+	jq351.ajax({
 		url: 'php/xuly.php?action=xnDH',
 		async: false,
 		type: 'POST',
@@ -839,7 +839,7 @@ function xnDh(x,input, pActive){
 }
 function huyDh(x, pActive){
 	if(confirm("Bạn có chắc chắn muốn xóa?")) {
-	$.ajax({
+	jq351.ajax({
 		url: 'php/xuly.php?action=xoaDH',
 		async: false,
 		type: 'POST',
@@ -855,7 +855,7 @@ function huyDh(x, pActive){
 	}
 }
 function xlDhVance(pActive){
-	$(function(){
+	jq351(function(){
 	var sDate = document.getElementById('startDate').value;
 	var eDate = document.getElementById('endDate').value;
 	var dh="",s="";
@@ -893,7 +893,7 @@ function xlDhVance(pActive){
 			break;
 		default: break;
 	}
-		$.ajax({
+		jq351.ajax({
 			url: url,
 			type: 'POST',
 			async: false,
@@ -944,20 +944,20 @@ function xlDh(pNum){
 			var eDate = new moment(new Date()).format('YYYY-MM-DD');
 			var opt ='<div id="DHVance"></div><input id="startDate" type="date" onchange="onchangeTkDH(1)" value="'+sDate+'"><input id="endDate" type="date" onchange="onchangeTkDH(1)" value="'+eDate+'">';
 			document.getElementById("opt").innerHTML=opt;
-			$(function(){xlDhVance(1);});
+			jq351(function(){xlDhVance(1);});
 		}
 	}
 }
 function thanhToan(){
 	var url = 'php/xuly.php?action=isLogin&checkuser=0';
-	$.ajax({
+	jq351.ajax({
 		url: url,
 		async: false,
 		success: function(answer) {
 			switch (Number(answer)) {
 				case 1:
 					var sanPhamDH = JSON.parse(localStorage.getItem("sanPhamDH"));
-					$.ajax({
+					jq351.ajax({
 						url: 'php/xuly.php?action=donhang',
 						type: 'POST',
 						async: false,
@@ -1010,7 +1010,7 @@ function checkValueC(i){
 		alert("vui lòng nhập vào đúng số");
 		input[0].value=1;
 	}
-	$.ajax({
+	jq351.ajax({
 		url: 'php/xuly.php?action=search',
 		async: false,
 		data: {masp:JSON.stringify(sanPhamDH[i].masp)},
@@ -1029,7 +1029,7 @@ function changeValue(i){
 	var masp = sanPhamDH[i].masp;
 	var input=document.getElementById("gh"+masp).getElementsByTagName("input");
 	var value=input[0].value;
-			$.ajax({
+			jq351.ajax({
 					url: 'php/xuly.php?action=search',
 					async: false,
 					data: {masp:JSON.stringify(sanPhamDH[i].masp)},
@@ -1063,7 +1063,7 @@ function Cart(){
 		var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
 		sp+='<div class="ghcover">';
 		for(var i=0;i<sanPhamDH.length;i++) {
-				$.ajax({
+				jq351.ajax({
 					url: 'php/xuly.php?action=search',
 					async: false,
 					data: {masp:JSON.stringify(sanPhamDH[i].masp)},
@@ -1127,7 +1127,7 @@ function checkValue(input){
 	}
 }
 function logout(){
-	$.ajax({
+	jq351.ajax({
 		url: 'php/xuly.php?action=logout',
 		async:false,
 		type: 'POST',
@@ -1203,14 +1203,14 @@ function checkValid(){
 }
 function checkUser(){
 	var form=document.register;
-	$.ajax({
+	jq351.ajax({
 		url: "php/xuly.php?action=checkUser",
 		type: "POST",
 		data: {username: JSON.stringify(form.user.value)},
 		success: function(result){
-			if(Number(result)==1) $(".Valid")[1].innerHTML="Tên đăng nhập đã tồn tại";
+			if(Number(result)==1) jq351(".Valid")[1].innerHTML="Tên đăng nhập đã tồn tại";
 			else {
-				if($(".Valid")[1].innerHTML=="Tên đăng nhập đã tồn tại") $(".Valid")[1].innerHTML="";
+				if(jq351(".Valid")[1].innerHTML=="Tên đăng nhập đã tồn tại") jq351(".Valid")[1].innerHTML="";
 			}
 		}
 	});		
