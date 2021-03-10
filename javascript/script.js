@@ -1,4 +1,5 @@
-﻿function customDialog(msg, btnMsgs, icons, functionCalls){
+﻿
+function customDialog(msg, btnMsgs, icons, functionCalls){
 	let dialog = document.createElement('div');
 	dialog.id = "dialog";
 	dialog.innerHTML = msg;
@@ -111,15 +112,15 @@ function escapeHtml(text) {
   return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 function check_num(number){
-	var check=/^\d+jq351/g;
+	var check=/^\d+$/g;
 	return check.test(number);
 }
 function checkEmail(email){
-	var check=/^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}jq351/i;
+	var check=/^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/i;
 	return check.test(email);
 }
 function checkNumber(number){
-	var check=/^(09|03|07|08|05)([0-9]{8})jq351/g;
+	var check=/^(09|03|07|08|05)([0-9]{8})$/g;
 	return check.test(number);
 }
 function vanceOption(id, func){

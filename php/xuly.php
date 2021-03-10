@@ -81,7 +81,7 @@ if(isset($_GET['action'])){
 	}
 }
 function test(){
-		echo $_SESSION['user'];	
+		echo $_SESSION['sql'];
 }
 function encrypt(){
 	$str="123456";
@@ -99,7 +99,7 @@ function uploadImg(){
 				$upload_file = ltrim($target_file,"./");
 				if(isset($_GET['masp'])) $masp = $_GET['masp'];
 				include_once 'DBConnect.php';
-				if($_GET['do']=='update') $sql = "update `chi tiết sản phẩm` set `Hình ảnh`='$upload_file' where `Mã sản phẩm`='$masp'";
+				if($_GET['do']=='update') $sql = "update `chitietsp` set `Hình ảnh`='$upload_file' where `maSP`='$masp'";
 				$update = DBconnect::getInstance()->execUpdate($sql);
 				if($update===true) echo 1;
 				else echo $update;
@@ -129,15 +129,14 @@ function removeMWSpace($String){
 }
 function home(){
 	include_once 'DBConnect.php';
-	$sql = "SELECT * FROM `sản phẩm` sp JOIN `chi tiết sản phẩm` ctsp ON sp.`Mã sản phẩm`=ctsp.`Mã sản phẩm` limit 0,10";
+	$sql = "SELECT * FROM `sanpham` sp JOIN `chitietsp` ctsp ON sp.`maSP`=ctsp.`maSP` limit 0,10";
 	$sp = DBconnect::getInstance()->execSQL($sql);
-	if($sp) echo json_encode($sp);
-	else echo $sql;
+	echo json_encode($sp);
 }
 function del(){
 	if(isset($_POST['user'])){
 		include_once 'DBConnect.php';
-	$sql = "delete from user where `Tên đăng nhập`='".replace_regex($_POST['user'])."' and `Tên đăng nhập`<>'admin'";
+	$sql = "delete from user where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
 	$update = DBconnect::getInstance()->execUpdate($sql);
 	if($update===true) echo 1;
 	else echo $update;
@@ -146,8 +145,8 @@ function del(){
 function unlock_lock(){
 	if(isset($_POST['user'])&&isset($_POST['do'])){
 		include_once 'DBConnect.php';
-	if($_POST['do']==1) $sql1 = "update user set `Mở/Khoá`=1 where `Tên đăng nhập`='".replace_regex($_POST['user'])."' and `Tên đăng nhập`<>'admin'";
-	else $sql2 = "update user set `Mở/Khoá`=0 where `Tên đăng nhập`='".replace_regex($_POST['user'])."' and `Tên đăng nhập`<>'admin'";
+	if($_POST['do']==1) $sql1 = "update user set `lock/unlock`=1 where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
+	else $sql2 = "update user set `lock/unlock`=0 where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
 	if(isset($sql1)) $update1 = DBconnect::getInstance()->execUpdate($sql1);
 	if(isset($sql2)) $update2 = DBconnect::getInstance()->execUpdate($sql2);
 		if(isset($update1)){
@@ -162,7 +161,7 @@ function unlock_lock(){
 }
 function qltk(){
 	include_once 'DBConnect.php';
-	$sql = "select * from user where `Tên đăng nhập`<>'admin'";
+	$sql = "select * from user where `TK`<>'admin'";
 	$user = DBconnect::getInstance()->execSQL($sql);
 	if($user) {
 		$numpage = ceil(count($user)/10);
@@ -176,7 +175,7 @@ function spmoi(){
 	$sDate = $_POST['sDate'];
 	$eDate = $_POST['eDate'];
 	include_once 'DBConnect.php';
-	$sql = "SELECT * FROM `sản phẩm` sp JOIN `chi tiết sản phẩm` ctsp ON sp.`Mã sản phẩm`=ctsp.`Mã sản phẩm` where ctsp.`Ngày nhập hàng` between '$sDate' and '$eDate 23:59:59.9999'";
+	$sql = "SELECT * FROM `sanpham` sp JOIN `chitietsp` ctsp ON sp.`maSP`=ctsp.`maSP` where ctsp.`Ngày nhập hàng` between '$sDate' and '$eDate 23:59:59.9999'";
 	$sp = DBconnect::getInstance()->execSQL($sql);
 	if($sp) echo json_encode($sp);
 	else echo $sql;
@@ -187,9 +186,9 @@ function searchVance(){
 		include_once 'DBConnect.php';
 		$toSearch = removeMWSpace($_POST['dataSearch']);
 		$each = $_POST['each'];
-		$sql = "SELECT * FROM `sản phẩm` sp JOIN `chi tiết sản phẩm` ctsp ON sp.`Mã sản phẩm`=ctsp.`Mã sản phẩm` JOIN `danh mục` th ON th.`Mã danh mục`=ctsp.`Mã danh mục` WHERE (sp.`Mã sản phẩm` = '$toSearch' or sp.`Tên điện thoại` like '%$toSearch%')";
-		if(isset($_GET['brandOption'])) $sql.="and (th.`Mã danh mục`='".$_GET['brandOption']."')";
-		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])) $sql.="and (sp.`Giá cả` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
+		$sql = "SELECT * FROM `sanpham` sp JOIN `chitietsp` ctsp ON sp.`maSP`=ctsp.`maSP` JOIN `danhmuc` th ON th.`maDM`=ctsp.`maDM` WHERE (sp.`maSP` = '$toSearch' or sp.`tenSp` like '%$toSearch%')";
+		if(isset($_GET['brandOption'])) $sql.="and (th.`maDM`='".$_GET['brandOption']."')";
+		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])) $sql.="and (sp.`GiaCa` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
 		$num = DBconnect::getInstance()->execSQL($sql);
 		if($num!=0){
 			$numPage = ceil(count($num)/$each);
@@ -205,16 +204,16 @@ function updateSP(){
 	if(isset($_POST['sp'])&&isset($_GET['do'])){
 		$sp = json_decode($_POST['sp'],true);
 		include_once 'DBConnect.php';
-		if($_GET['do']=='update') $sql1 = "update `sản phẩm` set `Tên điện thoại`='".replace_regex($sp['Tên điện thoại'])."', `Mô tả`='".replace_regex($sp['Mô tả'])."', `Giá cả`=".$sp['Giá cả'].", `Số lượng`=".$sp['Số lượng']." where `Mã sản phẩm`='".$sp['Mã sản phẩm']."'";
-		if($_GET['do']=='insert') $sql1 = "insert into `sản phẩm` values ('".$sp['Mã sản phẩm']."','".replace_regex($sp['Tên điện thoại'])."','".replace_regex($sp['Mô tả'])."',".$sp['Giá cả'].",".$sp['Số lượng'].")";
-		$sql = "select count(`Mã danh mục`) from `danh mục` where `Mã danh mục`='".replace_regex($sp['Mã danh mục'])."'";
+		if($_GET['do']=='update') $sql1 = "update `sanpham` set `tenSp`='".replace_regex($sp['tenSp'])."', `Mô tả`='".replace_regex($sp['Mô tả'])."', `GiaCa`=".$sp['GiaCa'].", `Số lượng`=".$sp['Số lượng']." where `maSP`='".$sp['maSP']."'";
+		if($_GET['do']=='insert') $sql1 = "insert into `sanpham` values ('".$sp['maSP']."','".replace_regex($sp['tenSp'])."','".replace_regex($sp['Mô tả'])."',".$sp['GiaCa'].",".$sp['Số lượng'].")";
+		$sql = "select count(`maDM`) from `danhmuc` where `maDM`='".replace_regex($sp['maDM'])."'";
 		$check = DBconnect::getInstance()->execSQL($sql);
 		if($check!=0&&$check[0][0]==0) {
-			$sqlTL = "insert into `danh mục` values ('".replace_regex($sp['Mã danh mục'])."','".replace_regex($sp['Tên Danh mục'])."')";
+			$sqlTL = "insert into `danhmuc` values ('".replace_regex($sp['maDM'])."','".replace_regex($sp['Tên danhmuc'])."')";
 			$insert = DBconnect::getInstance()->execUpdate($sqlTL);
 		}			
-			if($_GET['do']=='update') $sql2 = "update `chi tiết sản phẩm` set `Mã danh mục`='".replace_regex($sp['Mã danh mục'])."', `Kích thước`='".replace_regex($sp['Kích thước'])."', `Trọng lượng`='".replace_regex($sp['Trọng lượng'])."', `Màu sắc`='".replace_regex($sp['Màu sắc'])."', `Bộ nhớ trong`='".replace_regex($sp['Bộ nhớ trong'])."', `Bộ nhớ đệm/Ram`='".replace_regex($sp['Bộ nhớ đệm/Ram'])."', `Hệ điều hành`='".replace_regex($sp['Hệ điều hành'])."', `Camera trước`='".replace_regex($sp['Camera trước'])."', `Camera sau`='".replace_regex($sp['Camera sau'])."', `Pin`='".replace_regex($sp['Pin'])."', `Bảo hành`='".replace_regex($sp['Bảo hành'])."', `Tình trạng`='".replace_regex($sp['Tình trạng'])."', `Ngày nhập hàng`='".$sp['Ngày nhập hàng']."' where `Mã sản phẩm`='".$sp['Mã sản phẩm']."'";
-			if($_GET['do']=='insert') $sql2 = "insert into `chi tiết sản phẩm`(`Mã chi tiết`,`Mã sản phẩm`,`Mã danh mục`,`Kích thước`,`Trọng lượng`,`Màu sắc`,`Bộ nhớ trong`,`Bộ nhớ đệm/Ram`,`Hệ điều hành`,`Camera trước`,`Camera sau`,`Pin`,`Bảo hành`,`Tình trạng`,`Ngày nhập hàng`) values ('".$sp['Mã chi tiết']."','".$sp['Mã sản phẩm']."','".replace_regex($sp['Mã danh mục'])."','".replace_regex($sp['Kích thước'])."','".replace_regex($sp['Trọng lượng'])."','".replace_regex($sp['Màu sắc'])."','".replace_regex($sp['Bộ nhớ trong'])."','".replace_regex($sp['Bộ nhớ đệm/Ram'])."','".replace_regex($sp['Hệ điều hành'])."','".replace_regex($sp['Camera trước'])."','".replace_regex($sp['Camera sau'])."','".replace_regex($sp['Pin'])."','".replace_regex($sp['Bảo hành'])."','".replace_regex($sp['Tình trạng'])."','".$sp['Ngày nhập hàng']."')";			
+			if($_GET['do']=='update') $sql2 = "update `chitietsp` set `maDM`='".replace_regex($sp['maDM'])."', `Kích thước`='".replace_regex($sp['Kích thước'])."', `Trọng lượng`='".replace_regex($sp['Trọng lượng'])."', `Màu sắc`='".replace_regex($sp['Màu sắc'])."', `Bộ nhớ trong`='".replace_regex($sp['Bộ nhớ trong'])."', `Bộ nhớ đệm/Ram`='".replace_regex($sp['Bộ nhớ đệm/Ram'])."', `Hệ điều hành`='".replace_regex($sp['Hệ điều hành'])."', `Camera trước`='".replace_regex($sp['Camera trước'])."', `Camera sau`='".replace_regex($sp['Camera sau'])."', `Pin`='".replace_regex($sp['Pin'])."', `Bảo hành`='".replace_regex($sp['Bảo hành'])."', `Tình trạng`='".replace_regex($sp['Tình trạng'])."', `Ngày nhập hàng`='".$sp['Ngày nhập hàng']."' where `maSP`='".$sp['maSP']."'";
+			if($_GET['do']=='insert') $sql2 = "insert into `chitietsp`(`Mã chi tiết`,`maSP`,`maDM`,`Kích thước`,`Trọng lượng`,`Màu sắc`,`Bộ nhớ trong`,`Bộ nhớ đệm/Ram`,`Hệ điều hành`,`Camera trước`,`Camera sau`,`Pin`,`Bảo hành`,`Tình trạng`,`Ngày nhập hàng`) values ('".$sp['Mã chi tiết']."','".$sp['maSP']."','".replace_regex($sp['maDM'])."','".replace_regex($sp['Kích thước'])."','".replace_regex($sp['Trọng lượng'])."','".replace_regex($sp['Màu sắc'])."','".replace_regex($sp['Bộ nhớ trong'])."','".replace_regex($sp['Bộ nhớ đệm/Ram'])."','".replace_regex($sp['Hệ điều hành'])."','".replace_regex($sp['Camera trước'])."','".replace_regex($sp['Camera sau'])."','".replace_regex($sp['Pin'])."','".replace_regex($sp['Bảo hành'])."','".replace_regex($sp['Tình trạng'])."','".$sp['Ngày nhập hàng']."')";			
 		$update1 = DBconnect::getInstance()->execUpdate($sql1);
 		if($update1===true) $update2 = DBconnect::getInstance()->execUpdate($sql2);
 		if(isset($update2)&&$update2===true) echo 1;
@@ -229,7 +228,7 @@ function checkSP(){
 	if(isset($_POST['tensp'])){
 		include_once 'DBConnect.php';
 		$tensp = $_POST['tensp'];
-		$sql = "select count(`Tên điện thoại`) from `sản phẩm` where `Tên điện thoại`='".replace_regex($tensp)."'";
+		$sql = "select count(`tenSp`) from `sanpham` where `tenSp`='".replace_regex($tensp)."'";
 		$check = DBconnect::getInstance()->execSQL($sql);
 		if($check!=0&&$check[0][0]==0) echo 0;
 		else echo 1;
@@ -240,7 +239,7 @@ function delSp(){
 	if(isset($_POST['masp'])){
 		include_once 'DBConnect.php';
 		$masp = $_POST['masp'];
-		$sql = "DELETE FROM `sản phẩm` where `Mã sản phẩm`='$masp'";
+		$sql = "DELETE FROM `sanpham` where `maSP`='$masp'";
 		$del = DBconnect::getInstance()->execUpdate($sql);
 		if($del===true) echo 1;
 		else echo $del;
@@ -252,18 +251,18 @@ function productList(){
 		include_once 'DBConnect.php';
 		$sDate = $_POST['sDate'];
 		$eDate = $_POST['eDate'];
-		$sqlNum="SELECT COUNT(sp.`Mã sản phẩm`) as SL FROM `sản phẩm` sp JOIN `chi tiết sản phẩm` ctsp ON sp.`Mã sản phẩm`=ctsp.`Mã sản phẩm` where (ctsp.`Ngày nhập hàng` between '$sDate' and '$eDate 23:59:59.9999') ";
-		if(isset($_GET['dataSearch'])) $sqlNum.="and (ctsp.`Mã sản phẩm` like '%".removeMWSpace($_GET['dataSearch'])."%' or sp.`Tên điện thoại` like '%".removeMWSpace($_GET['dataSearch'])."%')";
-		if(isset($_GET['brandOption'])) $sqlNum.="and (ctsp.`Mã danh mục`='".$_GET['brandOption']."')";
-		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])) $sqlNum.="and (sp.`Giá cả` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
+		$sqlNum="SELECT COUNT(sp.`maSP`) as SL FROM `sanpham` sp JOIN `chitietsp` ctsp ON sp.`maSP`=ctsp.`maSP` where (ctsp.`Ngày nhập hàng` between '$sDate' and '$eDate 23:59:59.9999') ";
+		if(isset($_GET['dataSearch'])) $sqlNum.="and (ctsp.`maSP` like '%".removeMWSpace($_GET['dataSearch'])."%' or sp.`tenSp` like '%".removeMWSpace($_GET['dataSearch'])."%')";
+		if(isset($_GET['brandOption'])) $sqlNum.="and (ctsp.`maDM`='".$_GET['brandOption']."')";
+		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])) $sqlNum.="and (sp.`GiaCa` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
 		$num = DBconnect::getInstance()->execSQL($sqlNum);
 		if($num!=0||$num[0][0]!=0) {
 		$each = $_POST['each'];
 		$numPage = ceil($num[0][0]/$each);
-		$sqlSP="SELECT * FROM `sản phẩm` sp JOIN `chi tiết sản phẩm` ctsp ON sp.`Mã sản phẩm`=ctsp.`Mã sản phẩm` JOIN `danh mục` ON `danh mục`.`Mã danh mục`=ctsp.`Mã danh mục` where (ctsp.`Ngày nhập hàng` between '$sDate' and '$eDate 23:59:59.9999') ";
-		if(isset($_GET['dataSearch'])) $sqlSP.="and (ctsp.`Mã sản phẩm` like '%".removeMWSpace($_GET['dataSearch'])."%' or sp.`Tên điện thoại` like '%".removeMWSpace($_GET['dataSearch'])."%')";
-		if(isset($_GET['brandOption'])) $sqlSP.="and (ctsp.`Mã danh mục`='".$_GET['brandOption']."')";
-		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])) $sqlSP.="and (sp.`Giá cả` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
+		$sqlSP="SELECT * FROM `sanpham` sp JOIN `chitietsp` ctsp ON sp.`maSP`=ctsp.`maSP` JOIN `danhmuc` ON `danhmuc`.`maDM`=ctsp.`maDM` where (ctsp.`Ngày nhập hàng` between '$sDate' and '$eDate 23:59:59.9999') ";
+		if(isset($_GET['dataSearch'])) $sqlSP.="and (ctsp.`maSP` like '%".removeMWSpace($_GET['dataSearch'])."%' or sp.`tenSp` like '%".removeMWSpace($_GET['dataSearch'])."%')";
+		if(isset($_GET['brandOption'])) $sqlSP.="and (ctsp.`maDM`='".$_GET['brandOption']."')";
+		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])) $sqlSP.="and (sp.`GiaCa` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
 		$sqlSP.= "limit ".($_POST['pageActive']-1)*$each.",$each";
 		$sanPham = DBconnect::getInstance()->execSQL($sqlSP);
 		if($sanPham!=0){ 
@@ -284,8 +283,8 @@ function TKDH(){
 		$sqlNum="SELECT COUNT(dh.`Mã đơn hàng`) as SL FROM `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` where (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		$sqlPage="SELECT COUNT(DISTINCT dh.`Mã đơn hàng`) as SL FROM `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` where (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		if(isset($_GET['brandOption'])) {
-			$sqlPage.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
-			$sqlNum.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
+			$sqlPage.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
+			$sqlNum.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
 		}
 		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])){
 			$sqlPage.=" and (dh.`Tổng tiền` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
@@ -298,8 +297,8 @@ function TKDH(){
 		$sqlLimit = "SELECT COUNT(ctdh.`Mã đơn hàng`) as count FROM `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` where (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		$sqlLast = "SELECT COUNT(ctdh.`Mã đơn hàng`) as count FROM `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` where (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		if(isset($_GET['brandOption'])) {
-			$sqlLimit.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
-			$sqlLast.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
+			$sqlLimit.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
+			$sqlLast.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
 		}
 		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])){
 			$sqlLimit.=" and (dh.`Tổng tiền` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
@@ -314,9 +313,9 @@ function TKDH(){
 		$start = $num[0][0];
 		if($lasts!=0) {
 			for($i=0;$i<count($lasts);$i++) $start-=$lasts[$i]['count'];
-		$sql="select dh.`Tổng tiền` as tongtien ,dh.`Mã đơn hàng`,dh.`Ngày khởi tạo`,user.`Tên`,user.`Địa chỉ`,user.`số điện thoại`,sp.`Tên điện thoại`,ctdh.`Số lượng`,ctdh.`Tổng tiền`,ctdh.`tình trạng đơn hàng` from `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` join user on user.`Mã người dùng` = dh.`Mã người dùng` join `sản phẩm` sp on sp.`Mã sản phẩm` = ctdh.`Mã sản phẩm` where (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
+		$sql="select dh.`Tổng tiền` as tongtien ,dh.`Mã đơn hàng`,dh.`Ngày khởi tạo`,user.`Tên`,user.`Địa chỉ`,user.`số điện thoại`,sp.`tenSp`,ctdh.`Số lượng`,ctdh.`Tổng tiền`,ctdh.`tình trạng đơn hàng` from `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` join user on user.`maUser` = dh.`maUser` join `sanpham` sp on sp.`maSP` = ctdh.`maSP` where (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		if(isset($_GET['brandOption'])) {
-			$sql.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
+			$sql.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
 		}
 		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])){
 			$sql.=" and (dh.`Tổng tiền` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
@@ -335,7 +334,7 @@ function numPagelsgd($lsgd1Page){
 	if(isset($_GET['LSGD'])&&isset($_GET['pageActive'])&&isset($_SESSION['id'])){
 		include_once 'DBConnect.php';
 		$makh = replace_regex($_SESSION['id']);
-		$sqlNum="SELECT COUNT(`Mã đơn hàng`) FROM `đơn hàng` where `Mã người dùng`='$makh'";
+		$sqlNum="SELECT COUNT(`Mã đơn hàng`) FROM `đơn hàng` where `maUser`='$makh'";
 		$num = DBconnect::getInstance()->execSQL($sqlNum);
 		$numPage = ceil($num[0][0]/$lsgd1Page);	
 		return $numPage;
@@ -346,15 +345,15 @@ function lsgd($lsgd1Page){
 	if(isset($_GET['LSGD'])&&isset($_GET['pageActive'])&&isset($_SESSION['id'])) {
 		include_once 'DBConnect.php';
 		$makh = replace_regex($_SESSION['id']);
-		$limits = DBconnect::getInstance()->execSQL("select count(ctdh.`Mã đơn hàng`) count from `chi tiết đơn hàng` ctdh join `đơn hàng` dh on dh.`Mã đơn hàng`=ctdh.`Mã đơn hàng` where dh.`Mã người dùng`='$makh' group by ctdh.`Mã đơn hàng` limit ".($_GET['pageActive']-1)*$lsgd1Page.",$lsgd1Page");
+		$limits = DBconnect::getInstance()->execSQL("select count(ctdh.`Mã đơn hàng`) count from `chi tiết đơn hàng` ctdh join `đơn hàng` dh on dh.`Mã đơn hàng`=ctdh.`Mã đơn hàng` where dh.`maUser`='$makh' group by ctdh.`Mã đơn hàng` limit ".($_GET['pageActive']-1)*$lsgd1Page.",$lsgd1Page");
 		$limit=0;
 		if($limits!=0) for($i=0;$i<count($limits);$i++) $limit+=$limits[$i]['count'];
-		$all = DBconnect::getInstance()->execSQL("select count(ctdh.`Mã đơn hàng`) from `chi tiết đơn hàng` ctdh join `đơn hàng` dh on dh.`Mã đơn hàng`=ctdh.`Mã đơn hàng` where dh.`Mã người dùng`='$makh'");
+		$all = DBconnect::getInstance()->execSQL("select count(ctdh.`Mã đơn hàng`) from `chi tiết đơn hàng` ctdh join `đơn hàng` dh on dh.`Mã đơn hàng`=ctdh.`Mã đơn hàng` where dh.`maUser`='$makh'");
 		if($all!=0){
-		$lasts = DBconnect::getInstance()->execSQL("select count(ctdh.`Mã đơn hàng`) count from `chi tiết đơn hàng` ctdh join `đơn hàng` dh on dh.`Mã đơn hàng`=ctdh.`Mã đơn hàng` where dh.`Mã người dùng`='$makh' group by ctdh.`Mã đơn hàng` limit ".($_GET['pageActive']-1)*$lsgd1Page.",".$all[0][0]);
+		$lasts = DBconnect::getInstance()->execSQL("select count(ctdh.`Mã đơn hàng`) count from `chi tiết đơn hàng` ctdh join `đơn hàng` dh on dh.`Mã đơn hàng`=ctdh.`Mã đơn hàng` where dh.`maUser`='$makh' group by ctdh.`Mã đơn hàng` limit ".($_GET['pageActive']-1)*$lsgd1Page.",".$all[0][0]);
 		$start = $all[0][0];
 		if($lasts!=0) for($i=0;$i<count($lasts);$i++) $start-=$lasts[$i]['count'];
-		$sql="select dh.`Mã đơn hàng`,dh.`Ngày khởi tạo`,user.`Tên`,user.`Địa chỉ`,user.`số điện thoại`,sp.`Tên điện thoại`,ctdh.`Số lượng`,ctdh.`Tổng tiền`,ctdh.`tình trạng đơn hàng` from `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` join user on user.`Mã người dùng` = dh.`Mã người dùng` join `sản phẩm` sp on sp.`Mã sản phẩm` = ctdh.`Mã sản phẩm` where dh.`Mã người dùng`='$makh' order by dh.`Mã đơn hàng` limit $start,$limit";
+		$sql="select dh.`Mã đơn hàng`,dh.`Ngày khởi tạo`,user.`Tên`,user.`Địa chỉ`,user.`số điện thoại`,sp.`tenSp`,ctdh.`Số lượng`,ctdh.`Tổng tiền`,ctdh.`tình trạng đơn hàng` from `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` join user on user.`maUser` = dh.`maUser` join `sanpham` sp on sp.`maSP` = ctdh.`maSP` where dh.`maUser`='$makh' order by dh.`Mã đơn hàng` limit $start,$limit";
 		$lsgd = DBconnect::getInstance()->execSQL($sql);
 		return json_encode($lsgd);
 		}
@@ -386,14 +385,14 @@ function xoaDH(){
 		include_once 'DBConnect.php';
 		$update;
 		$madh = json_decode($_POST['madh']);
-		$sqlSLDH = "select `Số lượng`,`Mã sản phẩm` from `chi tiết đơn hàng` where `Mã đơn hàng`='$madh'";
+		$sqlSLDH = "select `Số lượng`,`maSP` from `chi tiết đơn hàng` where `Mã đơn hàng`='$madh'";
 		$SLDH = DBconnect::getInstance()->execSQL($sqlSLDH);
 		for($i=0;$i<count($SLDH);$i++) {
-			$masp = $SLDH[$i]['Mã sản phẩm'];
-			$sqlSLSP = "select `Số lượng` from `sản phẩm` where `Mã sản phẩm`='$masp'";
+			$masp = $SLDH[$i]['maSP'];
+			$sqlSLSP = "select `Số lượng` from `sanpham` where `maSP`='$masp'";
 			$SLSP = DBconnect::getInstance()->execSQL($sqlSLSP);
 			$soluong = $SLSP[0][0] + $SLDH[$i]['Số lượng'];
-			$sqlUpdate = "update `sản phẩm` set `Số lượng`=$soluong where `Mã sản phẩm`='$masp'";
+			$sqlUpdate = "update `sanpham` set `Số lượng`=$soluong where `maSP`='$masp'";
 			DBconnect::getInstance()->execUpdate($sqlUpdate);
 			$sql = "update `chi tiết đơn hàng` set `tình trạng đơn hàng`='Đã hủy' where `Mã đơn hàng`='$madh'";
 			$update = Dbconnect::getInstance()->execUpdate($sql);
@@ -412,8 +411,8 @@ function xulyDHVance(){
 		$sqlNum="SELECT COUNT(dh.`Mã đơn hàng`) as SL FROM `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` where (ctdh.`tình trạng đơn hàng` NOT IN('Đã hủy')) and (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		$sqlPage="SELECT COUNT(DISTINCT dh.`Mã đơn hàng`) as SL FROM `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` where (ctdh.`tình trạng đơn hàng` NOT IN('Đã hủy')) and (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		if(isset($_GET['brandOption'])) {
-			$sqlPage.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
-			$sqlNum.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
+			$sqlPage.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
+			$sqlNum.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
 		}
 		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])){
 			$sqlPage.=" and (dh.`Tổng tiền` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
@@ -427,8 +426,8 @@ function xulyDHVance(){
 		$sqlLimit = "SELECT COUNT(ctdh.`Mã đơn hàng`) as count FROM `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng`  where (ctdh.`tình trạng đơn hàng` NOT IN('Đã hủy')) and (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		$sqlLast = "SELECT COUNT(ctdh.`Mã đơn hàng`) as count FROM `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng`  where (ctdh.`tình trạng đơn hàng` NOT IN('Đã hủy')) and (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		if(isset($_GET['brandOption'])) {
-			$sqlLimit.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
-			$sqlLast.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
+			$sqlLimit.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
+			$sqlLast.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
 		}
 		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])){
 			$sqlLimit.=" and (dh.`Tổng tiền` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
@@ -443,9 +442,9 @@ function xulyDHVance(){
 		$start = $num[0][0];
 		if($lasts!=0) {
 			for($i=0;$i<count($lasts);$i++) $start-=$lasts[$i]['count'];
-		$sql="select dh.`Tổng tiền` as tongtien ,dh.`Mã đơn hàng`,dh.`Ngày khởi tạo`,user.`Tên`,user.`Địa chỉ`,user.`số điện thoại`,sp.`Tên điện thoại`,ctdh.`Số lượng`,ctdh.`Tổng tiền`,ctdh.`tình trạng đơn hàng` from `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` join user on user.`Mã người dùng` = dh.`Mã người dùng` join `sản phẩm` sp on sp.`Mã sản phẩm` = ctdh.`Mã sản phẩm` where (ctdh.`tình trạng đơn hàng` NOT IN('Đã hủy')) and (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
+		$sql="select dh.`Tổng tiền` as tongtien ,dh.`Mã đơn hàng`,dh.`Ngày khởi tạo`,user.`Tên`,user.`Địa chỉ`,user.`số điện thoại`,sp.`tenSp`,ctdh.`Số lượng`,ctdh.`Tổng tiền`,ctdh.`tình trạng đơn hàng` from `đơn hàng` dh join `chi tiết đơn hàng` ctdh on dh.`Mã đơn hàng` = ctdh.`Mã đơn hàng` join user on user.`maUser` = dh.`maUser` join `sanpham` sp on sp.`maSP` = ctdh.`maSP` where (ctdh.`tình trạng đơn hàng` NOT IN('Đã hủy')) and (dh.`Ngày khởi tạo` between '$sDate' and '$eDate 23:59:59.9999')";
 		if(isset($_GET['brandOption'])) {
-			$sql.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chi tiết sản phẩm` ctsp on ctdh1.`mã sản phẩm`=ctsp.`mã sản phẩm` where ctsp.`Mã danh mục`='".$_GET['brandOption']."'))";
+			$sql.=" and (ctdh.`Mã đơn hàng` = any (select ctdh1.`Mã đơn hàng` from `chi tiết đơn hàng` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='".$_GET['brandOption']."'))";
 		}
 		if(isset($_GET['startPrice'])&&isset($_GET['endPrice'])){
 			$sql.=" and (dh.`Tổng tiền` between ".$_GET['startPrice']." and ".$_GET['endPrice'].")";
@@ -478,7 +477,7 @@ function donhang(){
 		$maKH = replace_regex($_SESSION['id']);
 		$date = $_POST['date'];
 		$tongtien = 0;
-		$sql2='insert into `chi tiết đơn hàng`(`Mã đơn hàng`, `Mã sản phẩm`, `Số lượng`, `Tổng tiền`, `tình trạng đơn hàng`) values';
+		$sql2='insert into `chi tiết đơn hàng`(`Mã đơn hàng`, `maSP`, `Số lượng`, `Tổng tiền`, `tình trạng đơn hàng`) values';
 		$maDH=DBconnect::getInstance()->execSQL("select max(`Mã đơn hàng`) from `đơn hàng`");
 		$insMaDH=(int)$maDH[0][0] + 1;
 		for($i=0;$i<count($DH);$i++){
@@ -486,14 +485,14 @@ function donhang(){
 			$masp=$DH[$i]['masp'];
 			$soluong=$DH[$i]['soluong'];
 			$thanhtien=$DH[$i]['thanhtien'];
-			$sql = "select `Số lượng` from `sản phẩm` where `Mã sản phẩm`='$masp'";			
+			$sql = "select `Số lượng` from `sanpham` where `maSP`='$masp'";			
 			$sql2.=" ('$insMaDH', '$masp', $soluong, $thanhtien, 'Đang chờ xử lý'),";
 			$SLSP = DBconnect::getInstance()->execSQL($sql);
 			$soluong = $SLSP[0][0] - $soluong;
-			$sqlUpdate = "update `sản phẩm` set `Số lượng`=$soluong where `Mã sản phẩm`='$masp'";
+			$sqlUpdate = "update `sanpham` set `Số lượng`=$soluong where `maSP`='$masp'";
 			DBconnect::getInstance()->execUpdate($sqlUpdate);
 		}
-		$sql1="insert into `đơn hàng`(`Mã đơn hàng`, `Mã người dùng`, `Tổng tiền`, `Ngày khởi tạo`) values ('$insMaDH', '$maKH', $tongtien, '$date')";
+		$sql1="insert into `đơn hàng`(`Mã đơn hàng`, `maUser`, `Tổng tiền`, `Ngày khởi tạo`) values ('$insMaDH', '$maKH', $tongtien, '$date')";
 		$exec1 = DBconnect::getInstance()->execUpdate($sql1);
 		$exec2 = DBconnect::getInstance()->execUpdate(rtrim($sql2,','));
 		if($exec1===true&&$exec2===true) echo 1;
@@ -504,7 +503,7 @@ function searchSP(){
 	if(isset($_POST['masp'])){
 		$masp = json_decode($_POST['masp']);
 		include_once 'DBConnect.php';
-		$sql="SELECT * FROM `sản phẩm` where `Mã sản phẩm`='$masp'";
+		$sql="SELECT * FROM `sanpham` where `maSP`='$masp'";
 		$sp = DBconnect::getInstance()->execSQL($sql);
 		echo json_encode($sp);
 	}	
@@ -515,12 +514,12 @@ function logout(){
 function isLogin(){
 	include_once 'DBConnect.php';
 	if(isset($_SESSION['name'])&&isset($_SESSION['user'])&&isset($_SESSION['pass'])){
-		$sql = "select `Mật khẩu` from user where `Tên đăng nhập`='".replace_regex($_SESSION['user'])."'";
+		$sql = "select `MK` from nguoidung where `TK`='".replace_regex($_SESSION['user'])."'";
 		$pass = DBconnect::getInstance()->execSQL($sql);
-		if($pass[0]['Mật khẩu']===$_SESSION['pass']) {
+		if($pass[0]['MK']===$_SESSION['pass']) {
 			if(isset($_GET['checkuser'])) echo 1;
-			else if ($_SESSION['user'] === "admin" && $_SERVER['PHP_SELF'] != '/pttk/admin.php') header('location:/pttk/admin.php');
-			else if ($_SESSION['user'] !== "admin" && $_SERVER['PHP_SELF'] != '/pttk/user.php') header('location:/pttk/user.php');
+			else if (isset($_SESSION['role']) && $_SERVER['PHP_SELF'] != '/pttk/admin.php') header('location:/pttk/admin.php');
+			else if (!isset($_SESSION['role']) && $_SERVER['PHP_SELF'] != '/pttk/user.php') header('location:/pttk/user.php');
 		} else {
 			if($_SERVER['PHP_SELF']!='/pttk/index.php') {
 				echo 0;
@@ -537,7 +536,7 @@ function checkUser(){
 	if(isset($_POST['username'])){
 		$user = replace_regex(json_decode($_POST['username']));
 		include_once 'DBConnect.php';
-		$sql="select `Tên đăng nhập` from user where `Tên đăng nhập`='".$user."'";
+		$sql="select `TK` from nguoidung where `TK`='".$user."'";
 		if(DBconnect::getInstance()->execSQL($sql)) echo 1;
 		else echo 0;
 	}
@@ -546,17 +545,20 @@ function xulyDK(){
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		if(isset($_POST['ht']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['email']) && isset($_POST['sdt']) && isset($_POST['address'])){
 			include_once 'DBConnect.php';
-			$maKH=DBconnect::getInstance()->execSQL("select max(`Mã người dùng`) from user");
-			$insMaKH="KH".(trim($maKH[0][0],"KH") + 1);
+			$maKH=DBconnect::getInstance()->execSQL("select max(`maUser`) from nguoidung");
+			$numMaKH = trim($maKH[0][0],"KH") + 1;
+			$insMaKH="KH".($numMaKH);
 			$cryptedPass = password_hash($_POST['pass'],PASSWORD_BCRYPT,array('cost'=>10));
-			$sql="insert into user values ('$insMaKH','".replace_regex($_POST['user'])."','$cryptedPass','".replace_regex($_POST['ht'])."','".replace_regex($_POST['address'])."','".$_POST['sdt']."','".replace_regex($_POST['email'])."',2,1)";
-			if(DBconnect::getInstance()->execUpdate($sql)) {
+			$sql="insert into nguoidung values ('$insMaKH',null,'".replace_regex($_POST['ht'])."','".replace_regex($_POST['user'])."','$cryptedPass',1);";
+			$sql.="insert into `khachhang` values ('$numMaKH','$insMaKH','".replace_regex($_POST['ht'])."','".replace_regex($_POST['address'])."','".$_POST['sdt']."','".replace_regex($_POST['email'])."',null);";
+			if(DBconnect::getInstance()->execMultiQuery($sql)) {
 				if(!isset($_GET['admin'])){
 					$_SESSION['id']=$insMaKH;
 					$_SESSION['name']=$_POST['ht'];
 					$_SESSION['user']=$_POST['user'];
 					$_SESSION['pass']=$cryptedPass;
 					setcookie(session_name(),session_id(),time()+172800,'/');
+					//$_SESSION['sql']=$err;
 				header('location:/pttk/user.php');
 				} else header('location:/pttk/admin.php?qltk');
 			}	
@@ -567,14 +569,15 @@ function xuLyDN(){
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		if(isset($_POST['user'])&&isset($_POST['pass'])){
 			include_once 'DBConnect.php';
-			$sql="select `Tên`, `RoleID`, `Mở/Khoá`, `Mật khẩu`, `Mã người dùng` from user where `Tên đăng nhập`='".replace_regex($_POST['user'])."'";
+			$sql="select `TenUser`, `RoleID`, `lock/unlock`, `MK`, `maUser` from nguoidung where `TK`='".replace_regex($_POST['user'])."'";
 			$user = DBconnect::getInstance()->execSQL($sql);
-			if(password_verify($_POST['pass'],$user[0]['Mật khẩu'])){
-				if($user[0]['Mở/Khoá']==1) {
-					$_SESSION['id']=$user[0]['Mã người dùng'];
-					$_SESSION['name']=$user[0]['Tên'];
+			if(password_verify($_POST['pass'],$user[0]['MK'])){
+				if($user[0]['lock/unlock']==1) {
+					$_SESSION['id']=$user[0]['maUser'];
+					$_SESSION['name']=$user[0]['TenUser'];
 					$_SESSION['user']=$_POST['user'];
-					$_SESSION['pass']=$user[0]['Mật khẩu'];
+					$_SESSION['pass']=$user[0]['MK'];
+					$_SESSION['role']=$user[0]['RoleID'];
 					if($_POST['remember']==true){
 						setcookie(session_name(),session_id(),time()+172800,'/');
 					}
@@ -585,25 +588,27 @@ function xuLyDN(){
 			else {
 				if(!isset($_SESSION['error'])) $_SESSION['error'] = 0;
 				else $_SESSION['error']++;
-				if(isset($_SESSION['error'])&&$_SESSION['error']==3&&$_POST['user']!='admin') {
-					DBconnect::getInstance()->execUpdate("update user set `Mở/Khoá`=0 where `Tên đăng nhập`='".replace_regex($_POST['user'])."'");
-					session_unset();
+				if(isset($_SESSION['role'])) {
+					if (isset($_SESSION['error']) && $_SESSION['error'] == 3 && $_SESSION['role'] != 0) {
+						DBconnect::getInstance()->execUpdate("update nguoidung set `lock/unlock`=0 where `TK`='" . replace_regex($_POST['user']) . "'");
+						session_unset();
+					}
+					header('location:/pttk/index.php?error=true&user=' . $_POST['user']);
 				}
-				header('location:/pttk/index.php?error=true&user='.$_POST['user']);
 			}
 		}
 	}
 }
 function menu(){
 	include_once 'DBConnect.php';
-	$sqlTL="SELECT * from `danh mục`";
+	$sqlTL="SELECT * from `danhmuc`";
 	$TL = DBconnect::getInstance()->execSQL($sqlTL);
 	echo json_encode($TL);
 }
 function sanPham($SP1Page){
 	if(isset($_GET['idBrand'])&&isset($_GET['pageActive'])){
 		include_once 'DBConnect.php';
-		$sqlSP="SELECT * FROM `sản phẩm` JOIN `chi tiết sản phẩm` ON `sản phẩm`.`Mã sản phẩm`=`chi tiết sản phẩm`.`Mã sản phẩm` JOIN `danh mục`ON `danh mục`.`Mã danh mục`=`chi tiết sản phẩm`.`Mã danh mục` WHERE `danh mục`.`Mã danh mục`='".replace_regex($_GET['idBrand'])."' limit ".($_GET['pageActive']-1)*$SP1Page.",$SP1Page";
+		$sqlSP="SELECT * FROM `sanpham` JOIN `chitietsp` ON `sanpham`.`maSP`=`chitietsp`.`maSP` JOIN `danhmuc`ON `danhmuc`.`maDM`=`chitietsp`.`maDM` WHERE `danhmuc`.`maDM`='".replace_regex($_GET['idBrand'])."' limit ".($_GET['pageActive']-1)*$SP1Page.",$SP1Page";
 		$sanPham = DBconnect::getInstance()->execSQL($sqlSP);
 		return json_encode($sanPham);
 	}
@@ -616,7 +621,7 @@ function getPA(){
 function numPage($SP1Page){
 	if(isset($_GET['idBrand'])&&isset($_GET['pageActive'])){
 		include_once 'DBConnect.php';
-		$sqlNum="SELECT COUNT(`chi tiết sản phẩm`.`Mã sản phẩm`) as SL FROM `chi tiết sản phẩm` WHERE `chi tiết sản phẩm`.`Mã danh mục`='".replace_regex($_GET['idBrand'])."'";
+		$sqlNum="SELECT COUNT(`chitietsp`.`maSP`) as SL FROM `chitietsp` WHERE `chitietsp`.`maDM`='".replace_regex($_GET['idBrand'])."'";
 		$num = DBconnect::getInstance()->execSQL($sqlNum);
 		$numPage = ceil($num[0][0]/$SP1Page);	
 		return $numPage;

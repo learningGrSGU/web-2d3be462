@@ -2,7 +2,7 @@
 class DBconnect {
 	private $user="root";
 	private $pass="";
-	private $dbname="phone";
+	private $dbname="phone_pttk";
 	private $server="localhost:3306";
 	private $conn;
 	public static $DB;
@@ -33,6 +33,10 @@ class DBconnect {
 		}
 		else return $this->conn->error;
 	}
+	public function execMultiQuery($sql){
+	    if($this->conn->multi_query($sql)===true) return true;
+	    else return $this->conn->error;
+    }
 	public function execUpdate($sql){
 		if($this->conn->query($sql)===true){
 			return true;
