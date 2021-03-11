@@ -9,6 +9,6 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "laminas/laminas-server": "3.0.x-dev"
+        "cboden/ratchet": "dev-master"
     }
 }

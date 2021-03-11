@@ -81,7 +81,7 @@ function upload(file, masp, toDo){
     	console.log(result);
 		if(Number(result)==1) alert('Đổi hình thành công!');
 		else if(Number(result)==-1) alert('Không hỗ trợ định dạng này!');
-		else if(Number(result)==0) alert('Hình có kích thước quá lớn!');
+		else if(Number(result)==0) alert('Hình có Size quá lớn!');
 		else if(Number(result)==-2) alert('Upload Hình thất bại');
 		else alert('Vui lòng điền đầy đủ thông tin trước khi thêm hình!');
   			}
@@ -133,7 +133,7 @@ function vanceOption(id, func){
 			var result = JSON.parse(results);
 			var s = "<select onchange='"+func+"'>";
 			for(var i=0;i<result.length;i++){
-				s+='<option value="'+escapeHtml(result[i]['Mã danh mục'])+'">'+escapeHtml(result[i]['Tên Danh mục'])+'</option>';
+				s+='<option value="'+escapeHtml(result[i]['maDM'])+'">'+escapeHtml(result[i]['tenDM'])+'</option>';
 			}
 			s+='<option value="ALL" selected>Tất cả</option></select>';
 			var span = document.createElement('span');
@@ -201,8 +201,8 @@ function Home(){
 					var result = JSON.parse(results);
 					var sp="";
 					for(var i=0;i<result.length;i++){
-						var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result[i]['Giá cả']);
-						sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["Hình ảnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["Tên điện thoại"])+'</span><button style="text-align:center;width:100%;color:#ff0000;">'+curr+'</button></div>';
+						var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result[i]['GiaCa']);
+						sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["HinhAnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["tenSp"])+'</span><button style="text-align:center;width:100%;color:#ff0000;">'+curr+'</button></div>';
 					}
 					document.getElementById("sp").innerHTML=sp;
 				} else {
@@ -229,8 +229,8 @@ function spmoi(pActive){
 					var result = JSON.parse(results);
 					var sp="";
 					for(var i=0;i<result.length;i++){
-						var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result[i]['Giá cả']);
-						sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["Hình ảnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["Tên điện thoại"])+'</span><button style="text-align:center;width:100%;color:red;">'+curr+'</button></div>';		
+						var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result[i]['GiaCa']);
+						sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["HinhAnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["tenSp"])+'</span><button style="text-align:center;width:100%;color:red;">'+curr+'</button></div>';		
 					}
 					document.getElementById("sp").innerHTML=sp;
 				} else {
@@ -290,8 +290,8 @@ var priceOption = document.getElementById('vance').getElementsByTagName('select'
 				var result = JSON.parse(results);
 				var sp="";
 				for(var i=0;i<result.length-1;i++){
-				var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result[i]['Giá cả']);
-				sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["Hình ảnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["Tên điện thoại"])+'</span><button style="text-align:center;width:100%;color:red;">'+curr+'</button></div>';		
+				var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(result[i]['GiaCa']);
+				sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(result[i]))+');\'><img src="'+result[i]["HinhAnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(result[i]["tenSp"])+'</span><button style="text-align:center;width:100%;color:red;">'+curr+'</button></div>';		
 					}
 				jq351('#spSearch').html(sp);
 				page('tr',result[result.length-1],'Search',pActive);
@@ -369,11 +369,11 @@ function qltk(pActive){
 	}
 }
 function ok(x,pActive){
-	var input=document.getElementById(x['Mã sản phẩm']).getElementsByTagName("input");
+	var input=document.getElementById(x['maSP']).getElementsByTagName("input");
 	var xacnhan=prompt("Nhập mật khẩu để xác nhận thay đổi!");
 	if(xacnhan=="admin") {
 		var check = false;
-		if(x['Tên điện thoại']!=input[1].value){
+		if(x['tenSp']!=input[1].value){
 		jq351.ajax({
 			url: 'php/xuly.php?action=checkSP',
 			type: 'POST',
@@ -388,36 +388,36 @@ function ok(x,pActive){
 			}
 		});}
 		if(!check){
-			if(input[2].value>=1000000000) alert('Số lượng phải nhỏ hơn 1.000.000.000');
+			if(input[2].value>=1000000000) alert('SL phải nhỏ hơn 1.000.000.000');
 			if(input[3].value>=1000000000) alert('Giá phải nhỏ hơn 1.000.000.000');
-			if(input[1].value!='') x['Tên điện thoại'] = input[1].value;
-			if(input[2].value!=''&&check_num(input[2].value)&&input[2].value<1000000000) x['Số lượng'] = input[2].value;
-			if(input[3].value!=''&&check_num(input[3].value)&&input[3].value<1000000000) x['Giá cả'] = input[3].value;
+			if(input[1].value!='') x['tenSp'] = input[1].value;
+			if(input[2].value!=''&&check_num(input[2].value)&&input[2].value<1000000000) x['SL'] = input[2].value;
+			if(input[3].value!=''&&check_num(input[3].value)&&input[3].value<1000000000) x['GiaCa'] = input[3].value;
 			if(input[4].value!='') {
 				var chitiet = input[4].value.split(';');
 				if(chitiet.length==11){
-					x['Kích thước'] = chitiet[0];
-					x['Trọng lượng'] = chitiet[1];
-					x['Màu sắc'] = chitiet[2];
-					x['Bộ nhớ trong'] = chitiet[3];
-					x['Bộ nhớ đệm/Ram'] = chitiet[4];
-					x['Hệ điều hành'] = chitiet[5];
-					x['Camera trước'] = chitiet[6];
-					x['Camera sau'] = chitiet[7];
+					x['Size'] = chitiet[0];
+					x['Weight'] = chitiet[1];
+					x['Color'] = chitiet[2];
+					x['BoNhoTrong'] = chitiet[3];
+					x['BoNho'] = chitiet[4];
+					x['HDH'] = chitiet[5];
+					x['CamTruoc'] = chitiet[6];
+					x['CamSau'] = chitiet[7];
 					x['Pin'] = chitiet[8];
-					x['Bảo hành'] = chitiet[9];
-					x['Tình trạng'] = chitiet[10];					
+					x['BaoHanh'] = chitiet[9];
+					x['TinhTrang'] = chitiet[10];					
 				}
 				else alert('Vui lòng nhập đủ 11 chi tiết cách nhau bởi ";" trong chi tiết!');				
 			}
-			if(input[5].value!='') x['Mã danh mục'] = input[5].value;
-			if(input[6].value!='') x['Tên Danh mục'] = input[6].value;
+			if(input[5].value!='') x['maDM'] = input[5].value;
+			if(input[6].value!='') x['tenDM'] = input[6].value;
 			if(input[7].value!='') x['Mô tả'] = input[7].value;
 			if(input[8].value!='') x['Ngày nhập hàng'] = new moment(input[8].value).format('YYYY-MM-DD HH:mm:ss');
 			var sp = JSON.stringify(x);
 				update(sp, 'update');
 			if(input[0].files&&input[0].files[0]) {
-				upload(input[0].files[0],x['Mã sản phẩm'],'update');
+				upload(input[0].files[0],x['maSP'],'update');
 			}
 			productList(pActive);
 		}
@@ -440,14 +440,14 @@ function delSp(x,pActive){
 	}
 }
 function changeSp(x,pActive){
-	var input=document.getElementById(x['Mã sản phẩm']).getElementsByTagName("div");
+	var input=document.getElementById(x['maSP']).getElementsByTagName("div");
 	input[0].innerHTML='<input type="file" accept="image/*">';
-	input[2].innerHTML='<input type="text" value=\''+escapeHtml(x['Tên điện thoại'])+'\'>';
-	input[3].innerHTML='<input type="number" value=\''+x['Số lượng']+'\'>';
-	input[4].innerHTML='<input type="number" value=\''+x['Giá cả']+'\'>';
-	input[5].innerHTML='<input type="text" value=\''+escapeHtml(x['Kích thước'])+';'+escapeHtml(x['Trọng lượng'])+';'+escapeHtml(x['Màu sắc'])+';'+escapeHtml(x['Bộ nhớ trong'])+';'+escapeHtml(x['Bộ nhớ đệm/Ram'])+';'+escapeHtml(x['Hệ điều hành'])+';'+escapeHtml(x['Camera trước'])+';'+escapeHtml(x['Camera sau'])+';'+escapeHtml(x['Pin'])+';'+escapeHtml(x['Bảo hành'])+';'+escapeHtml(x['Tình trạng'])+'\'>';
-	input[6].innerHTML='<input type="text" value=\''+escapeHtml(x['Mã danh mục'])+'\'>';
-	input[7].innerHTML='<input type="text" value=\''+escapeHtml(x['Tên Danh mục'])+'\'>';
+	input[2].innerHTML='<input type="text" value=\''+escapeHtml(x['tenSp'])+'\'>';
+	input[3].innerHTML='<input type="number" value=\''+x['SL']+'\'>';
+	input[4].innerHTML='<input type="number" value=\''+x['GiaCa']+'\'>';
+	input[5].innerHTML='<input type="text" value=\''+escapeHtml(x['Size'])+';'+escapeHtml(x['Weight'])+';'+escapeHtml(x['Color'])+';'+escapeHtml(x['BoNhoTrong'])+';'+escapeHtml(x['BoNho'])+';'+escapeHtml(x['HDH'])+';'+escapeHtml(x['CamTruoc'])+';'+escapeHtml(x['CamSau'])+';'+escapeHtml(x['Pin'])+';'+escapeHtml(x['BaoHanh'])+';'+escapeHtml(x['TinhTrang'])+'\'>';
+	input[6].innerHTML='<input type="text" value=\''+escapeHtml(x['maDM'])+'\'>';
+	input[7].innerHTML='<input type="text" value=\''+escapeHtml(x['tenDM'])+'\'>';
 	input[9].innerHTML='<input type="text" value=\''+escapeHtml(x['Mô tả'])+'\'>';
 	input[10].innerHTML='<input type="date" value="'+x['Ngày nhập hàng']+'">';
 	input[11].innerHTML='<button class="DP" onclick=\'ok('+escapeHtml(JSON.stringify(x))+', '+pActive+');\'>OK</button><button class="DP" onclick="productList('+pActive+');">Hủy</button>';
@@ -473,34 +473,34 @@ function addSp(x){
 					var data = {};
 					var chitiet = input[5].value.split(';');
 					data['Ngày nhập hàng'] = new moment(input[10].value).format('YYYY-MM-DD HH:mm:ss');
-					data['Mã sản phẩm'] = input[1].value;
-					data['Tên điện thoại'] = input[2].value;
+					data['maSP'] = input[1].value;
+					data['tenSp'] = input[2].value;
 					data['Mô tả'] = input[9].value;
-					data['Giá cả'] = input[4].value;
-					data['Số lượng'] = input[3].value;
-					data['Mã danh mục'] = input[6].value;
-					data['Tên Danh mục'] = input[7].value;
+					data['GiaCa'] = input[4].value;
+					data['SL'] = input[3].value;
+					data['maDM'] = input[6].value;
+					data['tenDM'] = input[7].value;
 					data['Mã chi tiết'] = input[8].value;
-					data['Kích thước'] = chitiet[0];
-					data['Trọng lượng'] = chitiet[1];
-					data['Màu sắc'] = chitiet[2];
-					data['Bộ nhớ trong'] = chitiet[3];
-					data['Bộ nhớ đệm/Ram'] = chitiet[4];
-					data['Hệ điều hành'] = chitiet[5];
-					data['Camera trước'] = chitiet[6];
-					data['Camera sau'] = chitiet[7];
+					data['Size'] = chitiet[0];
+					data['Weight'] = chitiet[1];
+					data['Color'] = chitiet[2];
+					data['BoNhoTrong'] = chitiet[3];
+					data['BoNho'] = chitiet[4];
+					data['HDH'] = chitiet[5];
+					data['CamTruoc'] = chitiet[6];
+					data['CamSau'] = chitiet[7];
 					data['Pin'] = chitiet[8];
-					data['Bảo hành'] = chitiet[9];
-					data['Tình trạng'] = chitiet[10];
+					data['BaoHanh'] = chitiet[9];
+					data['TinhTrang'] = chitiet[10];
 					var sp = JSON.stringify(data);
 					update(sp, 'insert');
 					if(input[0].files&&input[0].files[0]){
 						upload(input[0].files[0],input[1].value,'update');
 					}
 					productList(1);
-				} else alert('Mã sản phẩm, Số lượng, Đơn giá, Mã chi tiết phải nhỏ hơn 1.000.000.000');
+				} else alert('maSP, SL, Đơn giá, Mã chi tiết phải nhỏ hơn 1.000.000.000');
 			} else alert('Vui lòng nhập đủ 11 chi tiết cách nhau bởi ";" trong chi tiết!');
-		} else alert('Mã sản phẩm, Số lượng, Đơn giá, Mã chi tiết phải là số nguyên!');		
+		} else alert('maSP, SL, Đơn giá, Mã chi tiết phải là số nguyên!');		
 	}
 	else alert("mật khẩu sai vui lòng nhập lại!");
 	}
@@ -518,16 +518,16 @@ function showAddSp(){
       '<h1 style="color:red;">Nhập đầy đủ thông tin để thêm sản phẩm!!!!</h1>'+
       '<hr>'+
 	  //1
-      '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Upload hình ảnh:</div>'+
+      '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Upload HinhAnh:</div>'+
       '<input style="float:left;margin:-8px auto auto 5px" type="file" accept="image/*"></div>'+
       //2
-      '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mã sản phẩm:</div>'+
+      '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">maSP:</div>'+
       '<input style="float:left;margin:-8px auto auto 5px;width:90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>'+
 	  //3
 	  '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Tên sản phẩm:</div>'+
       '<input style="float:left;margin:-8px auto auto 5px;width: 89%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>'+
 	  //4
-	  '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Số lượng:</div>'+
+	  '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">SL:</div>'+
       '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>'+
 	  //5
 	  '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Đơn giá:</div>'+
@@ -619,10 +619,10 @@ function productList(pActive){
 					if(Number(results)!=0){
 					var result = JSON.parse(results);
 			var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
-			var sp='<div class="row"><div class="th">Hình ảnh</div><div class="th">Mã sản phẩm</div><div class="th">Tên sản phẩm</div><div class="th">Số lượng</div><div class="th">Đơn giá</div><div class="th">Chi tiết</div><div class="th">Mã thể loại</div><div class="th">Tên thể loại</div><div class="th">Mã chi tiết</div><div class="th">Mô tả</div><div class="th">Ngày nhập hàng</div><div class="th" style="width:10%;">Chức năng</div></div>',s="";
+			var sp='<div class="row"><div class="th">HinhAnh</div><div class="th">maSP</div><div class="th">Tên sản phẩm</div><div class="th">SL</div><div class="th">Đơn giá</div><div class="th">Chi tiết</div><div class="th">Mã thể loại</div><div class="th">Tên thể loại</div><div class="th">Mã chi tiết</div><div class="th">Mô tả</div><div class="th">Ngày nhập hàng</div><div class="th" style="width:10%;">Chức năng</div></div>',s="";
 			for(var i=0;i<result.length-1;i++){
 			var ng=new moment(result[i]['Ngày nhập hàng']).format('DD/MM/YYYY HH:mm:ss');
-			sp+='<div class="row" id="'+result[i]['Mã sản phẩm']+'"><div class="col" ><img alt="image" width="70%" height="65px" title="'+escapeHtml(result[i]['Tên điện thoại'])+'" src="'+result[i]['Hình ảnh']+'"/></div><div class="col">'+result[i]['Mã sản phẩm']+'</div><div class="col">'+escapeHtml(result[i]['Tên điện thoại'])+'</div><div class="col">'+result[i]['Số lượng']+'</div><div class="col">'+curr.format(result[i]['Giá cả'])+'</div><div class="col">'+escapeHtml(result[i]['Kích thước'])+';'+escapeHtml(result[i]['Trọng lượng'])+';'+escapeHtml(result[i]['Màu sắc'])+';'+escapeHtml(result[i]['Bộ nhớ trong'])+';'+escapeHtml(result[i]['Bộ nhớ đệm/Ram'])+';'+escapeHtml(result[i]['Hệ điều hành'])+';'+escapeHtml(result[i]['Camera trước'])+';'+escapeHtml(result[i]['Camera sau'])+';'+escapeHtml(result[i]['Pin'])+';'+escapeHtml(result[i]['Bảo hành'])+';'+escapeHtml(result[i]['Tình trạng'])+'</div><div class="col">'+escapeHtml(result[i]['Mã danh mục'])+'</div><div class="col">'+escapeHtml(result[i]['Tên Danh mục'])+'</div><div class="col">'+result[i]['Mã chi tiết']+'</div><div class="col">'+escapeHtml(result[i]['Mô tả'])+'</div><div class="col">'+ng+'</div><div class="col" style="width:10%;"><button class="DP" onclick="delSp('+result[i]['Mã sản phẩm']+', '+pActive+');">Xóa</button><button class="CP" onclick=\'changeSp('+escapeHtml(JSON.stringify(result[i]))+','+pActive+');\'>Sửa</button></div></div>';
+			sp+='<div class="row" id="'+result[i]['maSP']+'"><div class="col" ><img alt="image" width="70%" height="65px" title="'+escapeHtml(result[i]['tenSp'])+'" src="'+result[i]['HinhAnh']+'"/></div><div class="col">'+result[i]['maSP']+'</div><div class="col">'+escapeHtml(result[i]['tenSp'])+'</div><div class="col">'+result[i]['SL']+'</div><div class="col">'+curr.format(result[i]['GiaCa'])+'</div><div class="col">'+escapeHtml(result[i]['Size'])+';'+escapeHtml(result[i]['Weight'])+';'+escapeHtml(result[i]['Color'])+';'+escapeHtml(result[i]['BoNhoTrong'])+';'+escapeHtml(result[i]['BoNho'])+';'+escapeHtml(result[i]['HDH'])+';'+escapeHtml(result[i]['CamTruoc'])+';'+escapeHtml(result[i]['CamSau'])+';'+escapeHtml(result[i]['Pin'])+';'+escapeHtml(result[i]['BaoHanh'])+';'+escapeHtml(result[i]['TinhTrang'])+'</div><div class="col">'+escapeHtml(result[i]['maDM'])+'</div><div class="col">'+escapeHtml(result[i]['tenDM'])+'</div><div class="col">'+result[i]['Mã chi tiết']+'</div><div class="col">'+escapeHtml(result[i]['Mô tả'])+'</div><div class="col">'+ng+'</div><div class="col" style="width:10%;"><button class="DP" onclick="delSp('+result[i]['maSP']+', '+pActive+');">Xóa</button><button class="CP" onclick=\'changeSp('+escapeHtml(JSON.stringify(result[i]))+','+pActive+');\'>Sửa</button></div></div>';
 			}
 			var sanP=document.getElementById("sp");
 			sanP.innerHTML=sp;
@@ -643,7 +643,7 @@ function product(){
 	if(url[1]=="dssp"){
 		var sDate = new moment(new Date()).subtract(1,'month').format('YYYY-MM-DD');
 		var eDate = new moment(new Date()).format('YYYY-MM-DD');
-		document.getElementById('opt').innerHTML='<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập mã sản phẩm hoặc tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="'+sDate+'"><input id="endDate" type="date" onchange="productList(1)" value="'+eDate+'"><button class="AProd" onclick="showAddSp();">Thêm sản phẩm</button>';
+		document.getElementById('opt').innerHTML='<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập maSP hoặc tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="'+sDate+'"><input id="endDate" type="date" onchange="productList(1)" value="'+eDate+'"><button class="AProd" onclick="showAddSp();">Thêm sản phẩm</button>';
 		jq351(function(){productList(1);});
 	}
 }
@@ -699,7 +699,7 @@ function onchangeTkDH(pActive){
 					if(results!=0){
 					var result = JSON.parse(results);
 					var data = [];
-					var columns = ['Tên điện thoại','Số lượng','Tổng tiền'];
+					var columns = ['tenSp','SL','Tổng tiền'];
 					var headers = [];
       				for (var k = 0; k < columns.length; k++) {
         			headers.push({
@@ -711,12 +711,12 @@ function onchangeTkDH(pActive){
 					for(var i=0;i<result.length-1;i++){
 				if(check){
 					var ng=new moment(result[i]['Ngày khởi tạo']).format('DD/MM/YYYY HH:mm:ss');
-					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(result[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(result[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+result[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">Tình trạng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(result[i]['tình trạng đơn hàng'])+'</span></div><div id="tkcover">';
+					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(result[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(result[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+result[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(result[i]['TinhTrang đơn hàng'])+'</span></div><div id="tkcover">';
 					check = false;
 				}
 				if(!check) {	
-					dh+='<div class="donHang" style="clear:both;"><div class="col tk" style="width:20%;"><span style="font-size:15px;color:black;">'+escapeHtml(result[i]['Tên điện thoại'])+'</span></div><div class="col tk" style="width:20%;">Số Lượng: <span style="font-size:15px;color:black;">'+result[i]['Số lượng']+' Cái</span></div><div class="col tk" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">'+curr.format(result[i]['Tổng tiền'])+'</span></div></div>';
-/*	<div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">'+result[0]['Tên điện thoại']+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">Số Lượng: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue('+i+');" onkeyup="checkValueC('+i+');" type="number" min="0" max="'+soluong+'" value="'+sanPhamDH[i].soluong+'"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">'+curr.format(gia)+'</div></div>
+					dh+='<div class="donHang" style="clear:both;"><div class="col tk" style="width:20%;"><span style="font-size:15px;color:black;">'+escapeHtml(result[i]['tenSp'])+'</span></div><div class="col tk" style="width:20%;">SL: <span style="font-size:15px;color:black;">'+result[i]['SL']+' Cái</span></div><div class="col tk" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">'+curr.format(result[i]['Tổng tiền'])+'</span></div></div>';
+/*	<div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">'+result[0]['tenSp']+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue('+i+');" onkeyup="checkValueC('+i+');" type="number" min="0" max="'+soluong+'" value="'+sanPhamDH[i].soluong+'"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">'+curr.format(gia)+'</div></div>
 */					var rowData = {};
 					for (var j = 0; j < columns.length; j++) {
 						if(columns[j]=="Tổng tiền") rowData[columns[j]] = curr.format(result[i]['Tổng tiền']);
@@ -728,7 +728,7 @@ function onchangeTkDH(pActive){
 				if(i==result.length-2) check=true;
 				if(check){
 					dh+='</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: '+curr.format(result[i]['tongtien'])+'</div>';
-					if(result[i]['tình trạng đơn hàng']=='Đã xác nhận') tc += Number(result[i]['tongtien']);
+					if(result[i]['TinhTrang đơn hàng']=='Đã xác nhận') tc += Number(result[i]['tongtien']);
 					}
 				}
 				dh+='<div style="clear:both;font-size:20px;color:#8000ff;">Tổng doanh thu trên 1 trang: <span style="font-size:26px;color:black;">'+curr.format(tc)+'</span></div>';
@@ -780,12 +780,12 @@ function LsGd(lsgdJSON,pActive,pNum){
 		for(var i=0;i<lsgdJSON.length;i++){
 				if(check){
 					var ng=new moment(lsgdJSON[i]['Ngày khởi tạo']).format('DD/MM/YYYY HH:mm:ss');
-					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(lsgdJSON[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày thanh toán: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(lsgdJSON[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+lsgdJSON[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">Tình trạng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(lsgdJSON[i]['tình trạng đơn hàng'])+'</span></div><div id="lsgdcover">';;
+					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(lsgdJSON[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày thanh toán: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(lsgdJSON[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+lsgdJSON[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(lsgdJSON[i]['TinhTrang đơn hàng'])+'</span></div><div id="lsgdcover">';;
 					check = false;
 				}
 				if(!check) {	
-					dh+='<div class="donHang" style="clear:both;"><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">'+escapeHtml(lsgdJSON[i]['Tên điện thoại'])+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">Số Lượng: <span style="font-size:18px;color:black;font-weight:normal;">'+lsgdJSON[i]['Số lượng']+' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">'+curr.format(lsgdJSON[i]['Tổng tiền'])+'</span></div></div>';
-		/*	<div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding:8px 0 0 4px;">'+result[0]['Tên điện thoại']+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">Số Lượng: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue('+i+');" onkeyup="checkValueC('+i+');" type="number" min="0" max="'+soluong+'" value="'+sanPhamDH[i].soluong+'"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">'+curr.format(gia)+'</div></div>
+					dh+='<div class="donHang" style="clear:both;"><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">'+escapeHtml(lsgdJSON[i]['tenSp'])+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: <span style="font-size:18px;color:black;font-weight:normal;">'+lsgdJSON[i]['SL']+' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">'+curr.format(lsgdJSON[i]['Tổng tiền'])+'</span></div></div>';
+		/*	<div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding:8px 0 0 4px;">'+result[0]['tenSp']+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue('+i+');" onkeyup="checkValueC('+i+');" type="number" min="0" max="'+soluong+'" value="'+sanPhamDH[i].soluong+'"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">'+curr.format(gia)+'</div></div>
 */
 				}
 				if(i!=lsgdJSON.length-1) if(lsgdJSON[i]['Mã đơn hàng']!=lsgdJSON[i+1]['Mã đơn hàng']) check=true;
@@ -907,17 +907,17 @@ function xlDhVance(pActive){
 					for(var i=0;i<result.length-1;i++){
 				if(check){
 					var ng=new moment(result[i]['Ngày khởi tạo']).format('DD/MM/YYYY HH:mm:ss');
-					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(result[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(result[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+result[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">Tình trạng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(result[i]['tình trạng đơn hàng'])+'</span></div><div id="dhcover">';
+					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(result[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(result[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+result[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(result[i]['TinhTrang đơn hàng'])+'</span></div><div id="dhcover">';
 					check = false;
 				}
 				if(!check) {	
-					dh+='<div class="donHang" style="clear:both;"><div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">'+result[i]['Tên điện thoại']+'</span></div><div class="col dh" style="width:20%;">Số Lượng: <span style="font-size:15px;color:black;">'+result[i]['Số lượng']+' Cái</span></div><div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">'+curr.format(result[i]['Tổng tiền'])+'</span></div></div>';
+					dh+='<div class="donHang" style="clear:both;"><div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">'+result[i]['tenSp']+'</span></div><div class="col dh" style="width:20%;">SL: <span style="font-size:15px;color:black;">'+result[i]['SL']+' Cái</span></div><div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">'+curr.format(result[i]['Tổng tiền'])+'</span></div></div>';
 				}
 				if(i!=result.length-2) if(result[i]['Mã đơn hàng']!=result[i+1]['Mã đơn hàng']) check=true;
 				if(i==result.length-2) check=true;
 				if(check){
 				dh+='</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: '+curr.format(result[i]['tongtien'])+'</div><label class="switch" style="float:left;clear:left;"><input class="xacnhan" type="checkbox" onclick="xnDh('+result[i]['Mã đơn hàng']+',this, '+pActive+');"style="clear:right;float:left;" ';
-				if(result[i]['tình trạng đơn hàng']=='Đã xác nhận') dh+='checked><span class="slider round"></span></label>';
+				if(result[i]['TinhTrang đơn hàng']=='Đã xác nhận') dh+='checked><span class="slider round"></span></label>';
 				else dh+='><span class="slider round"></span></label><button onclick="huyDh('+result[i]['Mã đơn hàng']+','+pActive+');" style="float:left;">Hủy Đơn Hàng</button>';
 				}
 		}
@@ -1018,8 +1018,8 @@ function checkValueC(i){
 		type: 'POST',
 		success: function(results){
 		var result = JSON.parse(results);
-			if(Number(result[0]['Số lượng'])<value) {
-				alert("xin lỗi, bạn chỉ có thể mua hàng với số lượng cho phép!");
+			if(Number(result[0]['SL'])<value) {
+				alert("xin lỗi, bạn chỉ có thể mua hàng với SL cho phép!");
 				input[0].value=sanPhamDH[i].soluong;
 			}
 		}
@@ -1039,11 +1039,11 @@ function changeValue(i){
 					var result = JSON.parse(results);
 				if(sanPhamDH[i].soluong<value) {
 					sanPhamDH[i].soluong=Number(value);
-					sanPhamDH[i].thanhtien=Number(value)*parseInt(result[0]['Giá cả']);
+					sanPhamDH[i].thanhtien=Number(value)*parseInt(result[0]['GiaCa']);
 				}
 				if(sanPhamDH[i].soluong>value) {
 					sanPhamDH[i].soluong=Number(value);
-					sanPhamDH[i].thanhtien=Number(value)*parseInt(result[0]['Giá cả']);
+					sanPhamDH[i].thanhtien=Number(value)*parseInt(result[0]['GiaCa']);
 				}
 					}
 			});
@@ -1069,12 +1069,14 @@ function Cart(){
 					async: false,
 					data: {masp:JSON.stringify(sanPhamDH[i].masp)},
 					type: 'POST',
-					success: function(results){
-					var result = JSON.parse(results);
-					var gia=Number(sanPhamDH[i].soluong)*parseInt(result[0]['Giá cả']);
-					var soluong=Number(result[0]['Số lượng']);
-					tong+=gia;
-					sp+='<div id="gh'+sanPhamDH[i].masp+'" class="donHang" style="clear:left;"><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">'+result[0]['Tên điện thoại']+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">Số Lượng: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue('+i+');" onkeyup="checkValueC('+i+');" type="number" min="0" max="'+soluong+'" value="'+sanPhamDH[i].soluong+'"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">'+curr.format(gia)+'</div></div><button style="float:left;height:40px;width:5%;font-size: 30px;border: 1px solid black;" class="del" onclick="delSpDH('+i+');">&times;</button></div>';
+					success: function(results) {
+						if (results != 0) {
+							var result = JSON.parse(results);
+							var gia = Number(sanPhamDH[i].soluong) * parseInt(result[0]['GiaCa']);
+							var soluong = Number(result[0]['SL']);
+							tong += gia;
+							sp += '<div id="gh' + sanPhamDH[i].masp + '" class="donHang" style="clear:left;"><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">' + result[0]['tenSp'] + '</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue(' + i + ');" onkeyup="checkValueC(' + i + ');" type="number" min="0" max="' + soluong + '" value="' + sanPhamDH[i].soluong + '"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">' + curr.format(gia) + '</div></div><button style="float:left;height:40px;width:5%;font-size: 30px;border: 1px solid black;" class="del" onclick="delSpDH(' + i + ');">&times;</button></div>';
+						}
 					}
 				});
 		}
@@ -1085,29 +1087,29 @@ function Cart(){
 	}
 }
 function addToCart(){
-	var input=document.getElementById(this['Mã sản phẩm']).getElementsByTagName("input");
+	var input=document.getElementById(this['maSP']).getElementsByTagName("input");
 	var value=Number(input[0].value);
 	var checkSL=false,check=false;
 	var j=0;
 	var sanPhamDH=JSON.parse(localStorage.getItem("sanPhamDH"));			
-	if(sanPhamDH==null) {if(value<=this['Số lượng']) {
-		sanPhamDH=[new sanphamDH(this['Mã sản phẩm'],value,(Number(value)*parseInt(this['Giá cả'])))];
+	if(sanPhamDH==null) {if(value<=this['SL']) {
+		sanPhamDH=[new sanphamDH(this['maSP'],value,(Number(value)*parseInt(this['GiaCa'])))];
 		checkSL=true;
 		}
 	}
 	else {for(j=0;j<sanPhamDH.length;j++){
-		if(sanPhamDH[j].masp==this['Mã sản phẩm']) {
-			if(sanPhamDH[j].soluong+value<=this['Số lượng']){
+		if(sanPhamDH[j].masp==this['maSP']) {
+			if(sanPhamDH[j].soluong+value<=this['SL']){
 			sanPhamDH[j].soluong+=value;
-			sanPhamDH[j].thanhtien=Number(sanPhamDH[j].soluong)*parseInt(this['Giá cả']);
+			sanPhamDH[j].thanhtien=Number(sanPhamDH[j].soluong)*parseInt(this['GiaCa']);
 			checkSL = true;
 			}
 			else check=true;
 			break;
 		}
 	}
-	if(j==sanPhamDH.length&&!check) if(value<=this['Số lượng']) {
-		sanPhamDH.push(new sanphamDH(this['Mã sản phẩm'],value,(Number(value)*parseInt(this['Giá cả']))));
+	if(j==sanPhamDH.length&&!check) if(value<=this['SL']) {
+		sanPhamDH.push(new sanphamDH(this['maSP'],value,(Number(value)*parseInt(this['GiaCa']))));
 		checkSL=true;
 		}
 	}
@@ -1115,16 +1117,16 @@ function addToCart(){
 	localStorage.setItem("sanPhamDH",JSON.stringify(sanPhamDH));
 	alert("thêm thành công");
 	}
-	else alert('Bạn đã thêm quá số lượng cho phép');
+	else alert('Bạn đã thêm quá SL cho phép');
 }
 function checkValue(input){
 	if(Number(input)<0) {
 		alert("vui lòng nhập vào đúng số");
 		input=1;
 	}
-	if(this["Số lượng"]<Number(input)) {
-		alert("xin lỗi, bạn chỉ có thể mua hàng với số lượng cho phép!");
-		input=this['Số lượng'];
+	if(this["SL"]<Number(input)) {
+		alert("xin lỗi, bạn chỉ có thể mua hàng với SL cho phép!");
+		input=this['SL'];
 	}
 }
 function logout(){
@@ -1219,42 +1221,42 @@ function checkUser(){
 function menu(){
 	var s="";
 	for(var i=0;i<this.length;i++){
-		s+='<li><a style="text-decoration:none;width:100%;" href="?idBrand='+this[i]['Mã danh mục']+'&pageActive=1"><div class="theloai">'+this[i]['Tên Danh mục']+"</div></a></li>";
+		s+='<li><a style="text-decoration:none;width:100%;" href="?idBrand='+this[i]['maDM']+'&pageActive=1"><div class="theloai">'+this[i]['tenDM']+"</div></a></li>";
 	}
 	document.getElementById("m").innerHTML=s;
 }
 function showPageSP(sanPhamJSON,pActiveJSON,pNumJSON){
 	var sp="";
 	for(var i=0;i<sanPhamJSON.length;i++){
-		var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(sanPhamJSON[i]['Giá cả']);
-		sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(sanPhamJSON[i]))+');\'><img src="'+sanPhamJSON[i]["Hình ảnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(sanPhamJSON[i]["Tên điện thoại"])+'</span><button style="text-align:center;width:100%;color:red;">'+curr+'</button></div>';		
+		var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(sanPhamJSON[i]['GiaCa']);
+		sp+='<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply('+escapeHtml(JSON.stringify(sanPhamJSON[i]))+');\'><img src="'+sanPhamJSON[i]["HinhAnh"]+'" class="img"><span style="font-size:10px;font-weight:bold;">'+escapeHtml(sanPhamJSON[i]["tenSp"])+'</span><button style="text-align:center;width:100%;color:red;">'+curr+'</button></div>';		
 	}
 	document.getElementById("sp").innerHTML=sp;
 	page("trang",pNumJSON,null,pActiveJSON);
 }
 function showCTSP(){	
-	var modal = document.getElementById(this["Mã sản phẩm"]);
+	var modal = document.getElementById(this["maSP"]);
 	if(modal!=null)
 	modal.style.display='block';
 	else {
 		var mod='';
 		var myModal=document.createElement('div');
 		myModal.className='modal product';
-		myModal.id=this["Mã sản phẩm"];
-		mod+='<div class="modal-content modalsp"><div class="close" onclick="document.getElementById('+this["Mã sản phẩm"]+').style.display='+"'none'"+';">&times;</div><div class="tendt">Điện thoại '+escapeHtml(this["Tên điện thoại"])+'<hr></div>'+
+		myModal.id=this["maSP"];
+		mod+='<div class="modal-content modalsp"><div class="close" onclick="document.getElementById('+this["maSP"]+').style.display='+"'none'"+';">&times;</div><div class="tendt">Điện thoại '+escapeHtml(this["tenSp"])+'<hr></div>'+
 		'<div class="details">'+
-		'<div class="mota">Kích thước: '+escapeHtml(this["Kích thước"])+'<hr></div>'+
-		'<div class="mota">Trọng lượng: '+escapeHtml(this["Trọng lượng"])+'<hr></div>'+
-		'<div class="mota">Màu sắc: '+escapeHtml(this["Màu sắc"])+'<hr></div>'+
-		'<div class="mota">Bộ nhớ trong: '+escapeHtml(this["Bộ nhớ trong"])+'<hr></div>'+
-		'<div class="mota">Bộ nhớ đệm(Ram): '+escapeHtml(this["Bộ nhớ đệm/Ram"])+'<hr></div>'+
-		'<div class="mota">Hệ điều hành: '+escapeHtml(this["Hệ điều hành"])+'<hr></div>'+
-		'<div class="mota">Camera trước: '+escapeHtml(this["Camera trước"])+'<hr></div>'+
-		'<div class="mota">Camera sau: '+escapeHtml(this["Camera sau"])+'<hr></div>'+
+		'<div class="mota">Size: '+escapeHtml(this["Size"])+'<hr></div>'+
+		'<div class="mota">Weight: '+escapeHtml(this["Weight"])+'<hr></div>'+
+		'<div class="mota">Color: '+escapeHtml(this["Color"])+'<hr></div>'+
+		'<div class="mota">BoNhoTrong: '+escapeHtml(this["BoNhoTrong"])+'<hr></div>'+
+		'<div class="mota">Bộ nhớ đệm(Ram): '+escapeHtml(this["BoNho"])+'<hr></div>'+
+		'<div class="mota">HDH: '+escapeHtml(this["HDH"])+'<hr></div>'+
+		'<div class="mota">CamTruoc: '+escapeHtml(this["CamTruoc"])+'<hr></div>'+
+		'<div class="mota">CamSau: '+escapeHtml(this["CamSau"])+'<hr></div>'+
 		'<div class="mota">Dung lượng Pin: '+escapeHtml(this["Pin"])+'<hr></div>'+
-		'<div class="mota">Bảo hành: '+escapeHtml(this["Bảo hành"])+'<hr></div>'+
-		'<div class="mota">Tình trạng: '+escapeHtml(this["Tình trạng"])+'<hr></div>'+
-		'</div><div style="height:70%;width:40%;float:right;"><img style="height:100%;width:100%;" src="'+this['Hình ảnh']+'"></div><div style="height:15%;width:40%;float:right;"><div class="soLuong">Số lượng: <input style="font-size:18px;width:30%;text-align:center;" type="number" onkeyup=\'checkValue.call('+escapeHtml(JSON.stringify(this))+',this.value);\' min="1" value="1" max="'+this["Số lượng"]+'"/></div><div class="addToCart"><button class="btnthem" onclick=\'addToCart.call('+escapeHtml(JSON.stringify(this))+');\'><img style="height:25px;float:left;" src="image/shopping-cart-solid - Copy.png"><span style="font-size:14px;color:black;">Thêm vào giỏ hàng</span></button></div></div></div>';
+		'<div class="mota">BaoHanh: '+escapeHtml(this["BaoHanh"])+'<hr></div>'+
+		'<div class="mota">TinhTrang: '+escapeHtml(this["TinhTrang"])+'<hr></div>'+
+		'</div><div style="height:70%;width:40%;float:right;"><img style="height:100%;width:100%;" src="'+this['HinhAnh']+'"></div><div style="height:15%;width:40%;float:right;"><div class="soLuong">SL: <input style="font-size:18px;width:30%;text-align:center;" type="number" onkeyup=\'checkValue.call('+escapeHtml(JSON.stringify(this))+',this.value);\' min="1" value="1" max="'+this["SL"]+'"/></div><div class="addToCart"><button class="btnthem" onclick=\'addToCart.call('+escapeHtml(JSON.stringify(this))+');\'><img style="height:25px;float:left;" src="image/shopping-cart-solid - Copy.png"><span style="font-size:14px;color:black;">Thêm vào giỏ hàng</span></button></div></div></div>';
 		myModal.innerHTML=mod;
 		document.getElementsByTagName('body')[0].appendChild(myModal);
 	}
@@ -1264,7 +1266,7 @@ function showCTSP(){
 				modal.style.display='none';
 			}
 	});
-	checkSP(this["Mã sản phẩm"],this["Số lượng"]);
+	checkSP(this["maSP"],this["SL"]);
 }
 function page(idPage,pageNum,functionCall,pActive){
 	if(Number(pageNum)>1){

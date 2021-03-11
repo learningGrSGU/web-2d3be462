@@ -81,7 +81,7 @@ if(isset($_GET['action'])){
 	}
 }
 function test(){
-		echo $_SESSION['sql'];
+
 }
 function encrypt(){
 	$str="123456";
@@ -510,6 +510,7 @@ function searchSP(){
 }
 function logout(){
 	session_destroy();
+	setcookie(session_name(),session_id(),time()-1,'/');
 }
 function isLogin(){
 	include_once 'DBConnect.php';
@@ -545,7 +546,7 @@ function xulyDK(){
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		if(isset($_POST['ht']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['email']) && isset($_POST['sdt']) && isset($_POST['address'])){
 			include_once 'DBConnect.php';
-			$maKH=DBconnect::getInstance()->execSQL("select max(`maUser`) from nguoidung");
+			$maKH=DBconnect::getInstance()->execSQL("SELECT MAX(CAST(SUBSTRING(maUser,3,length(maUser)-2) AS unsigned)) FROM nguoidung WHERE maUser LIKE 'KH%'");
 			$numMaKH = trim($maKH[0][0],"KH") + 1;
 			$insMaKH="KH".($numMaKH);
 			$cryptedPass = password_hash($_POST['pass'],PASSWORD_BCRYPT,array('cost'=>10));
