@@ -346,7 +346,7 @@ function qltk(pActive){
 				if(Number(results)!=0){
 					var result = JSON.parse(results);
 					var accs="";
-					accs+='<div id="qltkcover"><div class="row"><div class="th qltk">STT</div><div class="th qltk">Tên Đăng Nhập</div><div class="th qltk">Họ và tên</div><div class="th qltk">Địa chỉ</div><div class="th qltk">Email</div><div class="th qltk">Số điện thoại</div><div class="th qltks">chức năng</div></div>';
+					accs+='<div id="qltkcover"><div class="row"><div class="th qltk">STT</div><div class="th qltk">Tên Đăng Nhập</div><div class="th qltk">Họ và Tên</div><div class="th qltk">Địa chỉ</div><div class="th qltk">Email</div><div class="th qltk">Số điện thoại</div><div class="th qltks">chức năng</div></div>';
 					for(var i=0;i<result.length-1;i++){
 						if(result[i]['Mở/Khoá']==1){
 	accs+='<div class="row" id="'+i+'"><div class="col qltk">'+i+'</div><div class="col qltk">'+escapeHtml(result[i]['Tên đăng nhập'])+'</div><div class="col">'+escapeHtml(result[i]['Tên'])+'</div><div class="col">'+result[i]['Địa chỉ']+'</div><div class="col qltk">'+escapeHtml(result[i]['Email'])+'</div><div class="col qltk">'+result[i]['số điện thoại']+'</div><div class="col qltks"><button class="delacc" onclick="del('+escapeHtml(JSON.stringify(result[i]['Tên đăng nhập']))+', '+pActive+');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock('+escapeHtml(JSON.stringify(result[i]['Tên đăng nhập']))+',0, '+pActive+');">Khóa tài khoản</button></div></div>';
@@ -643,7 +643,7 @@ function product(){
 	if(url[1]=="dssp"){
 		var sDate = new moment(new Date()).subtract(1,'month').format('YYYY-MM-DD');
 		var eDate = new moment(new Date()).format('YYYY-MM-DD');
-		document.getElementById('opt').innerHTML='<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập maSP hoặc tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="'+sDate+'"><input id="endDate" type="date" onchange="productList(1)" value="'+eDate+'"><button class="AProd" onclick="showAddSp();">Thêm sản phẩm</button>';
+		document.getElementById('opt').innerHTML='<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập maSP hoặc Tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="'+sDate+'"><input id="endDate" type="date" onchange="productList(1)" value="'+eDate+'"><button class="AProd" onclick="showAddSp();">Thêm sản phẩm</button>';
 		jq351(function(){productList(1);});
 	}
 }
@@ -710,8 +710,8 @@ function onchangeTkDH(pActive){
       				}
 					for(var i=0;i<result.length-1;i++){
 				if(check){
-					var ng=new moment(result[i]['Ngày khởi tạo']).format('DD/MM/YYYY HH:mm:ss');
-					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(result[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(result[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+result[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(result[i]['TinhTrang đơn hàng'])+'</span></div><div id="tkcover">';
+					var ng=new moment(result[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
+					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(result[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(result[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+result[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(result[i]['Tinhtrang'])+'</span></div><div id="tkcover">';
 					check = false;
 				}
 				if(!check) {	
@@ -724,11 +724,11 @@ function onchangeTkDH(pActive){
         			}
         			data.push(rowData);
 				}
-				if(i!=result.length-2) if(result[i]['Mã đơn hàng']!=result[i+1]['Mã đơn hàng']) check=true;
+				if(i!=result.length-2) if(result[i]['maDH']!=result[i+1]['maDH']) check=true;
 				if(i==result.length-2) check=true;
 				if(check){
 					dh+='</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: '+curr.format(result[i]['tongtien'])+'</div>';
-					if(result[i]['TinhTrang đơn hàng']=='Đã xác nhận') tc += Number(result[i]['tongtien']);
+					if(result[i]['Tinhtrang']=='Đã xác nhận') tc += Number(result[i]['tongtien']);
 					}
 				}
 				dh+='<div style="clear:both;font-size:20px;color:#8000ff;">Tổng doanh thu trên 1 trang: <span style="font-size:26px;color:black;">'+curr.format(tc)+'</span></div>';
@@ -779,42 +779,22 @@ function LsGd(lsgdJSON,pActive,pNum){
 		var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
 		for(var i=0;i<lsgdJSON.length;i++){
 				if(check){
-					var ng=new moment(lsgdJSON[i]['Ngày khởi tạo']).format('DD/MM/YYYY HH:mm:ss');
-					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(lsgdJSON[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày thanh toán: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(lsgdJSON[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+lsgdJSON[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(lsgdJSON[i]['TinhTrang đơn hàng'])+'</span></div><div id="lsgdcover">';;
+					var ng=new moment(lsgdJSON[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
+					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(lsgdJSON[i]['Hovaten'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày thanh toán: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(lsgdJSON[i]['Diachi'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+lsgdJSON[i]['Sdt']+'</span></div><div><span style="font-weight:bold;">Tình trạng đơn hàng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(lsgdJSON[i]['Tinhtrang'])+'</span></div><div id="lsgdcover">';
 					check = false;
 				}
 				if(!check) {	
-					dh+='<div class="donHang" style="clear:both;"><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">'+escapeHtml(lsgdJSON[i]['tenSp'])+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: <span style="font-size:18px;color:black;font-weight:normal;">'+lsgdJSON[i]['SL']+' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">'+curr.format(lsgdJSON[i]['Tổng tiền'])+'</span></div></div>';
+					dh+='<div class="donHang" style="clear:both;"><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">'+escapeHtml(lsgdJSON[i]['tenSp'])+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: <span style="font-size:18px;color:black;font-weight:normal;">'+lsgdJSON[i]['SL']+' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">'+curr.format(lsgdJSON[i]['TongTien'])+'</span></div></div>';
 		/*	<div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding:8px 0 0 4px;">'+result[0]['tenSp']+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue('+i+');" onkeyup="checkValueC('+i+');" type="number" min="0" max="'+soluong+'" value="'+sanPhamDH[i].soluong+'"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">'+curr.format(gia)+'</div></div>
 */
 				}
-				if(i!=lsgdJSON.length-1) if(lsgdJSON[i]['Mã đơn hàng']!=lsgdJSON[i+1]['Mã đơn hàng']) check=true;
+				if(i!=lsgdJSON.length-1) if(lsgdJSON[i]['maDH']!=lsgdJSON[i+1]['maDH']) check=true;
 				if(i==lsgdJSON.length-1) check=true;
 				if(check) dh+='</div>';
 		}
 		document.getElementById("sp").innerHTML=dh;
 		page("trang",pNum,null,pActive);
 		}
-	}
-}
-function thanhToan(){
-	if(getCookie('user')==null&&getCookie('name')==null) {alert("vui lòng đăng nhập để tiếp tục");}
-	else {
-		var sanPhamDH=JSON.parse(localStorage.getItem("sanPhamDH"));
-		jq351.ajax({
-			url: 'php/xuly.php?action=donhang',
-			type: 'POST',
-			async: false,
-			data: {DH:JSON.stringify(sanPhamDH),date:new moment(new Date()).format('YYYY-MM-DD HH:mm:ss')},
-			success: function(result){
-				if(result==1) {
-					localStorage.removeItem("sanPhamDH");
-					Cart();
-					alert('Thanh toán thành công');
-				}
-				else alert('Giao dịch thất bại! '+result);
-			}
-		});
 	}
 }
 function xnDh(x,input, pActive){
@@ -906,19 +886,19 @@ function xlDhVance(pActive){
 					var curr = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
 					for(var i=0;i<result.length-1;i++){
 				if(check){
-					var ng=new moment(result[i]['Ngày khởi tạo']).format('DD/MM/YYYY HH:mm:ss');
-					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(result[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(result[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+result[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(result[i]['TinhTrang đơn hàng'])+'</span></div><div id="dhcover">';
+					var ng=new moment(result[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
+					dh+='<div id="'+i+'"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>'+escapeHtml(result[i]['Tên'])+'</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>'+ng+'</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">'+escapeHtml(result[i]['Địa chỉ'])+'</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">'+result[i]['số điện thoại']+'</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">'+escapeHtml(result[i]['Tinhtrang'])+'</span></div><div id="dhcover">';
 					check = false;
 				}
 				if(!check) {	
 					dh+='<div class="donHang" style="clear:both;"><div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">'+result[i]['tenSp']+'</span></div><div class="col dh" style="width:20%;">SL: <span style="font-size:15px;color:black;">'+result[i]['SL']+' Cái</span></div><div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">'+curr.format(result[i]['Tổng tiền'])+'</span></div></div>';
 				}
-				if(i!=result.length-2) if(result[i]['Mã đơn hàng']!=result[i+1]['Mã đơn hàng']) check=true;
+				if(i!=result.length-2) if(result[i]['maDH']!=result[i+1]['maDH']) check=true;
 				if(i==result.length-2) check=true;
 				if(check){
-				dh+='</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: '+curr.format(result[i]['tongtien'])+'</div><label class="switch" style="float:left;clear:left;"><input class="xacnhan" type="checkbox" onclick="xnDh('+result[i]['Mã đơn hàng']+',this, '+pActive+');"style="clear:right;float:left;" ';
-				if(result[i]['TinhTrang đơn hàng']=='Đã xác nhận') dh+='checked><span class="slider round"></span></label>';
-				else dh+='><span class="slider round"></span></label><button onclick="huyDh('+result[i]['Mã đơn hàng']+','+pActive+');" style="float:left;">Hủy Đơn Hàng</button>';
+				dh+='</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: '+curr.format(result[i]['tongtien'])+'</div><label class="switch" style="float:left;clear:left;"><input class="xacnhan" type="checkbox" onclick="xnDh('+result[i]['maDH']+',this, '+pActive+');"style="clear:right;float:left;" ';
+				if(result[i]['Tinhtrang']=='Đã xác nhận') dh+='checked><span class="slider round"></span></label>';
+				else dh+='><span class="slider round"></span></label><button onclick="huyDh('+result[i]['maDH']+','+pActive+');" style="float:left;">Hủy Đơn Hàng</button>';
 				}
 		}
 					document.getElementById("sp").innerHTML=dh;
@@ -1019,7 +999,7 @@ function checkValueC(i){
 		success: function(results){
 		var result = JSON.parse(results);
 			if(Number(result[0]['SL'])<value) {
-				alert("xin lỗi, bạn chỉ có thể mua hàng với SL cho phép!");
+				customDialog("xin lỗi, bạn chỉ có thể mua hàng với SL cho phép!");
 				input[0].value=sanPhamDH[i].soluong;
 			}
 		}
@@ -1141,7 +1121,7 @@ function logout(){
 }
 function check(){
 	if(document.login.user.value=="") {
-		alert("Nhập vào tên đăng nhập");
+		alert("Nhập vào Tên đăng nhập");
 		return false;	
 	}
 	if(document.login.pass.value==""){
