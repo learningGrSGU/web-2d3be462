@@ -129,7 +129,7 @@ function removeMWSpace($String){
 }
 function home(){
 	include_once 'DBConnect.php';
-	$sql = "SELECT * FROM `sanpham` sp JOIN `chitietsp` ctsp ON sp.`maSP`=ctsp.`maSP` limit 0,10";
+	$sql = "SELECT * FROM `sanpham` sp JOIN `chitietsp` ctsp ON sp.`maSP`=ctsp.`maSP` limit 0,12";
 	$sp = DBconnect::getInstance()->execSQL($sql);
 	echo json_encode($sp);
 }

@@ -2,7 +2,7 @@
 class DBconnect {
 	private $user="root";
 	private $pass="";
-	private $dbname="phone_draft";
+	private $dbname="phone";
 	private $server="localhost:3306";
 	private $conn;
 	public static $DB;
