@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <script src="external/jquery/jquery.js"></script>
     <script src="javascript/jquery-ui.min.js"></script>
-    <script src="javascript/script.js"></script>
+    <script type="module" src="javascript/script.js"></script>
     <script src="javascript/jquery-3.5.1.js"></script>
     <script src="javascript/moment-with-locales.js"></script>
     <script>
@@ -41,7 +41,7 @@
             <nav>
                <ul id="MenuItems">
                   <li><a href="">Home</a></li>
-                  <li><a href="">Products</a></li>
+                  <li class="list-item" style="position:relative;"><a>Thể Loại</a><ul id="m" type="none"></ul></li>
                   <li><a href="">About</a></li>
                   <li><a href="">Contact</a></li>
                   <li><a href="">Account</a></li>

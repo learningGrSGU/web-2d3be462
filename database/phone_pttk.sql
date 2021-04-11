@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 08, 2021 at 08:51 AM
+-- Generation Time: Apr 10, 2021 at 10:58 AM
 -- Server version: 8.0.21
 -- PHP Version: 7.3.21
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `binhluan` (
   PRIMARY KEY (`maBL`),
   KEY `maSP` (`maSP`),
   KEY `maKH` (`maKH`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `chitietdonhang` (
   PRIMARY KEY (`maDH`,`maSp`),
   KEY `maSp` (`maSp`),
   KEY `maDH` (`maDH`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `chitietpn` (
   PRIMARY KEY (`maPN`,`maSP`),
   KEY `maPN` (`maPN`) USING BTREE,
   KEY `maSP` (`maSP`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -85,22 +85,22 @@ CREATE TABLE IF NOT EXISTS `chitietsp` (
   `maCT` int NOT NULL AUTO_INCREMENT,
   `maSP` int NOT NULL,
   `maDM` varchar(50) NOT NULL,
-  `Size` int NOT NULL,
-  `Weight` int NOT NULL,
+  `Size` varchar(255) NOT NULL,
+  `Weight` varchar(255) NOT NULL,
   `Color` varchar(20) NOT NULL,
-  `BoNhoTrong` int NOT NULL,
-  `BoNho` int NOT NULL,
+  `BoNhoTrong` varchar(255) NOT NULL,
+  `BoNho` varchar(255) NOT NULL,
   `HDH` varchar(10) NOT NULL,
   `CamTruoc` varchar(10) NOT NULL,
   `CamSau` varchar(10) NOT NULL,
-  `Pin` int NOT NULL,
-  `BaoHanh` date NOT NULL,
+  `Pin` varchar(255) NOT NULL,
+  `BaoHanh` varchar(50) NOT NULL,
   `TinhTrang` varchar(20) NOT NULL,
-  `HinhAnh` varchar(20) NOT NULL,
+  `HinhAnh` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`maCT`),
   KEY `maSP` (`maSP`),
   KEY `maDM` (`maDM`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -113,7 +113,15 @@ CREATE TABLE IF NOT EXISTS `danhmuc` (
   `maDM` varchar(50) NOT NULL,
   `tenDM` varchar(20) NOT NULL,
   PRIMARY KEY (`maDM`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `danhmuc`
+--
+
+INSERT INTO `danhmuc` (`maDM`, `tenDM`) VALUES
+('IP', 'Iphone'),
+('SS', 'Samsung');
 
 -- --------------------------------------------------------
 
@@ -131,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `donhang` (
   PRIMARY KEY (`maDH`),
   KEY `maKH` (`maKH`),
   KEY `maNV` (`maNV`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -142,15 +150,22 @@ CREATE TABLE IF NOT EXISTS `donhang` (
 DROP TABLE IF EXISTS `khachhang`;
 CREATE TABLE IF NOT EXISTS `khachhang` (
   `maKH` int NOT NULL AUTO_INCREMENT,
-  `maUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `Hovaten` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `maUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Hovaten` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `Diachi` varchar(50) NOT NULL,
   `Sdt` int NOT NULL,
-  `Email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `CMND` int NOT NULL,
+  `Email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `CMND` int DEFAULT NULL,
   PRIMARY KEY (`maKH`) USING BTREE,
   KEY `maUser` (`maUser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `khachhang`
+--
+
+INSERT INTO `khachhang` (`maKH`, `maUser`, `Hovaten`, `Diachi`, `Sdt`, `Email`, `CMND`) VALUES
+(1, 'KH1', 'duong ngoc bao', 'sadasdasdasdasd', 837574301, 'baovippro318@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -161,15 +176,22 @@ CREATE TABLE IF NOT EXISTS `khachhang` (
 DROP TABLE IF EXISTS `nguoidung`;
 CREATE TABLE IF NOT EXISTS `nguoidung` (
   `maUser` varchar(50) NOT NULL,
-  `RoleID` int NOT NULL,
+  `RoleID` int DEFAULT NULL,
   `TenUser` varchar(20) NOT NULL,
   `TK` varchar(20) NOT NULL,
-  `MK` varchar(20) NOT NULL,
+  `MK` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `lock/unlock` tinyint(1) NOT NULL,
   PRIMARY KEY (`maUser`),
   UNIQUE KEY `TK` (`TK`),
   KEY `RoleID` (`RoleID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `nguoidung`
+--
+
+INSERT INTO `nguoidung` (`maUser`, `RoleID`, `TenUser`, `TK`, `MK`, `lock/unlock`) VALUES
+('KH1', NULL, 'duong ngoc bao', 'user123', '$2y$10$ZtyH1GYDDTlJsNXUknq22uZmEnLmb0ngsCi5R8A3ZsXHI1jGmiFCe', 1);
 
 -- --------------------------------------------------------
 
@@ -185,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `nhacungcap` (
   `SDT` int NOT NULL,
   `Email` varchar(20) NOT NULL,
   PRIMARY KEY (`maNCC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -196,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `nhacungcap` (
 DROP TABLE IF EXISTS `nhanvien`;
 CREATE TABLE IF NOT EXISTS `nhanvien` (
   `maNV` int NOT NULL AUTO_INCREMENT,
-  `maUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `maUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `TenNV` varchar(20) NOT NULL,
   `GT` varchar(10) NOT NULL,
   `NgaySinh` date NOT NULL,
@@ -206,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `nhanvien` (
   `NgayVaoLam` date NOT NULL,
   PRIMARY KEY (`maNV`),
   KEY `maUser` (`maUser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -220,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `phanquyen` (
   `tenQuyen` varchar(20) NOT NULL,
   `ChiTiet` varchar(50) NOT NULL,
   PRIMARY KEY (`RoleID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -238,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `phieunhap` (
   PRIMARY KEY (`maPN`),
   KEY `maNV` (`maNV`),
   KEY `maNCC` (`maNCC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -254,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `sanpham` (
   `GiaCa` int NOT NULL,
   `SL` int NOT NULL,
   PRIMARY KEY (`maSP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Constraints for dumped tables

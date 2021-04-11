@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <script src="external/jquery/jquery.js"></script>
     <script src="javascript/jquery-ui.min.js"></script>
-<script src="javascript/script.js"></script>
+<script type="module" src="javascript/script.js"></script>
 <script src="javascript/jquery-3.5.1.js"></script>
 <script src="javascript/moment-with-locales.js"></script>
 <script>

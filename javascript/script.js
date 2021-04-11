@@ -1,4 +1,9 @@
-﻿function customDialog(msg, btnMsgs, icons, functionCalls) {
+﻿let prodDetailModule = await import('./modules/productDetail.js');
+
+window.showCTSP = function () {
+    prodDetailModule.showCTSP.apply(this);
+}
+window.customDialog = function (msg, btnMsgs, icons, functionCalls) {
     let dialog = document.createElement('div');
     dialog.id = "dialog";
     dialog.innerHTML = msg;
@@ -32,7 +37,7 @@
     });
 }
 
-function exportExcel(title, Headers, Data, filename, sheetname) {
+window.exportExcel = function (title, Headers, Data, filename, sheetname) {
     objectExporter({
         exportable: Data,
         headers: Headers,
@@ -46,7 +51,7 @@ function exportExcel(title, Headers, Data, filename, sheetname) {
     });
 }
 
-function exportPDF(id) {
+window.exportPDF = function (id) {
     objectExporter({
         type: 'html',
         exportable: id
@@ -69,7 +74,7 @@ function getCookie(cname) {
     return null;
 }
 
-function upload(file, masp, toDo) {
+window.upload = function (file, masp, toDo) {
     var form = new FormData();
     form.append('fileToUpload', file);
     jq351.ajax({
@@ -91,7 +96,7 @@ function upload(file, masp, toDo) {
     });
 }
 
-function update(sp, toDo) {
+window.update = function (sp, toDo) {
     jq351.ajax({
         url: 'php/xuly.php?action=updateSP&do=' + toDo,
         type: 'POST',
@@ -105,7 +110,7 @@ function update(sp, toDo) {
     });
 }
 
-function escapeHtml(text) {
+window.escapeHtml = function (text) {
     var map = {
         '&': '&amp;',
         '<': '&lt;',
@@ -119,22 +124,22 @@ function escapeHtml(text) {
     });
 }
 
-function check_num(number) {
+window.check_num = function (number) {
     var check = /^\d+$/g;
     return check.test(number);
 }
 
-function checkEmail(email) {
+window.checkEmail = function (email) {
     var check = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/i;
     return check.test(email);
 }
 
-function checkNumber(number) {
+window.checkNumber = function (number) {
     var check = /^(09|03|07|08|05)([0-9]{8})$/g;
     return check.test(number);
 }
 
-function vanceOption(id, func) {
+window.vanceOption = function (id, func) {
     jq351(function () {
         jq351.ajax({
             url: 'php/xuly.php?action=getTL',
@@ -162,18 +167,18 @@ function vanceOption(id, func) {
     });
 }
 
-function showErrorLogin(error) {
+window.showErrorLogin = function (error) {
     if (Number(error) == 0) alert('Sai thông tin đăng nhập!');
     if (Number(error) == -1) alert('Tài khoản đã bị khóa do nhập sai quá nhiều lần');
 }
 
-function sanphamDH(msp, sl, thanhtien) {
+window.sanphamDH = function (msp, sl, thanhtien) {
     this.masp = msp;
     this.soluong = sl;
     this.thanhtien = thanhtien;
 }
 
-function onLoad() {
+window.onLoad = function () {
     var loadingConext = document.createElement("div");
     loadingConext.className = 'modal';
     loadingConext.id = 'ld';
@@ -191,11 +196,11 @@ function onLoad() {
 }
 
 //-------------------------------------------------------------code function here-------------------------------------------------------------------//
-function isLogin(errorCode) {
+window.isLogin = function (errorCode) {
     if (Number(errorCode) == 0) alert('Mật khẩu không hợp lệ');
 }
 
-function Homead() {
+window.Homead = function () {
     var url = location.href.split('/');
     if (url[url.length - 1] == 'admin.php') {
         var sDate = new moment(new Date()).subtract(1, 'month').format('YYYY-MM-DD');
@@ -208,7 +213,7 @@ function Homead() {
     }
 }
 
-function Home() {
+window.Home = function () {
     var url = location.href.split('/');
     if (url[url.length - 1] == 'index.php' || url[url.length - 1] == 'user.php') {
         jq351.ajax({
@@ -234,7 +239,7 @@ function Home() {
                                 } else if (total == 0.5) rate += "<i class=\"fa fa-star-half-o\"></i>";
                                 else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
                             }
-                            sp += '<div class="col-3" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
+                            sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
                         }
                         document.getElementById("sp").innerHTML = sp;
@@ -247,7 +252,7 @@ function Home() {
     }
 }
 
-function spmoi(pActive) {
+window.spmoi = function (pActive) {
     var url = location.href.split('?');
     if (url[1] == 'maymoi') {
         var sDate = new moment(new Date()).subtract(20, 'days').format('YYYY-MM-DD');
@@ -263,6 +268,7 @@ function spmoi(pActive) {
                         var result = JSON.parse(results);
                         var sp = "";
                         for (var i = 0; i < result.length; i++) {
+                            if (i % 4 == 0) sp += '<div class=\"row\">';
                             var curr = new Intl.NumberFormat('vi-VN', {
                                 style: 'currency',
                                 currency: 'VND'
@@ -276,7 +282,7 @@ function spmoi(pActive) {
                                 } else if (total == 0.5) rate += "<i class=\"fa fa-star-half-o\"></i>";
                                 else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
                             }
-                            sp += '<div class="col-3" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
+                            sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
                         }
                         document.getElementById("sp").innerHTML = sp;
@@ -289,7 +295,7 @@ function spmoi(pActive) {
     }
 }
 
-function Search(pActive) {
+window.Search = function (pActive) {
     var url = 'php/xuly.php?action=searchVance';
     var data = escapeHtml(jq351('#dataSearch').val());
     if (data != '') {
@@ -339,11 +345,22 @@ function Search(pActive) {
                         var result = JSON.parse(results);
                         var sp = "";
                         for (var i = 0; i < result.length - 1; i++) {
+                            if (i % 4 == 0) sp += '<div class=\"row\">';
                             var curr = new Intl.NumberFormat('vi-VN', {
                                 style: 'currency',
                                 currency: 'VND'
                             }).format(result[i]['GiaCa']);
-                            sp += '<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><span style="font-size:10px;font-weight:bold;">' + escapeHtml(result[i]["tenSp"]) + '</span><button style="text-align:center;width:100%;color:red;">' + curr + '</button></div>';
+                            let rate = "";
+                            let total = Number(result[i]['rate']);
+                            for (let j = 1; j <= 5; j++) {
+                                if (total >= 1) {
+                                    rate += "<i class=\"fa fa-star\"></i>";
+                                    total--;
+                                } else if (total == 0.5) rate += "<i class=\"fa fa-star-half-o\"></i>";
+                                else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+                            }
+                            sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
+                            if (i % 4 == 3) sp += '</div>';
                         }
                         jq351('#spSearch').html(sp);
                         page('tr', result[result.length - 1], 'Search', pActive);
@@ -360,7 +377,7 @@ function Search(pActive) {
     }
 }
 
-function del(x, pActive) {
+window.del = function (x, pActive) {
     jq351.ajax({
         url: 'php/xuly.php?action=del',
         data: {user: x},
@@ -374,7 +391,7 @@ function del(x, pActive) {
     qltk(pActive);
 }
 
-function Unlock_lock(x, l, pActive) {
+window.Unlock_lock = function (x, l, pActive) {
     jq351.ajax({
         url: 'php/xuly.php?action=unlock_lock',
         data: {user: x, do: l},
@@ -388,7 +405,7 @@ function Unlock_lock(x, l, pActive) {
     qltk(pActive);
 }
 
-function qltk(pActive) {
+window.qltk = function (pActive) {
     var url = location.href.split('?');
     if (url[1] == 'qltk') {
         jq351(function () {
@@ -421,7 +438,7 @@ function qltk(pActive) {
     }
 }
 
-function ok(x, pActive) {
+window.ok = function (x, pActive) {
     var input = document.getElementById(x['maSP']).getElementsByTagName("input");
     var xacnhan = prompt("Nhập mật khẩu để xác nhận thay đổi!");
     if (xacnhan == "admin") {
@@ -477,7 +494,7 @@ function ok(x, pActive) {
     } else alert("mật khẩu sai vui lòng nhập lại!");
 }
 
-function delSp(x, pActive) {
+window.delSp = function (x, pActive) {
     if (confirm("Bạn có chắc chắn muốn xóa?")) {
         jq351.ajax({
             url: 'php/xuly.php?action=delSp',
@@ -493,7 +510,7 @@ function delSp(x, pActive) {
     }
 }
 
-function changeSp(x, pActive) {
+window.changeSp = function (x, pActive) {
     var input = document.getElementById(x['maSP']).getElementsByTagName("div");
     input[0].innerHTML = '<input type="file" accept="image/*">';
     input[2].innerHTML = '<input type="text" value=\'' + escapeHtml(x['tenSp']) + '\'>';
@@ -509,7 +526,7 @@ function changeSp(x, pActive) {
     for (var t = 0; t < but.length; t++) but[t].style.width = "100%";
 }
 
-function addSp(x) {
+window.addSp = function (x) {
     var input = document.getElementById(x).getElementsByTagName("input");
     var check = 1;
     for (var i = 1; i < input.length; i++) {
@@ -560,7 +577,7 @@ function addSp(x) {
     }
 }
 
-function showAddSp() {
+window.showAddSp = function () {
     var modal = document.getElementById('addSp');
     if (modal != null)
         modal.style.display = 'block';
@@ -617,7 +634,7 @@ function showAddSp() {
     });
 }
 
-function productList(pActive) {
+window.productList = function (pActive) {
     jq351(function () {
         document.addEventListener('keydown', function (ev) {
             ev.preventDefault();
@@ -697,7 +714,7 @@ function productList(pActive) {
     });
 }
 
-function product() {
+window.product = function () {
     var url = location.href.split("?");
     if (url[1] == "dssp") {
         var sDate = new moment(new Date()).subtract(1, 'month').format('YYYY-MM-DD');
@@ -709,7 +726,7 @@ function product() {
     }
 }
 
-function onchangeTkDH(pActive) {
+window.onchangeTkDH = function (pActive) {
     jq351(function () {
         var dh = '';
         var tc = 0;
@@ -817,7 +834,7 @@ function onchangeTkDH(pActive) {
     });
 }
 
-function tkDH() {
+window.tkDH = function () {
     var url = location.href.split("?");
     if (url[1] == "tksp") {
         var dh = '';
@@ -832,7 +849,7 @@ function tkDH() {
     }
 }
 
-function LsGd(lsgdJSON, pActive, pNum) {
+window.LsGd = function (lsgdJSON, pActive, pNum) {
     if (lsgdJSON != -1) {
         var dh = "", s = "";
         document.getElementsByClassName("featured")[0].style.display = "none";
@@ -864,7 +881,7 @@ function LsGd(lsgdJSON, pActive, pNum) {
     }
 }
 
-function xnDh(x, input, pActive) {
+window.xnDh = function (x, input, pActive) {
     var check;
     if (input.checked == true) check = 1;
     else check = 0;
@@ -885,7 +902,7 @@ function xnDh(x, input, pActive) {
     });
 }
 
-function huyDh(x, pActive) {
+window.huyDh = function (x, pActive) {
     if (confirm("Bạn có chắc chắn muốn xóa?")) {
         jq351.ajax({
             url: 'php/xuly.php?action=xoaDH',
@@ -902,7 +919,7 @@ function huyDh(x, pActive) {
     }
 }
 
-function xlDhVance(pActive) {
+window.xlDhVance = function (pActive) {
     jq351(function () {
         var sDate = document.getElementById('startDate').value;
         var eDate = document.getElementById('endDate').value;
@@ -981,7 +998,7 @@ function xlDhVance(pActive) {
     });
 }
 
-function xlDh(pNum) {
+window.xlDh = function (pNum) {
     if (pNum != -1) {
         var dh = "", s = "";
         if (pNum == 0) {
@@ -999,7 +1016,7 @@ function xlDh(pNum) {
     }
 }
 
-function thanhToan() {
+window.thanhToan = function () {
     var url = 'php/xuly.php?action=isLogin&checkuser=0';
     jq351.ajax({
         url: url,
@@ -1035,7 +1052,7 @@ function thanhToan() {
     });
 }
 
-function delAll() {
+window.delAll = function () {
     localStorage.removeItem("sanPhamDH");
     Cart();
 }
@@ -1056,7 +1073,7 @@ function delSpDH(x) {
     Cart();
 }
 
-function checkValueC(i) {
+window.checkValueC = function (i) {
     var sanPhamDH = JSON.parse(localStorage.getItem("sanPhamDH"));
     var masp = sanPhamDH[i].masp;
     var input = document.getElementById("gh" + masp).getElementsByTagName("input");
@@ -1080,7 +1097,7 @@ function checkValueC(i) {
     });
 }
 
-function changeValue(i) {
+window.changeValue = function (i) {
     var sanPhamDH = JSON.parse(localStorage.getItem("sanPhamDH"));
     var masp = sanPhamDH[i].masp;
     var input = document.getElementById("gh" + masp).getElementsByTagName("input");
@@ -1106,7 +1123,7 @@ function changeValue(i) {
     Cart();
 }
 
-function Cart() {
+window.Cart = function () {
     var url = location.href.split("?");
     if (url[1] == "gh") {
         var acc = JSON.parse(localStorage.getItem("acc"));
@@ -1142,7 +1159,7 @@ function Cart() {
     }
 }
 
-function addToCart() {
+window.addToCart = function () {
     var input = document.getElementById(this['maSP']).getElementsByTagName("input");
     var value = Number(input[0].value);
     var checkSL = false, check = false;
@@ -1175,7 +1192,7 @@ function addToCart() {
     } else alert('Bạn đã thêm quá SL cho phép');
 }
 
-function checkValue(input) {
+window.checkValue = function (input) {
     if (Number(input) < 0) {
         alert("vui lòng nhập vào đúng số");
         input = 1;
@@ -1186,7 +1203,7 @@ function checkValue(input) {
     }
 }
 
-function logout() {
+window.logout = function () {
     jq351.ajax({
         url: 'php/xuly.php?action=logout',
         async: false,
@@ -1197,7 +1214,7 @@ function logout() {
     });
 }
 
-function check() {
+window.check = function () {
     if (document.login.user.value == "") {
         alert("Nhập vào Tên đăng nhập");
         return false;
@@ -1208,7 +1225,7 @@ function check() {
     }
 }
 
-function checkValid() {
+window.checkValid = function () {
     var check = true;
     var checkUser = true;
     var form = document.register;
@@ -1257,7 +1274,7 @@ function checkValid() {
     if (check == false) return false;
 }
 
-function checkUser() {
+window.checkUser = function () {
     var form = document.register;
     jq351.ajax({
         url: "php/xuly.php?action=checkUser",
@@ -1272,7 +1289,7 @@ function checkUser() {
     });
 }
 
-function menu() {
+window.menu = function () {
     var s = "";
     for (var i = 0; i < this.length; i++) {
         s += '<li><a style="text-decoration:none;width:100%;" href="?idBrand=' + this[i]['maDM'] + '&pageActive=1"><div class="theloai">' + this[i]['tenDM'] + "</div></a></li>";
@@ -1280,52 +1297,29 @@ function menu() {
     document.getElementById("m").innerHTML = s;
 }
 
-function showPageSP(sanPhamJSON, pActiveJSON, pNumJSON) {
+window.showPageSP = function (sanPhamJSON, pActiveJSON, pNumJSON) {
     var sp = "";
     for (var i = 0; i < sanPhamJSON.length; i++) {
+        if (i % 4 == 0) sp += '<div class=\"row\">';
         var curr = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(sanPhamJSON[i]['GiaCa']);
-        sp += '<div class="sanPham" style="text-align:center;" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(sanPhamJSON[i])) + ');\'><img src="' + sanPhamJSON[i]["HinhAnh"] + '" class="img"><span style="font-size:10px;font-weight:bold;">' + escapeHtml(sanPhamJSON[i]["tenSp"]) + '</span><button style="text-align:center;width:100%;color:red;">' + curr + '</button></div>';
+        let rate = "";
+        let total = Number(sanPhamJSON[i]['rate']);
+        for (let j = 1; j <= 5; j++) {
+            if (total >= 1) {
+                rate += "<i class=\"fa fa-star\"></i>";
+                total--;
+            } else if (total == 0.5) rate += "<i class=\"fa fa-star-half-o\"></i>";
+            else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+        }
+        sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(sanPhamJSON[i])) + ');\'><img src="' + sanPhamJSON[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(sanPhamJSON[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
+        if (i % 4 == 3) sp += '</div>';
     }
     document.getElementById("sp").innerHTML = sp;
     page("trang", pNumJSON, null, pActiveJSON);
 }
 
-function showCTSP() {
-    var modal = document.getElementById(this["maSP"]);
-    if (modal != null)
-        modal.style.display = 'block';
-    else {
-        var mod = '';
-        var myModal = document.createElement('div');
-        myModal.className = 'modal product';
-        myModal.id = this["maSP"];
-        mod += '<div class="modal-content modalsp"><div class="close" onclick="document.getElementById(' + this["maSP"] + ').style.display=' + "'none'" + ';">&times;</div><div class="tendt">Điện thoại ' + escapeHtml(this["tenSp"]) + '<hr></div>' +
-            '<div class="details">' +
-            '<div class="mota">Size: ' + escapeHtml(this["Size"]) + '<hr></div>' +
-            '<div class="mota">Weight: ' + escapeHtml(this["Weight"]) + '<hr></div>' +
-            '<div class="mota">Color: ' + escapeHtml(this["Color"]) + '<hr></div>' +
-            '<div class="mota">BoNhoTrong: ' + escapeHtml(this["BoNhoTrong"]) + '<hr></div>' +
-            '<div class="mota">Bộ nhớ đệm(Ram): ' + escapeHtml(this["BoNho"]) + '<hr></div>' +
-            '<div class="mota">HDH: ' + escapeHtml(this["HDH"]) + '<hr></div>' +
-            '<div class="mota">CamTruoc: ' + escapeHtml(this["CamTruoc"]) + '<hr></div>' +
-            '<div class="mota">CamSau: ' + escapeHtml(this["CamSau"]) + '<hr></div>' +
-            '<div class="mota">Dung lượng Pin: ' + escapeHtml(this["Pin"]) + '<hr></div>' +
-            '<div class="mota">BaoHanh: ' + escapeHtml(this["BaoHanh"]) + '<hr></div>' +
-            '<div class="mota">TinhTrang: ' + escapeHtml(this["TinhTrang"]) + '<hr></div>' +
-            '</div><div style="height:70%;width:40%;float:right;"><img style="height:100%;width:100%;" src="' + this['HinhAnh'] + '"></div><div style="height:15%;width:40%;float:right;"><div class="soLuong">SL: <input style="font-size:18px;width:30%;text-align:center;" type="number" onkeyup=\'checkValue.call(' + escapeHtml(JSON.stringify(this)) + ',this.value);\' min="1" value="1" max="' + this["SL"] + '"/></div><div class="addToCart"><button class="btnthem" onclick=\'addToCart.call(' + escapeHtml(JSON.stringify(this)) + ');\'><img style="height:25px;float:left;" src="image/shopping-cart-solid - Copy.png"><span style="font-size:14px;color:black;">Thêm vào giỏ hàng</span></button></div></div></div>';
-        myModal.innerHTML = mod;
-        document.getElementsByTagName('body')[0].appendChild(myModal);
-    }
-    if (modal == null) modal = myModal;
-    window.addEventListener('click', function (event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    });
-    checkSP(this["maSP"], this["SL"]);
-}
 
-function page(idPage, pageNum, functionCall, pActive) {
+window.page = function (idPage, pageNum, functionCall, pActive) {
     if (Number(pageNum) > 1) {
         var pages = 5;
         var lef = 50, pa = '';
@@ -1395,7 +1389,7 @@ function page(idPage, pageNum, functionCall, pActive) {
     }
 }
 
-function checkSP(masp, soluong) {
+window.checkSP = function (masp, soluong) {
     var div = document.getElementById(masp);
     if (soluong == 0) {
         var content = div.getElementsByClassName('modal-content');

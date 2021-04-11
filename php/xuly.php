@@ -136,7 +136,7 @@ function home(){
 function del(){
 	if(isset($_POST['user'])){
 		include_once 'DBConnect.php';
-	$sql = "delete from user where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
+	$sql = "delete from nguoidung where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
 	$update = DBconnect::getInstance()->execUpdate($sql);
 	if($update===true) echo 1;
 	else echo $update;
@@ -145,8 +145,8 @@ function del(){
 function unlock_lock(){
 	if(isset($_POST['user'])&&isset($_POST['do'])){
 		include_once 'DBConnect.php';
-	if($_POST['do']==1) $sql1 = "update user set `lock/unlock`=1 where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
-	else $sql2 = "update user set `lock/unlock`=0 where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
+	if($_POST['do']==1) $sql1 = "update nguoidung set `lock/unlock`=1 where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
+	else $sql2 = "update nguoidung set `lock/unlock`=0 where `TK`='".replace_regex($_POST['user'])."' and `TK`<>'admin'";
 	if(isset($sql1)) $update1 = DBconnect::getInstance()->execUpdate($sql1);
 	if(isset($sql2)) $update2 = DBconnect::getInstance()->execUpdate($sql2);
 		if(isset($update1)){
@@ -161,7 +161,7 @@ function unlock_lock(){
 }
 function qltk(){
 	include_once 'DBConnect.php';
-	$sql = "select * from user where `TK`<>'admin'";
+	$sql = "select * from nguoidung where `TK`<>'admin'";
 	$user = DBconnect::getInstance()->execSQL($sql);
 	if($user) {
 		$numpage = ceil(count($user)/10);

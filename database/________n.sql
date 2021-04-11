@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th3 24, 2021 lúc 09:26 AM
+-- Thời gian đã tạo: Th4 10, 2021 lúc 01:01 PM
 -- Phiên bản máy phục vụ: 10.4.17-MariaDB
 -- Phiên bản PHP: 8.0.2
 
@@ -178,6 +178,16 @@ CREATE TABLE `nguoidung` (
   `lock/unlock` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `nguoidung`
+--
+
+INSERT INTO `nguoidung` (`maUser`, `RoleID`, `TenUser`, `TK`, `MK`, `lock/unlock`) VALUES
+('0', 0, 'admin', 'admin', '123456', 1),
+('1', 1, 'nhanvien1', 'nhanvien1', '123456', 1),
+('2', 1, 'nhanvien2', 'nhanvien2', '123456', 1),
+('3', 1, 'nhanvien3', 'nhanvien3', '123456', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -221,6 +231,14 @@ CREATE TABLE `phanquyen` (
   `tenQuyen` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ChiTiet` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `phanquyen`
+--
+
+INSERT INTO `phanquyen` (`RoleID`, `tenQuyen`, `ChiTiet`) VALUES
+(0, 'Admin', 'Có đầy đủ tất cả các quyền'),
+(1, 'Nhân viên', '');
 
 -- --------------------------------------------------------
 
@@ -414,7 +432,7 @@ ALTER TABLE `nhanvien`
 -- AUTO_INCREMENT cho bảng `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `phieunhap`
