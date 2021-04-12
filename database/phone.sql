@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 10, 2021 lúc 01:01 PM
--- Phiên bản máy phục vụ: 10.4.17-MariaDB
--- Phiên bản PHP: 8.0.2
+-- Host: 127.0.0.1:3306
+-- Generation Time: Apr 12, 2021 at 12:40 PM
+-- Server version: 8.0.21
+-- PHP Version: 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,63 +18,101 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `đồ án`
+-- Database: `phone`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `chitietdonhang`
+-- Table structure for table `binhluan`
 --
 
-CREATE TABLE `chitietdonhang` (
-  `maDH` int(11) NOT NULL,
-  `maSP` int(11) NOT NULL,
-  `SL` int(11) NOT NULL,
-  `TongTien` int(11) NOT NULL,
-  `Tinhtrang` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+DROP TABLE IF EXISTS `binhluan`;
+CREATE TABLE IF NOT EXISTS `binhluan` (
+  `maBL` int NOT NULL AUTO_INCREMENT,
+  `maKH` int NOT NULL,
+  `maSP` int NOT NULL,
+  `ND` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ThoiGianBL` datetime NOT NULL,
+  PRIMARY KEY (`maBL`),
+  KEY `maSP` (`maSP`),
+  KEY `maKH` (`maKH`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `binhluan`
+--
+
+INSERT INTO `binhluan` (`maBL`, `maKH`, `maSP`, `ND`, `ThoiGianBL`) VALUES
+(1, 1, 166, 'hello bao dep trai', '2021-04-13 18:00:00'),
+(2, 1, 166, 'hi', '2021-04-11 18:41:33');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chitietdonhang`
+--
+
+DROP TABLE IF EXISTS `chitietdonhang`;
+CREATE TABLE IF NOT EXISTS `chitietdonhang` (
+  `maDH` int NOT NULL,
+  `maSP` int NOT NULL,
+  `SL` int NOT NULL,
+  `TongTien` int NOT NULL,
+  `Tinhtrang` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`maDH`,`maSP`),
+  KEY `maSp` (`maSP`),
+  KEY `maDH` (`maDH`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `chitietpn`
+-- Table structure for table `chitietpn`
 --
 
-CREATE TABLE `chitietpn` (
-  `maPN` int(11) NOT NULL,
-  `maSP` int(11) NOT NULL,
-  `SL` int(11) NOT NULL,
-  `DonGia` int(11) NOT NULL
+DROP TABLE IF EXISTS `chitietpn`;
+CREATE TABLE IF NOT EXISTS `chitietpn` (
+  `maPN` int NOT NULL,
+  `maSP` int NOT NULL,
+  `SL` int NOT NULL,
+  `DonGia` int NOT NULL,
+  PRIMARY KEY (`maPN`,`maSP`),
+  KEY `maPN` (`maPN`) USING BTREE,
+  KEY `maSP` (`maSP`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `chitietsp`
+-- Table structure for table `chitietsp`
 --
 
-CREATE TABLE `chitietsp` (
-  `maCT` int(11) NOT NULL,
-  `maSP` int(11) NOT NULL,
-  `maDM` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Size` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Weight` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `BoNhoTrong` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `BoNho` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `HDH` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `CamTruoc` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `CamSau` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Pin` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `BaoHanh` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `TinhTrang` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+DROP TABLE IF EXISTS `chitietsp`;
+CREATE TABLE IF NOT EXISTS `chitietsp` (
+  `maCT` int NOT NULL AUTO_INCREMENT,
+  `maSP` int NOT NULL,
+  `maDM` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Size` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Weight` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Color` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `BoNhoTrong` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `BoNho` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `HDH` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CamTruoc` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CamSau` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Pin` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `BaoHanh` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `TinhTrang` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `Ngày nhập hàng` datetime NOT NULL,
-  `HinhAnh` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `HinhAnh` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`maCT`),
+  KEY `maSP` (`maSP`),
+  KEY `maDM` (`maDM`)
+) ENGINE=InnoDB AUTO_INCREMENT=987 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `chitietsp`
+-- Dumping data for table `chitietsp`
 --
 
 INSERT INTO `chitietsp` (`maCT`, `maSP`, `maDM`, `Size`, `Weight`, `Color`, `BoNhoTrong`, `BoNho`, `HDH`, `CamTruoc`, `CamSau`, `Pin`, `BaoHanh`, `TinhTrang`, `Ngày nhập hàng`, `HinhAnh`) VALUES
@@ -112,16 +150,18 @@ INSERT INTO `chitietsp` (`maCT`, `maSP`, `maDM`, `Size`, `Weight`, `Color`, `BoN
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `danhmuc`
+-- Table structure for table `danhmuc`
 --
 
-CREATE TABLE `danhmuc` (
-  `maDM` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tenDM` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
+DROP TABLE IF EXISTS `danhmuc`;
+CREATE TABLE IF NOT EXISTS `danhmuc` (
+  `maDM` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tenDM` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`maDM`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `danhmuc`
+-- Dumping data for table `danhmuc`
 --
 
 INSERT INTO `danhmuc` (`maDM`, `tenDM`) VALUES
@@ -136,50 +176,68 @@ INSERT INTO `danhmuc` (`maDM`, `tenDM`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `donhang`
+-- Table structure for table `donhang`
 --
 
-CREATE TABLE `donhang` (
-  `maDH` int(11) NOT NULL,
-  `maKH` int(11) NOT NULL,
-  `maNV` int(11) DEFAULT NULL,
-  `TongTien` int(11) NOT NULL,
-  `Ngaykhoitao` datetime NOT NULL
+DROP TABLE IF EXISTS `donhang`;
+CREATE TABLE IF NOT EXISTS `donhang` (
+  `maDH` int NOT NULL AUTO_INCREMENT,
+  `maKH` int NOT NULL,
+  `maNV` int DEFAULT NULL,
+  `TongTien` int NOT NULL,
+  `Ngaykhoitao` datetime NOT NULL,
+  PRIMARY KEY (`maDH`),
+  KEY `maKH` (`maKH`),
+  KEY `maNV` (`maNV`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `khachhang`
+-- Table structure for table `khachhang`
 --
 
-CREATE TABLE `khachhang` (
-  `maKH` int(11) NOT NULL,
-  `maUser` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `Hovaten` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `Diachi` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Sdt` int(11) NOT NULL,
-  `Email` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `CMND` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `khachhang`;
+CREATE TABLE IF NOT EXISTS `khachhang` (
+  `maKH` int NOT NULL AUTO_INCREMENT,
+  `maUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Hovaten` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Diachi` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Sdt` int NOT NULL,
+  `Email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `CMND` int NOT NULL,
+  PRIMARY KEY (`maKH`) USING BTREE,
+  KEY `maUser` (`maUser`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `khachhang`
+--
+
+INSERT INTO `khachhang` (`maKH`, `maUser`, `Hovaten`, `Diachi`, `Sdt`, `Email`, `CMND`) VALUES
+(1, NULL, 'Bao dep trai', 'dsadasda', 132213123, 'dsadasd@dads.daw', 312313341);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `nguoidung`
+-- Table structure for table `nguoidung`
 --
 
-CREATE TABLE `nguoidung` (
-  `maUser` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `RoleID` int(11) DEFAULT NULL,
-  `TenUser` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `TK` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `MK` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lock/unlock` tinyint(1) NOT NULL
+DROP TABLE IF EXISTS `nguoidung`;
+CREATE TABLE IF NOT EXISTS `nguoidung` (
+  `maUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `RoleID` int DEFAULT NULL,
+  `TenUser` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `TK` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `MK` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lock/unlock` tinyint(1) NOT NULL,
+  PRIMARY KEY (`maUser`),
+  UNIQUE KEY `TK` (`TK`),
+  KEY `RoleID` (`RoleID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `nguoidung`
+-- Dumping data for table `nguoidung`
 --
 
 INSERT INTO `nguoidung` (`maUser`, `RoleID`, `TenUser`, `TK`, `MK`, `lock/unlock`) VALUES
@@ -191,49 +249,56 @@ INSERT INTO `nguoidung` (`maUser`, `RoleID`, `TenUser`, `TK`, `MK`, `lock/unlock
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `nhacungcap`
+-- Table structure for table `nhacungcap`
 --
 
-CREATE TABLE `nhacungcap` (
-  `maNCC` int(11) NOT NULL,
-  `tenNCC` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `DiaChi` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `SDT` int(11) NOT NULL,
-  `Email` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
+DROP TABLE IF EXISTS `nhacungcap`;
+CREATE TABLE IF NOT EXISTS `nhacungcap` (
+  `maNCC` int NOT NULL AUTO_INCREMENT,
+  `tenNCC` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `DiaChi` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `SDT` int NOT NULL,
+  `Email` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`maNCC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `nhanvien`
+-- Table structure for table `nhanvien`
 --
 
-CREATE TABLE `nhanvien` (
-  `maNV` int(11) NOT NULL,
-  `maUser` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `TenNV` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `GT` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+DROP TABLE IF EXISTS `nhanvien`;
+CREATE TABLE IF NOT EXISTS `nhanvien` (
+  `maNV` int NOT NULL AUTO_INCREMENT,
+  `maUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `TenNV` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `GT` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `NgaySinh` date NOT NULL,
-  `SDT` int(11) NOT NULL,
-  `CMND` int(11) NOT NULL,
-  `ChucVu` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `NgayVaoLam` date NOT NULL
+  `SDT` int NOT NULL,
+  `CMND` int NOT NULL,
+  `ChucVu` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `NgayVaoLam` date NOT NULL,
+  PRIMARY KEY (`maNV`),
+  KEY `maUser` (`maUser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `phanquyen`
+-- Table structure for table `phanquyen`
 --
 
-CREATE TABLE `phanquyen` (
-  `RoleID` int(11) NOT NULL,
-  `tenQuyen` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ChiTiet` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `phanquyen`;
+CREATE TABLE IF NOT EXISTS `phanquyen` (
+  `RoleID` int NOT NULL AUTO_INCREMENT,
+  `tenQuyen` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ChiTiet` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`RoleID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `phanquyen`
+-- Dumping data for table `phanquyen`
 --
 
 INSERT INTO `phanquyen` (`RoleID`, `tenQuyen`, `ChiTiet`) VALUES
@@ -243,33 +308,59 @@ INSERT INTO `phanquyen` (`RoleID`, `tenQuyen`, `ChiTiet`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `phieunhap`
+-- Table structure for table `phieunhap`
 --
 
-CREATE TABLE `phieunhap` (
-  `maPN` int(11) NOT NULL,
-  `maNCC` int(11) NOT NULL,
-  `maNV` int(11) NOT NULL,
+DROP TABLE IF EXISTS `phieunhap`;
+CREATE TABLE IF NOT EXISTS `phieunhap` (
+  `maPN` int NOT NULL AUTO_INCREMENT,
+  `maNCC` int NOT NULL,
+  `maNV` int NOT NULL,
   `NgayNhap` datetime NOT NULL,
-  `Tong` int(11) NOT NULL
+  `Tong` int NOT NULL,
+  PRIMARY KEY (`maPN`),
+  KEY `maNV` (`maNV`),
+  KEY `maNCC` (`maNCC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `sanpham`
+-- Table structure for table `rating`
 --
 
-CREATE TABLE `sanpham` (
-  `maSP` int(11) NOT NULL,
-  `tenSp` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `MoTa` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `GiaCa` int(11) NOT NULL,
-  `SL` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `rating`;
+CREATE TABLE IF NOT EXISTS `rating` (
+  `rateID` int NOT NULL AUTO_INCREMENT,
+  `maSP` int NOT NULL,
+  `5star` int NOT NULL,
+  `4star` int NOT NULL,
+  `3star` int NOT NULL,
+  `2star` int NOT NULL,
+  `1star` int NOT NULL,
+  `rate` float NOT NULL,
+  PRIMARY KEY (`rateID`),
+  KEY `maSP` (`maSP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+
+-- --------------------------------------------------------
 
 --
--- Đang đổ dữ liệu cho bảng `sanpham`
+-- Table structure for table `sanpham`
+--
+
+DROP TABLE IF EXISTS `sanpham`;
+CREATE TABLE IF NOT EXISTS `sanpham` (
+  `maSP` int NOT NULL AUTO_INCREMENT,
+  `tenSp` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `MoTa` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `GiaCa` int NOT NULL,
+  `SL` int NOT NULL,
+  PRIMARY KEY (`maSP`)
+) ENGINE=InnoDB AUTO_INCREMENT=987 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sanpham`
 --
 
 INSERT INTO `sanpham` (`maSP`, `tenSp`, `MoTa`, `GiaCa`, `SL`) VALUES
@@ -305,203 +396,74 @@ INSERT INTO `sanpham` (`maSP`, `tenSp`, `MoTa`, `GiaCa`, `SL`) VALUES
 (986, 'POCO F2 PRO 5G', '8 GB  -256 GB', 10200000, 20);
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Constraints for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `chitietdonhang`
+-- Constraints for table `binhluan`
 --
-ALTER TABLE `chitietdonhang`
-  ADD PRIMARY KEY (`maDH`,`maSP`),
-  ADD KEY `maSp` (`maSP`),
-  ADD KEY `maDH` (`maDH`) USING BTREE;
+ALTER TABLE `binhluan`
+  ADD CONSTRAINT `binhluan_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
+  ADD CONSTRAINT `binhluan_ibfk_2` FOREIGN KEY (`maKH`) REFERENCES `khachhang` (`maKH`);
 
 --
--- Chỉ mục cho bảng `chitietpn`
---
-ALTER TABLE `chitietpn`
-  ADD PRIMARY KEY (`maPN`,`maSP`),
-  ADD KEY `maPN` (`maPN`) USING BTREE,
-  ADD KEY `maSP` (`maSP`) USING BTREE;
-
---
--- Chỉ mục cho bảng `chitietsp`
---
-ALTER TABLE `chitietsp`
-  ADD PRIMARY KEY (`maCT`),
-  ADD KEY `maSP` (`maSP`),
-  ADD KEY `maDM` (`maDM`);
-
---
--- Chỉ mục cho bảng `danhmuc`
---
-ALTER TABLE `danhmuc`
-  ADD PRIMARY KEY (`maDM`);
-
---
--- Chỉ mục cho bảng `donhang`
---
-ALTER TABLE `donhang`
-  ADD PRIMARY KEY (`maDH`),
-  ADD KEY `maKH` (`maKH`),
-  ADD KEY `maNV` (`maNV`);
-
---
--- Chỉ mục cho bảng `khachhang`
---
-ALTER TABLE `khachhang`
-  ADD PRIMARY KEY (`maKH`) USING BTREE,
-  ADD KEY `maUser` (`maUser`);
-
---
--- Chỉ mục cho bảng `nguoidung`
---
-ALTER TABLE `nguoidung`
-  ADD PRIMARY KEY (`maUser`),
-  ADD UNIQUE KEY `TK` (`TK`),
-  ADD KEY `RoleID` (`RoleID`);
-
---
--- Chỉ mục cho bảng `nhacungcap`
---
-ALTER TABLE `nhacungcap`
-  ADD PRIMARY KEY (`maNCC`);
-
---
--- Chỉ mục cho bảng `nhanvien`
---
-ALTER TABLE `nhanvien`
-  ADD PRIMARY KEY (`maNV`),
-  ADD KEY `maUser` (`maUser`);
-
---
--- Chỉ mục cho bảng `phanquyen`
---
-ALTER TABLE `phanquyen`
-  ADD PRIMARY KEY (`RoleID`);
-
---
--- Chỉ mục cho bảng `phieunhap`
---
-ALTER TABLE `phieunhap`
-  ADD PRIMARY KEY (`maPN`),
-  ADD KEY `maNV` (`maNV`),
-  ADD KEY `maNCC` (`maNCC`);
-
---
--- Chỉ mục cho bảng `sanpham`
---
-ALTER TABLE `sanpham`
-  ADD PRIMARY KEY (`maSP`);
-
---
--- AUTO_INCREMENT cho các bảng đã đổ
---
-
---
--- AUTO_INCREMENT cho bảng `chitietsp`
---
-ALTER TABLE `chitietsp`
-  MODIFY `maCT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=987;
-
---
--- AUTO_INCREMENT cho bảng `donhang`
---
-ALTER TABLE `donhang`
-  MODIFY `maDH` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `khachhang`
---
-ALTER TABLE `khachhang`
-  MODIFY `maKH` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `nhacungcap`
---
-ALTER TABLE `nhacungcap`
-  MODIFY `maNCC` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `nhanvien`
---
-ALTER TABLE `nhanvien`
-  MODIFY `maNV` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `phanquyen`
---
-ALTER TABLE `phanquyen`
-  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT cho bảng `phieunhap`
---
-ALTER TABLE `phieunhap`
-  MODIFY `maPN` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT cho bảng `sanpham`
---
-ALTER TABLE `sanpham`
-  MODIFY `maSP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=987;
-
---
--- Các ràng buộc cho các bảng đã đổ
---
-
---
--- Các ràng buộc cho bảng `chitietdonhang`
+-- Constraints for table `chitietdonhang`
 --
 ALTER TABLE `chitietdonhang`
   ADD CONSTRAINT `chitietdonhang_ibfk_1` FOREIGN KEY (`maDH`) REFERENCES `donhang` (`maDH`),
-  ADD CONSTRAINT `chitietdonhang_ibfk_2` FOREIGN KEY (`maSp`) REFERENCES `sanpham` (`maSP`);
+  ADD CONSTRAINT `chitietdonhang_ibfk_2` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`);
 
 --
--- Các ràng buộc cho bảng `chitietpn`
+-- Constraints for table `chitietpn`
 --
 ALTER TABLE `chitietpn`
   ADD CONSTRAINT `chitietpn_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
   ADD CONSTRAINT `chitietpn_ibfk_2` FOREIGN KEY (`maPN`) REFERENCES `phieunhap` (`maPN`);
 
 --
--- Các ràng buộc cho bảng `chitietsp`
+-- Constraints for table `chitietsp`
 --
 ALTER TABLE `chitietsp`
   ADD CONSTRAINT `chitietsp_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
   ADD CONSTRAINT `chitietsp_ibfk_2` FOREIGN KEY (`maDM`) REFERENCES `danhmuc` (`maDM`);
 
 --
--- Các ràng buộc cho bảng `donhang`
+-- Constraints for table `donhang`
 --
 ALTER TABLE `donhang`
   ADD CONSTRAINT `donhang_ibfk_1` FOREIGN KEY (`maKH`) REFERENCES `khachhang` (`maKH`),
   ADD CONSTRAINT `donhang_ibfk_2` FOREIGN KEY (`maNV`) REFERENCES `nhanvien` (`maNV`);
 
 --
--- Các ràng buộc cho bảng `khachhang`
+-- Constraints for table `khachhang`
 --
 ALTER TABLE `khachhang`
   ADD CONSTRAINT `khachhang_ibfk_1` FOREIGN KEY (`maUser`) REFERENCES `nguoidung` (`maUser`);
 
 --
--- Các ràng buộc cho bảng `nguoidung`
+-- Constraints for table `nguoidung`
 --
 ALTER TABLE `nguoidung`
   ADD CONSTRAINT `nguoidung_ibfk_1` FOREIGN KEY (`RoleID`) REFERENCES `phanquyen` (`RoleID`);
 
 --
--- Các ràng buộc cho bảng `nhanvien`
+-- Constraints for table `nhanvien`
 --
 ALTER TABLE `nhanvien`
   ADD CONSTRAINT `nhanvien_ibfk_1` FOREIGN KEY (`maUser`) REFERENCES `nguoidung` (`maUser`);
 
 --
--- Các ràng buộc cho bảng `phieunhap`
+-- Constraints for table `phieunhap`
 --
 ALTER TABLE `phieunhap`
   ADD CONSTRAINT `phieunhap_ibfk_1` FOREIGN KEY (`maNV`) REFERENCES `nhanvien` (`maNV`),
   ADD CONSTRAINT `phieunhap_ibfk_2` FOREIGN KEY (`maNCC`) REFERENCES `nhacungcap` (`maNCC`);
+
+--
+-- Constraints for table `rating`
+--
+ALTER TABLE `rating`
+  ADD CONSTRAINT `rating_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

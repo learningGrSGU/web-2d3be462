@@ -1,7 +1,33 @@
-﻿let prodDetailModule = await import('./modules/productDetail.js');
+﻿import * as prodDetailModule from './modules/productDetail.js';
 
 window.showCTSP = function () {
-    prodDetailModule.showCTSP.apply(this);
+    if (this != null) {
+        localStorage.setItem("productDetail", JSON.stringify(this));
+        location.assign("?productID=" + this["maSP"]);
+    } else {
+        let check = /\?(productID=(\w+))(?!.)/g;
+        let url = location.href;
+        if (url.match(check)) {
+            if (localStorage.getItem("productDetail") != null) prodDetailModule.showCTSP();
+            else {
+                let productID = url.substring(url.search(check), url.length).split("=")[1];
+                jq351.ajax({
+                    url: "php/xuly.php?action=getDetail&productID=" + productID,
+                    success: function (result) {
+                        console.log(result);
+                        if (Number(result) != -1) {
+                            if (result == 0)
+                                customDialog("Sản phẩm không tồn tại!");
+                            else {
+                                localStorage.setItem("productDetail", JSON.stringify(JSON.parse(result)[0]));
+                                prodDetailModule.showCTSP();
+                            }
+                        } else customDialog("Sản phẩm không tồn tại!");
+                    }
+                });
+            }
+        }
+    }
 }
 window.customDialog = function (msg, btnMsgs, icons, functionCalls) {
     let dialog = document.createElement('div');
@@ -195,6 +221,26 @@ window.onLoad = function () {
         });
 }
 
+window.sendBL = function (masp) {
+    let comment = jq351('#chatBox').val();
+    if (comment != "") {
+        jq351.ajax({
+            url: "php/xuly.php?action=sendBL",
+            data: {
+                cmt: JSON.stringify(comment),
+                masp: JSON.stringify(masp),
+                datetime: new moment(new Date()).format('YYYY-MM-DD')
+            },
+            type: "POST",
+            success: function (result) {
+                if (Number(result) == 1) {
+                    customDialog("Gửi bình luận thành công");
+                } else customDialog("Vui lòng đăng nhập để bình luận");
+            }
+        });
+    }
+}
+
 //-------------------------------------------------------------code function here-------------------------------------------------------------------//
 window.isLogin = function (errorCode) {
     if (Number(errorCode) == 0) alert('Mật khẩu không hợp lệ');
@@ -236,8 +282,10 @@ window.Home = function () {
                                 if (total >= 1) {
                                     rate += "<i class=\"fa fa-star\"></i>";
                                     total--;
-                                } else if (total == 0.5) rate += "<i class=\"fa fa-star-half-o\"></i>";
-                                else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+                                } else if (total == 0.5) {
+                                    rate += "<i class=\"fa fa-star-half-o\"></i>";
+                                    total -= 0.5;
+                                } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -279,8 +327,10 @@ window.spmoi = function (pActive) {
                                 if (total >= 1) {
                                     rate += "<i class=\"fa fa-star\"></i>";
                                     total--;
-                                } else if (total == 0.5) rate += "<i class=\"fa fa-star-half-o\"></i>";
-                                else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+                                } else if (total == 0.5) {
+                                    rate += "<i class=\"fa fa-star-half-o\"></i>";
+                                    total -= 0.5;
+                                } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -356,8 +406,10 @@ window.Search = function (pActive) {
                                 if (total >= 1) {
                                     rate += "<i class=\"fa fa-star\"></i>";
                                     total--;
-                                } else if (total == 0.5) rate += "<i class=\"fa fa-star-half-o\"></i>";
-                                else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+                                } else if (total == 0.5) {
+                                    rate += "<i class=\"fa fa-star-half-o\"></i>";
+                                    total -= 0.5;
+                                } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -1308,8 +1360,10 @@ window.showPageSP = function (sanPhamJSON, pActiveJSON, pNumJSON) {
             if (total >= 1) {
                 rate += "<i class=\"fa fa-star\"></i>";
                 total--;
-            } else if (total == 0.5) rate += "<i class=\"fa fa-star-half-o\"></i>";
-            else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+            } else if (total == 0.5) {
+                rate += "<i class=\"fa fa-star-half-o\"></i>";
+                total -= 0.5;
+            } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
         }
         sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(sanPhamJSON[i])) + ');\'><img src="' + sanPhamJSON[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(sanPhamJSON[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
         if (i % 4 == 3) sp += '</div>';
@@ -1392,7 +1446,7 @@ window.page = function (idPage, pageNum, functionCall, pActive) {
 window.checkSP = function (masp, soluong) {
     var div = document.getElementById(masp);
     if (soluong == 0) {
-        var content = div.getElementsByClassName('modal-content');
+        var content = div.getElementsByClassName('product-content');
         var button = div.getElementsByTagName('button');
         var soluong = div.getElementsByClassName('soLuong');
         if (button[0] != null) {

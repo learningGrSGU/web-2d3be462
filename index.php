@@ -26,6 +26,7 @@
             Cart();
             vanceOption('#vance','Search(1);');
             showErrorLogin(<?php echo errorLogin();?>);
+            showCTSP();
         });
     </script>
 </head>
