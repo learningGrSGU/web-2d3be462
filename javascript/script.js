@@ -30,7 +30,6 @@ window.showCTSP = function () {
         } else customDialog("Sản phẩm không tồn tại!");
     }
 }
-
 //test
 window.customDialog = function (msg, btnMsgs, icons, functionCalls) {
     let dialog = document.createElement('div');
