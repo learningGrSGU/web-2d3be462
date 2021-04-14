@@ -31,6 +31,7 @@ window.showCTSP = function () {
     }
 }
 
+//test
 window.customDialog = function (msg, btnMsgs, icons, functionCalls) {
     let dialog = document.createElement('div');
     dialog.id = "dialog";
