@@ -48,9 +48,9 @@ export function showCTSP() {
                 jq351('#sp').html(mod);
                 checkSP(detail["maSP"], detail["SL"]);
                 localStorage.removeItem("productDetail");
-            }
+            } else customDialog("Sản phẩm không tồn tại!");
         } catch (exception) {
-            customDialog("Sản phẩm không tồn tại! " + exception);
+            customDialog("Sản phẩm không tồn tại! ");
         }
     });
 }
