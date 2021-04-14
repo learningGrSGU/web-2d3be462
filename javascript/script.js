@@ -1,6 +1,6 @@
 ﻿import * as prodDetailModule from './modules/productDetail.js';
 
-
+//test
 window.showCTSP = function () {
     if (this != null) {
         localStorage.setItem("productDetail", JSON.stringify(this));
