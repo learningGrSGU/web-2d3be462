@@ -1,0 +1,9 @@
+select RoleID from phanquyen where ChiTiet like '%Có đầy đủ tất cả các quyền%'
+
+
+SELECT (CHAR_LENGTH(str) - CHAR_LENGTH(REPLACE(str, substr, ''))) / CHAR_LENGTH(substr) AS cnt
+
+
+SELECT nd.maUser, nd.RoleID, nd.TenUser, nd.TK, nd.`lock/unlock`, kh.maKH, kh.Hovaten, kh.Diachi, kh.Sdt, kh.Email, kh.CMND FROM nguoidung nd, khachhang kh where nd.maUser = kh.maUser;
+
+SELECT * FROM nguoidung nd, nhanvien nv WHERE nv.maUser = nd.maUser and RoleID <> 0;

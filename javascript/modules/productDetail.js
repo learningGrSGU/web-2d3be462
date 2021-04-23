@@ -46,11 +46,14 @@ export function showCTSP() {
                 }
                 mod += '</div>';
                 jq351('#sp').html(mod);
+                jq351('#chatBox').on('keyup', function (ev) {
+                    if (ev.key == "Enter") sendBL(detail['maSP']);
+                });
                 checkSP(detail["maSP"], detail["SL"]);
                 localStorage.removeItem("productDetail");
             } else customDialog("Sản phẩm không tồn tại!");
         } catch (exception) {
-            customDialog("Sản phẩm không tồn tại! ");
+            customDialog("Sản phẩm không tồn tại! " + exception);
         }
     });
 }

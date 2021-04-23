@@ -7,26 +7,28 @@ window.showCTSP = function () {
     } else {
         let check = /\?(productID=(\w+))(?!.)/g;
         let url = location.href;
-        if (url.match(check)) {
-            if (localStorage.getItem("productDetail") != null) prodDetailModule.showCTSP();
-            else {
-                let productID = url.substring(url.search(check), url.length).split("=")[1];
-                jq351.ajax({
-                    url: "php/xuly.php?action=getDetail&productID=" + productID,
-                    success: function (result) {
-                        console.log(result);
-                        if (Number(result) != -1) {
-                            if (result == 0)
-                                customDialog("Sản phẩm không tồn tại!");
-                            else {
-                                localStorage.setItem("productDetail", JSON.stringify(JSON.parse(result)[0]));
-                                prodDetailModule.showCTSP();
-                            }
-                        } else customDialog("Sản phẩm không tồn tại!");
-                    }
-                });
-            }
-        } else customDialog("Sản phẩm không tồn tại!");
+        if (url.includes("productID=")) {
+            if (url.match(check)) {
+                if (localStorage.getItem("productDetail") != null) prodDetailModule.showCTSP();
+                else {
+                    let productID = url.substring(url.search(check), url.length).split("=")[1];
+                    jq351.ajax({
+                        url: "php/xuly.php?action=getDetail&productID=" + productID,
+                        success: function (result) {
+                            console.log(result);
+                            if (Number(result) != -1) {
+                                if (result == 0)
+                                    customDialog("Sản phẩm không tồn tại!");
+                                else {
+                                    localStorage.setItem("productDetail", JSON.stringify(JSON.parse(result)[0]));
+                                    prodDetailModule.showCTSP();
+                                }
+                            } else customDialog("Sản phẩm không tồn tại!");
+                        }
+                    });
+                }
+            } else customDialog("Sản phẩm không tồn tại!");
+        }
     }
 }
 
@@ -235,8 +237,9 @@ window.sendBL = function (masp) {
             type: "POST",
             success: function (result) {
                 if (Number(result) == 1) {
+                    showCTSP();
                     customDialog("Gửi bình luận thành công");
-                } else customDialog("Vui lòng đăng nhập để bình luận");
+                } else customDialog("Vui lòng đăng nhập để bình luận ");
             }
         });
     }
@@ -287,6 +290,7 @@ window.Home = function () {
                                     rate += "<i class=\"fa fa-star-half-o\"></i>";
                                     total -= 0.5;
                                 } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+                                else rate += "<i class=\"fa fa-star-o\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -332,6 +336,7 @@ window.spmoi = function (pActive) {
                                     rate += "<i class=\"fa fa-star-half-o\"></i>";
                                     total -= 0.5;
                                 } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+                                else rate += "<i class=\"fa fa-star-o\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -411,6 +416,7 @@ window.Search = function (pActive) {
                                     rate += "<i class=\"fa fa-star-half-o\"></i>";
                                     total -= 0.5;
                                 } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+                                else rate += "<i class=\"fa fa-star-o\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -468,14 +474,15 @@ window.qltk = function (pActive) {
                 success: function (results) {
                     console.log(results);
                     if (Number(results) != 0) {
+                        console.log(results);
                         var result = JSON.parse(results);
                         var accs = "";
                         accs += '<div id="qltkcover"><div class="row"><div class="th qltk">STT</div><div class="th qltk">Tên Đăng Nhập</div><div class="th qltk">Họ và Tên</div><div class="th qltk">Địa chỉ</div><div class="th qltk">Email</div><div class="th qltk">Số điện thoại</div><div class="th qltks">chức năng</div></div>';
                         for (var i = 0; i < result.length - 1; i++) {
-                            if (result[i]['Mở/Khoá'] == 1) {
-                                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['Tên đăng nhập']) + '</div><div class="col">' + escapeHtml(result[i]['Tên']) + '</div><div class="col">' + result[i]['Địa chỉ'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['số điện thoại'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['Tên đăng nhập'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['Tên đăng nhập'])) + ',0, ' + pActive + ');">Khóa tài khoản</button></div></div>';
+                            if (result[i]['lock/unlock'] == 1) {
+                                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['TK']) + '</div><div class="col">' + escapeHtml(result[i]['TenUser']) + '</div><div class="col">' + result[i]['Diachi'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['Sdt'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['maUser'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['TK'])) + ',0, ' + pActive + ');">Khóa tài khoản</button></div></div>';
                             } else {
-                                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['Tên đăng nhập']) + '</div><div class="col qltk">' + escapeHtml(result[i]['Tên']) + '</div><div class="col qltk">' + result[i]['Địa chỉ'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['số điện thoại'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['Tên đăng nhập'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['Tên đăng nhập'])) + ',1, ' + pActive + ');">Mở khóa tài khoản</button></div></div>';
+                                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['TK']) + '</div><div class="col qltk">' + escapeHtml(result[i]['TenUser']) + '</div><div class="col qltk">' + result[i]['Diachi'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['Sdt'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['maUser'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['TK'])) + ',1, ' + pActive + ');">Mở khóa tài khoản</button></div></div>';
                             }
                         }
                         accs += '</div>';
@@ -691,7 +698,7 @@ window.productList = function (pActive) {
     jq351(function () {
         document.addEventListener('keydown', function (ev) {
             ev.preventDefault();
-            if (ev.ctrlKey && ev.altKey && ev.key === 'n') {
+            if (ev.ctrlKey && ev.altKey && ev.key == 'n') {
                 showAddSp();
             }
         });
@@ -844,7 +851,7 @@ window.onchangeTkDH = function (pActive) {
                         for (var i = 0; i < result.length - 1; i++) {
                             if (check) {
                                 var ng = new moment(result[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
-                                dh += '<div id="' + i + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Tên']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Địa chỉ']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['số điện thoại'] + '</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div id="tkcover">';
+                                dh += '<div id="' + i + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Tên']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Địa chỉ']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div id="tkcover">';
                                 check = false;
                             }
                             if (!check) {
@@ -920,7 +927,7 @@ window.LsGd = function (lsgdJSON, pActive, pNum) {
                     check = false;
                 }
                 if (!check) {
-                    dh += '<div class="donHang" style="clear:both;"><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">' + escapeHtml(lsgdJSON[i]['tenSp']) + '</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: <span style="font-size:18px;color:black;font-weight:normal;">' + lsgdJSON[i]['SL'] + ' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">' + curr.format(lsgdJSON[i]['TongTien']) + '</span></div></div>';
+                    dh += '<div class="donHang" style="clear:both;"><div class="col gh"><span onclick="location.assign(\'?productID=' + lsgdJSON[i]["maSP"] + '\');" style="cursor: pointer; font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">' + escapeHtml(lsgdJSON[i]['tenSp']) + '</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: <span style="font-size:18px;color:black;font-weight:normal;">' + lsgdJSON[i]['SL'] + ' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">' + curr.format(lsgdJSON[i]['TongTien']) + '</span></div></div>';
                     /*	<div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding:8px 0 0 4px;">'+result[0]['tenSp']+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue('+i+');" onkeyup="checkValueC('+i+');" type="number" min="0" max="'+soluong+'" value="'+sanPhamDH[i].soluong+'"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">'+curr.format(gia)+'</div></div>
 */
                 }
@@ -1025,7 +1032,7 @@ window.xlDhVance = function (pActive) {
                         for (var i = 0; i < result.length - 1; i++) {
                             if (check) {
                                 var ng = new moment(result[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
-                                dh += '<div id="' + i + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Tên']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Địa chỉ']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['số điện thoại'] + '</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div id="dhcover">';
+                                dh += '<div id="' + i + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Tên']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Địa chỉ']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div id="dhcover">';
                                 check = false;
                             }
                             if (!check) {
@@ -1365,6 +1372,7 @@ window.showPageSP = function (sanPhamJSON, pActiveJSON, pNumJSON) {
                 rate += "<i class=\"fa fa-star-half-o\"></i>";
                 total -= 0.5;
             } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
+            else rate += "<i class=\"fa fa-star-o\"></i>";
         }
         sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(sanPhamJSON[i])) + ');\'><img src="' + sanPhamJSON[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(sanPhamJSON[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
         if (i % 4 == 3) sp += '</div>';

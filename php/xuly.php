@@ -2,6 +2,9 @@
 session_start();
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
+        case "getUName":
+            getUName();
+            break;
         case "sendBL":
             sendBL();
             break;
@@ -92,9 +95,7 @@ if (isset($_GET['action'])) {
 }
 function test()
 {
-    include_once 'DBConnect.php';
-    $maKH = DBconnect::getInstance()->execSQL("select maKH from khachhang where maUser=5")[0][0];
-    echo $maKH;
+    echo $_SESSION['sql'];
 }
 
 function encrypt()
@@ -150,13 +151,18 @@ function removeMWSpace($String)
     return preg_replace('/\s{2,}/', ' ', trim($String));
 }
 
+function getUName()
+{
+    echo $_SESSION['name'];
+}
+
 function sendBL()
 {
     if (isset($_POST['cmt'])) {
         if (isset($_SESSION['id'])) {
             include_once 'DBConnect.php';
-            $maKH = DBconnect::getInstance()->execSQL("select maKH from khachhang where maUser=" + $_SESSION['id'])[0][0];
-            $sql = "insert into binhluan(maKH, maSP, ND, ThoiGianBL) values('$maKH', '" . json_decode($_POST['masp']) . "', '" . $_POST['cmt'] . "', '" . $_POST['datetime'] . "')";
+            $maKH = DBconnect::getInstance()->execSQL("select maKH from khachhang where maUser='" . $_SESSION['id'] . "'")[0][0];
+            $sql = "insert into binhluan(maKH, maSP, ND, ThoiGianBL) values('$maKH', '" . json_decode($_POST['masp']) . "', '" . json_decode($_POST['cmt']) . "', '" . $_POST['datetime'] . "')";
             $sp = DBconnect::getInstance()->execUpdate($sql);
             echo 1;
         } else echo 0;
@@ -185,8 +191,9 @@ function del()
 {
     if (isset($_POST['user'])) {
         include_once 'DBConnect.php';
-        $sql = "delete from nguoidung where `TK`='" . replace_regex($_POST['user']) . "' and `TK`<>'admin'";
-        $update = DBconnect::getInstance()->execUpdate($sql);
+        $sql = "update khachhang set maUser = null where maUser = '" . $_POST['user'] . "';";
+        $sql .= "delete from nguoidung where `maUser`='" . replace_regex($_POST['user']) . "' and RoleID <> 0;";
+        $update = DBconnect::getInstance()->execMultiQuery($sql);
         if ($update === true) echo 1;
         else echo $update;
     } else echo -1;
@@ -214,7 +221,7 @@ function unlock_lock()
 function qltk()
 {
     include_once 'DBConnect.php';
-    $sql = "select * from nguoidung where `TK`<>'admin'";
+    $sql = "SELECT nd.maUser, nd.RoleID, nd.TenUser, nd.TK, nd.`lock/unlock`, kh.maKH, kh.Hovaten, kh.Diachi, kh.Sdt, kh.Email, kh.CMND FROM nguoidung nd, khachhang kh where nd.maUser = kh.maUser";
     $user = DBconnect::getInstance()->execSQL($sql);
     if ($user) {
         $numpage = ceil(count($user) / 10);
@@ -416,7 +423,7 @@ function lsgd($lsgd1Page)
             $lasts = DBconnect::getInstance()->execSQL("select count(ctdh.`maDH`) count from `chitietdonhang` ctdh join `donhang` dh on dh.`maDH`=ctdh.`maDH` where dh.`maKH`='" . $maKH[0][0] . "' group by ctdh.`maDH` limit " . ($_GET['pageActive'] - 1) * $lsgd1Page . "," . $all[0][0]);
             $start = $all[0][0];
             if ($lasts != 0) for ($i = 0; $i < count($lasts); $i++) $start -= $lasts[$i]['count'];
-            $sql = "select dh.`maDH`,dh.`Ngaykhoitao`,user.`Hovaten`,user.`Diachi`,user.`Sdt`,sp.`tenSp`,ctdh.`SL`,ctdh.`TongTien`,ctdh.`Tinhtrang` from `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH` join khachhang user on user.`maKH` = dh.`maKH` join `sanpham` sp on sp.`maSP` = ctdh.`maSP` where dh.`maKH`='" . $maKH[0][0] . "' order by dh.`maDH` limit $start,$limit";
+            $sql = "select sp.`maSP`, dh.`maDH`,dh.`Ngaykhoitao`,user.`Hovaten`,user.`Diachi`,user.`Sdt`,sp.`tenSp`,ctdh.`SL`,ctdh.`TongTien`,ctdh.`Tinhtrang` from `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH` join khachhang user on user.`maKH` = dh.`maKH` join `sanpham` sp on sp.`maSP` = ctdh.`maSP` where dh.`maKH`='" . $maKH[0][0] . "' order by dh.`maDH` limit $start,$limit";
             $lsgd = DBconnect::getInstance()->execSQL($sql);
             return json_encode($lsgd);
         }
@@ -623,19 +630,20 @@ function xulyDK()
         if (isset($_POST['ht']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['email']) && isset($_POST['sdt']) && isset($_POST['address'])) {
             include_once 'DBConnect.php';
             $maKH = DBconnect::getInstance()->execSQL("SELECT MAX(CAST(SUBSTRING(maUser,3,length(maUser)-2) AS unsigned)) FROM nguoidung WHERE maUser LIKE 'KH%'");
-            $numMaKH = trim($maKH[0][0], "KH") + 1;
+            $numMaKH = (int)trim($maKH[0][0], "KH") + 1;
             $insMaKH = "KH" . ($numMaKH);
+            $idKH = (int)DBconnect::getInstance()->execSQL("SELECT MAX(maKH) from khachhang")[0][0] + 1;
             $cryptedPass = password_hash($_POST['pass'], PASSWORD_BCRYPT, array('cost' => 10));
             $sql = "insert into nguoidung values ('$insMaKH',null,'" . replace_regex($_POST['ht']) . "','" . replace_regex($_POST['user']) . "','$cryptedPass',1);";
-            $sql .= "insert into `khachhang` values ('$numMaKH','$insMaKH','" . replace_regex($_POST['ht']) . "','" . replace_regex($_POST['address']) . "','" . $_POST['sdt'] . "','" . replace_regex($_POST['email']) . "',null);";
+            $sql .= "insert into `khachhang` values ($idKH, '$insMaKH','" . replace_regex($_POST['ht']) . "','" . replace_regex($_POST['address']) . "','" . $_POST['sdt'] . "','" . replace_regex($_POST['email']) . "',null);";
             if (DBconnect::getInstance()->execMultiQuery($sql)) {
                 if (!isset($_GET['admin'])) {
                     $_SESSION['id'] = $insMaKH;
                     $_SESSION['name'] = $_POST['ht'];
                     $_SESSION['user'] = $_POST['user'];
                     $_SESSION['pass'] = $cryptedPass;
+                    $_SESSION['sql'] = $sql;
                     setcookie(session_name(), session_id(), time() + 172800, '/');
-                    //$_SESSION['sql']=$err;
                     header('location:/pttk/user.php');
                 } else header('location:/pttk/admin.php?qltk');
             }
