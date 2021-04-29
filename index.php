@@ -45,7 +45,7 @@
                   <li class="list-item" style="position:relative;"><a>Thể Loại</a><ul id="m" type="none"></ul></li>
                   <li><a href="">About</a></li>
                   <li><a href="">Contact</a></li>
-                  <li><a href="">Account</a></li>
+                  <li><a href="login.php">Account</a></li>
                </ul>
             </nav>
             <img src="images/cart.png" width="30px" height="30px">

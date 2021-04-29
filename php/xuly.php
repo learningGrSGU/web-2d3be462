@@ -192,9 +192,9 @@ function del()
     if (isset($_POST['user'])) {
         include_once 'DBConnect.php';
         $sql = "update khachhang set maUser = null where maUser = '" . $_POST['user'] . "';";
-        $sql .= "delete from nguoidung where `maUser`='" . replace_regex($_POST['user']) . "' and RoleID <> 0;";
+        $sql .= "delete from nguoidung where `maUser`='" . replace_regex($_POST['user']) . "';";
         $update = DBconnect::getInstance()->execMultiQuery($sql);
-        if ($update === true) echo 1;
+        if ($update == 1) echo 1;
         else echo $update;
     } else echo -1;
 }
@@ -268,16 +268,10 @@ function updateSP()
     if (isset($_POST['sp']) && isset($_GET['do'])) {
         $sp = json_decode($_POST['sp'], true);
         include_once 'DBConnect.php';
-        if ($_GET['do'] == 'update') $sql1 = "update `sanpham` set `tenSp`='" . replace_regex($sp['tenSp']) . "', `Mô tả`='" . replace_regex($sp['Mô tả']) . "', `GiaCa`=" . $sp['GiaCa'] . ", `SL`=" . $sp['SL'] . " where `maSP`='" . $sp['maSP'] . "'";
-        if ($_GET['do'] == 'insert') $sql1 = "insert into `sanpham` values ('" . $sp['maSP'] . "','" . replace_regex($sp['tenSp']) . "','" . replace_regex($sp['Mô tả']) . "'," . $sp['GiaCa'] . "," . $sp['SL'] . ")";
-        $sql = "select count(`maDM`) from `danhmuc` where `maDM`='" . replace_regex($sp['maDM']) . "'";
-        $check = DBconnect::getInstance()->execSQL($sql);
-        if ($check != 0 && $check[0][0] == 0) {
-            $sqlTL = "insert into `danhmuc` values ('" . replace_regex($sp['maDM']) . "','" . replace_regex($sp['Hovaten danhmuc']) . "')";
-            $insert = DBconnect::getInstance()->execUpdate($sqlTL);
-        }
-        if ($_GET['do'] == 'update') $sql2 = "update `chitietsp` set `maDM`='" . replace_regex($sp['maDM']) . "', `Kích thước`='" . replace_regex($sp['Kích thước']) . "', `Trọng lượng`='" . replace_regex($sp['Trọng lượng']) . "', `Màu sắc`='" . replace_regex($sp['Màu sắc']) . "', `Bộ nhớ trong`='" . replace_regex($sp['Bộ nhớ trong']) . "', `Bộ nhớ đệm/Ram`='" . replace_regex($sp['Bộ nhớ đệm/Ram']) . "', `Hệ điều hành`='" . replace_regex($sp['Hệ điều hành']) . "', `Camera trước`='" . replace_regex($sp['Camera trước']) . "', `Camera sau`='" . replace_regex($sp['Camera sau']) . "', `Pin`='" . replace_regex($sp['Pin']) . "', `Bảo hành`='" . replace_regex($sp['Bảo hành']) . "', `Tình trạng`='" . replace_regex($sp['Tình trạng']) . "', `Ngày nhập hàng`='" . $sp['Ngày nhập hàng'] . "' where `maSP`='" . $sp['maSP'] . "'";
-        if ($_GET['do'] == 'insert') $sql2 = "insert into `chitietsp`(`Mã chi tiết`,`maSP`,`maDM`,`Kích thước`,`Trọng lượng`,`Màu sắc`,`Bộ nhớ trong`,`Bộ nhớ đệm/Ram`,`Hệ điều hành`,`Camera trước`,`Camera sau`,`Pin`,`Bảo hành`,`Tình trạng`,`Ngày nhập hàng`) values ('" . $sp['Mã chi tiết'] . "','" . $sp['maSP'] . "','" . replace_regex($sp['maDM']) . "','" . replace_regex($sp['Kích thước']) . "','" . replace_regex($sp['Trọng lượng']) . "','" . replace_regex($sp['Màu sắc']) . "','" . replace_regex($sp['Bộ nhớ trong']) . "','" . replace_regex($sp['Bộ nhớ đệm/Ram']) . "','" . replace_regex($sp['Hệ điều hành']) . "','" . replace_regex($sp['Camera trước']) . "','" . replace_regex($sp['Camera sau']) . "','" . replace_regex($sp['Pin']) . "','" . replace_regex($sp['Bảo hành']) . "','" . replace_regex($sp['Tình trạng']) . "','" . $sp['Ngày nhập hàng'] . "')";
+        if ($_GET['do'] == 'update') $sql1 = "update `sanpham` set `tenSp`='" . replace_regex($sp['tenSp']) . "', `MoTa`='" . replace_regex($sp['MoTa']) . "', `GiaCa`=" . $sp['GiaCa'] . ", `SL`=" . $sp['SL'] . " where `maSP`='" . $sp['maSP'] . "'";
+        if ($_GET['do'] == 'insert') $sql1 = "insert into `sanpham` values ('" . $sp['maSP'] . "','" . replace_regex($sp['tenSp']) . "','" . replace_regex($sp['MoTa']) . "'," . $sp['GiaCa'] . "," . $sp['SL'] . ")";
+        if ($_GET['do'] == 'update') $sql2 = "update `chitietsp` set `maDM`='" . replace_regex($sp['maDM']) . "', `Size`='" . replace_regex($sp['Size']) . "', `Weight`='" . replace_regex($sp['Weight']) . "', `Color`='" . replace_regex($sp['Color']) . "', `BoNhoTrong`='" . replace_regex($sp['BoNhoTrong']) . "', `BoNho`='" . replace_regex($sp['BoNho']) . "', `HDH`='" . replace_regex($sp['HDH']) . "', `CamTruoc`='" . replace_regex($sp['CamTruoc']) . "', `CamSau`='" . replace_regex($sp['CamSau']) . "', `Pin`='" . replace_regex($sp['Pin']) . "', `BaoHanh`='" . replace_regex($sp['BaoHanh']) . "', `TinhTrang`='" . replace_regex($sp['TinhTrang']) . "', `Ngày nhập hàng`='" . $sp['Ngày nhập hàng'] . "' where `maSP`='" . $sp['maSP'] . "'";
+        if ($_GET['do'] == 'insert') $sql2 = "insert into `chitietsp`(`maSP`,`maDM`,`Size`,`Weight`,`Color`,`BoNhoTrong`,`BoNho`,`HDH`,`CamTruoc`,`CamSau`,`Pin`,`BaoHanh`,`TinhTrang`,`Ngày nhập hàng`) values ('" . $sp['maSP'] . "','" . replace_regex($sp['maDM']) . "','" . replace_regex($sp['Size']) . "','" . replace_regex($sp['Weight']) . "','" . replace_regex($sp['Color']) . "','" . replace_regex($sp['BoNhoTrong']) . "','" . replace_regex($sp['BoNho']) . "','" . replace_regex($sp['HDH']) . "','" . replace_regex($sp['CamTruoc']) . "','" . replace_regex($sp['CamSau']) . "','" . replace_regex($sp['Pin']) . "','" . replace_regex($sp['BaoHanh']) . "','" . replace_regex($sp['TinhTrang']) . "','" . $sp['Ngày nhập hàng'] . "')";
         $update1 = DBconnect::getInstance()->execUpdate($sql1);
         if ($update1 === true) $update2 = DBconnect::getInstance()->execUpdate($sql2);
         if (isset($update2) && $update2 === true) echo 1;
@@ -305,8 +299,9 @@ function delSp()
     if (isset($_POST['masp'])) {
         include_once 'DBConnect.php';
         $masp = $_POST['masp'];
-        $sql = "DELETE FROM `sanpham` where `maSP`='$masp'";
-        $del = DBconnect::getInstance()->execUpdate($sql);
+        $sql = "DELETE FROM `chitietsp` where `maSP`='$masp';";
+        $sql .= "DELETE FROM `sanpham` where `maSP`='$masp';";
+        $del = DBconnect::getInstance()->execMultiQuery($sql);
         if ($del === true) echo 1;
         else echo $del;
     } else echo -1;
@@ -673,13 +668,13 @@ function xuLyDN()
             } else {
                 if (!isset($_SESSION['error'])) $_SESSION['error'] = 0;
                 else $_SESSION['error']++;
-                if (isset($_SESSION['role'])) {
-                    if (isset($_SESSION['error']) && $_SESSION['error'] == 3 && $_SESSION['role'] != 0) {
+                if (isset($user[0]['maUser'])) {
+                    if (isset($_SESSION['error']) && $_SESSION['error'] == 3 && ($user[0]['RoleID'] != 0 || !isset($user[0]['RoleID']))) {
                         DBconnect::getInstance()->execUpdate("update nguoidung set `lock/unlock`=0 where `TK`='" . replace_regex($_POST['user']) . "'");
                         session_unset();
                     }
-                    header('location:/pttk/index.php?error=true&user=' . $_POST['user']);
-                }
+                    header('location:/pttk/login.php?error=true&user=' . $_POST['user'] . '&num=' . $_SESSION['error']);
+                } else header('location:/pttk/login.php?error=true&user=' . $_POST['user']);
             }
         }
     }

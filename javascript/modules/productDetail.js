@@ -4,6 +4,8 @@ export function showCTSP() {
         let url = location.href.match(check);
         try {
             if (url) {
+                jq351('.header').hide();
+                jq351('.categories').hide();
                 let detail = JSON.parse(localStorage.getItem("productDetail"));
                 let binhluan;
                 jq351.ajax({

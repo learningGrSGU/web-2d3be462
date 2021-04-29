@@ -1,4 +1,9 @@
 ﻿import * as prodDetailModule from './modules/productDetail.js';
+import * as sortTableModule from './modules/SortedTable.js';
+
+window.sortedTable = function (tag) {
+    sortTableModule.sortedTable.call(this, tag);
+}
 
 window.showCTSP = function () {
     if (this != null) {
@@ -32,7 +37,7 @@ window.showCTSP = function () {
     }
 }
 
-window.customDialog = function (msg, btnMsgs, icons, functionCalls) {
+window.customDialog = function (msg, btnMsgs, icons, functionCalls, Arguments) {
     let dialog = document.createElement('div');
     dialog.id = "dialog";
     dialog.innerHTML = msg;
@@ -54,7 +59,7 @@ window.customDialog = function (msg, btnMsgs, icons, functionCalls) {
                 text: btnMsgs[i],
                 icon: icons[i],
                 click: function () {
-                    functionCalls[i]()
+                    functionCalls[i]().apply(Arguments[i]);
                 }
             });
         }
@@ -137,6 +142,29 @@ window.update = function (sp, toDo) {
             else alert('Sản phẩm đã tồn tại! ' + result);
         }
     });
+}
+
+window.isCurrency = function (str) {
+    if (typeof str != "string") return false;
+    let check = /(^(\d\.*)*\d(?: ₫)$)/gi;
+    return str.match(check);
+}
+
+window.isNumeric = function (str) {
+    if (typeof str != 'string') return false;
+    return (!isNaN(parseFloat(str)) && !isNaN(str));
+}
+
+let isNumber = function (value) {
+    return typeof value === 'number' && isFinite(value);
+}
+
+let isNumberObject = function (n) {
+    return (Object.prototype.toString.apply(n) === '[object Number]');
+}
+
+let isCustomNumber = function (n) {
+    return isNumber(n) || isNumberObject(n);
 }
 
 window.escapeHtml = function (text) {
@@ -464,6 +492,10 @@ window.Unlock_lock = function (x, l, pActive) {
     qltk(pActive);
 }
 
+window.accountManage = function () {
+
+}
+
 window.qltk = function (pActive) {
     var url = location.href.split('?');
     if (url[1] == 'qltk') {
@@ -472,22 +504,23 @@ window.qltk = function (pActive) {
             jq351.ajax({
                 url: 'php/xuly.php?action=qltk',
                 success: function (results) {
-                    console.log(results);
                     if (Number(results) != 0) {
-                        console.log(results);
-                        var result = JSON.parse(results);
-                        var accs = "";
-                        accs += '<div id="qltkcover"><div class="row"><div class="th qltk">STT</div><div class="th qltk">Tên Đăng Nhập</div><div class="th qltk">Họ và Tên</div><div class="th qltk">Địa chỉ</div><div class="th qltk">Email</div><div class="th qltk">Số điện thoại</div><div class="th qltks">chức năng</div></div>';
-                        for (var i = 0; i < result.length - 1; i++) {
-                            if (result[i]['lock/unlock'] == 1) {
-                                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['TK']) + '</div><div class="col">' + escapeHtml(result[i]['TenUser']) + '</div><div class="col">' + result[i]['Diachi'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['Sdt'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['maUser'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['TK'])) + ',0, ' + pActive + ');">Khóa tài khoản</button></div></div>';
-                            } else {
-                                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['TK']) + '</div><div class="col qltk">' + escapeHtml(result[i]['TenUser']) + '</div><div class="col qltk">' + result[i]['Diachi'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['Sdt'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['maUser'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['TK'])) + ',1, ' + pActive + ');">Mở khóa tài khoản</button></div></div>';
-                            }
-                        }
-                        accs += '</div>';
-                        jq351('#sp').html(accs);
-                        page('trang', result[result.length - 1], 'qltk', pActive);
+                        let result = JSON.parse(results);
+                        let pages = result[result.length - 1];
+                        result.length -= 1;
+                        let toSortObject = {
+                            id: "#sp",
+                            headers: ["Tên Đăng Nhập", "Họ và Tên", "Địa chỉ", "Email", "Số điện thoại"],
+                            result: result,
+                            colToSort: "TK",
+                            alias: ["TK", "TenUser", "Diachi", "Email", "Sdt"],
+                            functionCalls: ['accountManage'],
+                            buttonName: ['...'],
+                            pages: pages,
+                            pActive: pActive
+                        };
+                        sortedTable.apply(toSortObject, [null]);
+                        //sortedAccount(results, "TK", pActive, null);
                     } else {
                         jq351('#sp').html('Hiện chưa có tài khoản nào!');
                         jq351('#trang').html('');
@@ -497,7 +530,57 @@ window.qltk = function (pActive) {
         });
     }
 }
-
+/*
+window.sortedAccount = function (results, colToSort, pActive, tag) {
+    let result = JSON.parse(results);
+    result.sort(function (a, b) {
+        if (a[colToSort] > b[colToSort]) return 1;
+        else if (a[colToSort] < b[colToSort]) return -1;
+        else return 0;
+    });
+    if (tag == null) {
+        page('trang', result[result.length - 1], 'qltk', pActive);
+        result.length = result.length - 1;
+        var accs = "";
+        accs += '<div id="qltkcover"><div class="row"><div class="th qltk">STT</div><div class="th qltk" onclick=\'sortedAccount(' + JSON.stringify(JSON.stringify(result)) + ', "TK", ' + pActive + ' , this)\'>Tên Đăng Nhập</div><div class="th qltk" onclick=\'sortedAccount(' + JSON.stringify(JSON.stringify(result)) + ', "TenUser", ' + pActive + ' , this)\'>Họ và Tên</div><div class="th qltk" onclick=\'sortedAccount(' + JSON.stringify(JSON.stringify(result)) + ', "Diachi", ' + pActive + ' , this)\'>Địa chỉ</div><div class="th qltk" onclick=\'sortedAccount(' + JSON.stringify(JSON.stringify(result)) + ', "Email", ' + pActive + ' , this)\'>Email</div><div class="th qltk" onclick=\'sortedAccount(' + JSON.stringify(JSON.stringify(result)) + ', "Sdt", ' + pActive + ', this)\'>Số điện thoại</div><div class="th qltks">chức năng</div></div>';
+        for (var i = 0; i < result.length; i++) {
+            if (result[i]['lock/unlock'] == 1) {
+                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['TK']) + '</div><div class="col">' + escapeHtml(result[i]['TenUser']) + '</div><div class="col">' + result[i]['Diachi'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['Sdt'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['maUser'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['TK'])) + ',0, ' + pActive + ');">Khóa tài khoản</button></div></div>';
+            } else {
+                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['TK']) + '</div><div class="col qltk">' + escapeHtml(result[i]['TenUser']) + '</div><div class="col qltk">' + result[i]['Diachi'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['Sdt'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['maUser'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['TK'])) + ',1, ' + pActive + ');">Mở khóa tài khoản</button></div></div>';
+            }
+        }
+        accs += '</div>';
+        jq351('#sp').html(accs);
+    }
+    if (tag != null) {
+        switch (tag.className) {
+            case "th qltk asc":
+                result.reverse();
+                tag.className = "th qltk dsc";
+                break;
+            case "th qltk dsc":
+                tag.className = "th qltk asc";
+                break;
+            default:
+                tag.className = "th qltk asc";
+                break;
+        }
+        var removalElement = $(".row");
+        for (let i = 1; i < removalElement.length; i++)
+            removalElement[i].remove();
+        var accs = "";
+        for (var i = 0; i < result.length; i++) {
+            if (result[i]['lock/unlock'] == 1) {
+                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['TK']) + '</div><div class="col">' + escapeHtml(result[i]['TenUser']) + '</div><div class="col">' + result[i]['Diachi'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['Sdt'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['maUser'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['TK'])) + ',0, ' + pActive + ');">Khóa tài khoản</button></div></div>';
+            } else {
+                accs += '<div class="row" id="' + i + '"><div class="col qltk">' + i + '</div><div class="col qltk">' + escapeHtml(result[i]['TK']) + '</div><div class="col qltk">' + escapeHtml(result[i]['TenUser']) + '</div><div class="col qltk">' + result[i]['Diachi'] + '</div><div class="col qltk">' + escapeHtml(result[i]['Email']) + '</div><div class="col qltk">' + result[i]['Sdt'] + '</div><div class="col qltks"><button class="delacc" onclick="del(' + escapeHtml(JSON.stringify(result[i]['maUser'])) + ', ' + pActive + ');">Xóa tài khoản</button><button class="lockacc" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(result[i]['TK'])) + ',1, ' + pActive + ');">Mở khóa tài khoản</button></div></div>';
+            }
+        }
+        jq351('#qltkcover').append(accs);
+    }
+}
+*/
 window.ok = function (x, pActive) {
     var input = document.getElementById(x['maSP']).getElementsByTagName("input");
     var xacnhan = prompt("Nhập mật khẩu để xác nhận thay đổi!");
@@ -697,7 +780,6 @@ window.showAddSp = function () {
 window.productList = function (pActive) {
     jq351(function () {
         document.addEventListener('keydown', function (ev) {
-            ev.preventDefault();
             if (ev.ctrlKey && ev.altKey && ev.key == 'n') {
                 showAddSp();
             }
@@ -751,19 +833,7 @@ window.productList = function (pActive) {
                 console.log(results);
                 if (Number(results) != -1) {
                     if (Number(results) != 0) {
-                        var result = JSON.parse(results);
-                        var curr = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'});
-                        var sp = '<div class="row"><div class="th">HinhAnh</div><div class="th">maSP</div><div class="th">Tên sản phẩm</div><div class="th">SL</div><div class="th">Đơn giá</div><div class="th">Chi tiết</div><div class="th">Mã thể loại</div><div class="th">Tên thể loại</div><div class="th">Mã chi tiết</div><div class="th">Mô tả</div><div class="th">Ngày nhập hàng</div><div class="th" style="width:10%;">Chức năng</div></div>',
-                            s = "";
-                        for (var i = 0; i < result.length - 1; i++) {
-                            var ng = new moment(result[i]['Ngày nhập hàng']).format('DD/MM/YYYY HH:mm:ss');
-                            sp += '<div class="row" id="' + result[i]['maSP'] + '"><div class="col" ><img alt="image" width="70%" height="65px" title="' + escapeHtml(result[i]['tenSp']) + '" src="' + result[i]['HinhAnh'] + '"/></div><div class="col">' + result[i]['maSP'] + '</div><div class="col">' + escapeHtml(result[i]['tenSp']) + '</div><div class="col">' + result[i]['SL'] + '</div><div class="col">' + curr.format(result[i]['GiaCa']) + '</div><div class="col">' + escapeHtml(result[i]['Size']) + ';' + escapeHtml(result[i]['Weight']) + ';' + escapeHtml(result[i]['Color']) + ';' + escapeHtml(result[i]['BoNhoTrong']) + ';' + escapeHtml(result[i]['BoNho']) + ';' + escapeHtml(result[i]['HDH']) + ';' + escapeHtml(result[i]['CamTruoc']) + ';' + escapeHtml(result[i]['CamSau']) + ';' + escapeHtml(result[i]['Pin']) + ';' + escapeHtml(result[i]['BaoHanh']) + ';' + escapeHtml(result[i]['TinhTrang']) + '</div><div class="col">' + escapeHtml(result[i]['maDM']) + '</div><div class="col">' + escapeHtml(result[i]['tenDM']) + '</div><div class="col">' + result[i]['Mã chi tiết'] + '</div><div class="col">' + escapeHtml(result[i]['Mô tả']) + '</div><div class="col">' + ng + '</div><div class="col" style="width:10%;"><button class="DP" onclick="delSp(' + result[i]['maSP'] + ', ' + pActive + ');">Xóa</button><button class="CP" onclick=\'changeSp(' + escapeHtml(JSON.stringify(result[i])) + ',' + pActive + ');\'>Sửa</button></div></div>';
-                        }
-                        var sanP = document.getElementById("sp");
-                        sanP.innerHTML = sp;
-                        page("trang", result[result.length - 1], "productList", pActive);
-                        var but = sanP.getElementsByTagName("button");
-                        for (var t = 0; t < but.length; t++) but[t].style.width = "100%";
+                        sortedProduct(results, false, "maSP", pActive, null);
                     } else {
                         jq351('#sp').html('Không tìm thấy sản phẩm!');
                         jq351('#trang').html('');
@@ -774,12 +844,61 @@ window.productList = function (pActive) {
     });
 }
 
+window.sortedProduct = function (results, isDate, colToSort, pActive, tag) {
+    var result = JSON.parse(results);
+    result.sort(function (a, b) {
+        if (isNumeric(a[colToSort]) || isCurrency(a[colToSort])) return Number(a[colToSort]) - Number(b[colToSort]);
+        if (a[colToSort] > b[colToSort]) return 1;
+        if (a[colToSort] < b[colToSort]) return -1;
+        else return 0;
+    });
+    if (tag == null) {
+        page("trang", result[result.length - 1], "productList", pActive);
+        result.length = result.length - 1;
+        var curr = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'});
+        var sp = '<div class="row"><div class="th">Hình Ảnh</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', false, "maSP", ' + pActive + ', this);\'>Mã sản phẩm</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', false, "tenSp", ' + pActive + ', this);\'>Tên sản phẩm</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', false, "SL", ' + pActive + ', this);\'>SL</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', false, "GiaCa", ' + pActive + ', this);\'>Đơn giá</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', false, "maDM", ' + pActive + ', this);\'>Mã thể loại</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', false, "tenDM", ' + pActive + ', this);\'>Tên thể loại</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', false, "maCT", ' + pActive + ', this);\'>Mã chi tiết</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', false, "MoTa", ' + pActive + ', this);\'>Mô tả</div><div class="th" onclick=\'sortedProduct(' + JSON.stringify(JSON.stringify(result)) + ', true, "Ngày nhập hàng", ' + pActive + ', this);\'>Ngày nhập hàng</div><div class="th" style="width:10%;">Chức năng</div></div>',
+            s = "";
+        for (var i = 0; i < result.length; i++) {
+            var ng = new moment(result[i]['Ngày nhập hàng']).format('DD/MM/YYYY HH:mm:ss');
+            sp += '<div class="row" id="' + result[i]['maSP'] + '"><div class="col" ><img alt="image" width="70%" height="65px" title="' + escapeHtml(result[i]['tenSp']) + '" src="' + result[i]['HinhAnh'] + '"/></div><div class="col">' + result[i]['maSP'] + '</div><div class="col">' + escapeHtml(result[i]['tenSp']) + '</div><div class="col">' + result[i]['SL'] + '</div><div class="col">' + curr.format(result[i]['GiaCa']) + '</div><div class="col">' + escapeHtml(result[i]['maDM']) + '</div><div class="col">' + escapeHtml(result[i]['tenDM']) + '</div><div class="col">' + result[i]['maCT'] + '</div><div class="col">' + escapeHtml(result[i]['MoTa']) + '</div><div class="col">' + ng + '</div><div class="col" style="width:10%;"><button class="DP" onclick="delSp(' + result[i]['maSP'] + ', ' + pActive + ');">Xóa</button><button class="CP" onclick=\'changeSp(' + escapeHtml(JSON.stringify(result[i])) + ',' + pActive + ');\'>Sửa</button></div></div>';
+        }
+        var sanP = document.getElementById("sp");
+        sanP.innerHTML = sp;
+    }
+    if (tag != null) {
+        switch (tag.className) {
+            case "th asc":
+                result.reverse();
+                tag.className = "th dsc";
+                break;
+            case "th dsc":
+                tag.className = "th asc";
+                break;
+            default:
+                tag.className = "th asc";
+                break;
+        }
+        var removalElement = jq351(".row");
+        for (let i = 1; i < removalElement.length; i++)
+            removalElement[i].remove();
+        var sp = "";
+        for (let i = 0; i < result.length; i++) {
+            var curr = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'});
+            var ng = new moment(result[i]['Ngày nhập hàng']).format('DD/MM/YYYY HH:mm:ss');
+            sp += '<div class="row" id="' + result[i]['maSP'] + '"><div class="col" ><img alt="image" width="70%" height="65px" title="' + escapeHtml(result[i]['tenSp']) + '" src="' + result[i]['HinhAnh'] + '"/></div><div class="col">' + result[i]['maSP'] + '</div><div class="col">' + escapeHtml(result[i]['tenSp']) + '</div><div class="col">' + result[i]['SL'] + '</div><div class="col">' + curr.format(result[i]['GiaCa']) + '</div><div class="col">' + escapeHtml(result[i]['maDM']) + '</div><div class="col">' + escapeHtml(result[i]['tenDM']) + '</div><div class="col">' + result[i]['maCT'] + '</div><div class="col">' + escapeHtml(result[i]['MoTa']) + '</div><div class="col">' + ng + '</div><div class="col" style="width:10%;"><button class="DP" onclick="delSp(' + result[i]['maSP'] + ', ' + pActive + ');">Xóa</button><button class="CP" onclick=\'changeSp(' + escapeHtml(JSON.stringify(result[i])) + ',' + pActive + ');\'>Sửa</button></div></div>';
+        }
+        jq351('#sp').append(sp);
+    }
+    let but = document.getElementById("sp").getElementsByTagName("button");
+    for (var t = 0; t < but.length; t++) but[t].style.width = "100%";
+}
+
 window.product = function () {
     var url = location.href.split("?");
     if (url[1] == "dssp") {
         var sDate = new moment(new Date()).subtract(1, 'month').format('YYYY-MM-DD');
         var eDate = new moment(new Date()).format('YYYY-MM-DD');
-        document.getElementById('opt').innerHTML = '<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập maSP hoặc Tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="' + sDate + '"><input id="endDate" type="date" onchange="productList(1)" value="' + eDate + '"><button class="AProd" onclick="showAddSp();">Thêm sản phẩm</button>';
+        document.getElementById('opt').innerHTML = '<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập Mã sản phẩm hoặc Tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="' + sDate + '"><input id="endDate" type="date" onchange="productList(1)" value="' + eDate + '"><button class="AProd" onclick="showAddSp();">Thêm sản phẩm</button>';
         jq351(function () {
             productList(1);
         });

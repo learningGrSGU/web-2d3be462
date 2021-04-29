@@ -1,3 +1,5 @@
+SELECT COUNT(sp.maSP) FROM `sanpham` sp JOIN chitietsp ctsp ON sp.`maSP` = ctsp.maSP WHERE ctsp.maDM = 'IP' AND sp.`SL` <> 0
+
 select RoleID from phanquyen where ChiTiet like '%Có đầy đủ tất cả các quyền%'
 
 
