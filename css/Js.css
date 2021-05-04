@@ -1,418 +1,504 @@
 /* loading animation */
 #loading {
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 100;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(192, 192, 192, 0.5);
-	background-image: url("../image/viploading.gif");
-	background-repeat: no-repeat;
-	background-position: center;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(192, 192, 192, 0.5);
+    background-image: url("../image/viploading.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.menu {
+    display: none;
+    background-color: white;
+    padding: 10px 0px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 30px lightgrey;
+    position: absolute;
+    transform-origin: top left;
+    z-index: 2;
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.menu-item {
+    display: block;
+    padding: 10px 30px;
+    transition: 0.1s;
+    color: #666;
+}
+
+.menu-item:hover {
+    background-color: #eee;
+    cursor: pointer;
 }
 
 /*  */
-#name{
-	color:white;
-	background-color:black;
-	position:relative;
-	cursor:pointer;
-}
-.logout{
-	width:100%;
-	background-color:black;
-	color:white;
-	border-top:1px solid white;
-}
-.logout:hover{
-	background-color:grey;
-	color:black;
-}
-#user{
-	border:1px solid white;
-	position:absolute;
-	display:none;	
-}
-#ten{
-	font-size:25px;
-	font-family:auto;
-	padding-left:5px;
-}
-#user a{
-	width:100%;
-	padding:6px;
-	color:white;
-	background-color:black;
-}
-#user a:hover{
-	color:black;
-	background-color:grey;
-}
-#name:hover #user{
-	display:block;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+#name {
+    color: white;
+    background-color: black;
+    position: relative;
+    cursor: pointer;
 }
 
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
+.logout {
+    width: 100%;
+    background-color: black;
+    color: white;
+    border-top: 1px solid white;
+}
+
+.logout:hover {
+    background-color: grey;
+    color: black;
+}
+
+#user {
+    border: 1px solid white;
+    position: absolute;
+    display: none;
+}
+
+#ten {
+    font-size: 25px;
+    font-family: auto;
+    padding-left: 5px;
+}
+
+#user a {
+    width: 100%;
+    padding: 6px;
+    color: white;
+    background-color: black;
+}
+
+#user a:hover {
+    color: black;
+    background-color: grey;
+}
+
+#name:hover #user {
+    display: block;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 .xacnhan:checked + .slider {
-  background-color: #2196F3;
+    background-color: #2196F3;
 }
 
 .xacnhan:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #2196F3;
 }
 
 .xacnhan:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
 }
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 34px;
+    border-radius: 34px;
 }
 
 .slider.round:before {
-  border-radius: 50%;
+    border-radius: 50%;
 }
 
-#spSearch{
-	margin-left:5%;
+#spSearch {
+    margin-left: 5%;
 }
 
 .sanPham {
-  cursor:pointer;
+    cursor: pointer;
 }
 
 .img {
-  display: block;
-  width: 100%;
-  height:10rem;
+    display: block;
+    width: 100%;
+    height: 10rem;
 
 }
 
-.product{
-	display:block;
+.product {
+    display: block;
 }
 
 #menu {
-	display: grid;
-	width:100%;	
+    display: grid;
+    width: 100%;
 }
-#m{
-	display:none;
-	position:absolute;
-	right:-35%;
-	width:200px;
+
+#m {
+    display: none;
+    position: absolute;
+    right: -35%;
+    width: 200px;
 }
-#MenuItems li:hover #m{
-	display:block;
+
+#MenuItems li:hover #m {
+    display: block;
 }
-#m li{
-	
-	float:none;
-	font-size:14px;
-	color:black;
-	display:block;
+
+#m li {
+
+    float: none;
+    font-size: 14px;
+    color: black;
+    display: block;
 }
-.donHang div{
-	height:40px;
-	border:1px #000000 solid;
-	text-align:center;
+
+.donHang div {
+    height: 40px;
+    border: 1px #000000 solid;
+    text-align: center;
 }
+
 .donHang input {
-	width:30px;
-	height:27px;
+    width: 30px;
+    height: 27px;
 }
-.check{
-	color:red;
-	background-color:white;
-	width:100%;
-	padding:5px;
-	text-align:center;
-	font-size:25px;
-	font-weight:bold;
+
+.check {
+    color: red;
+    background-color: white;
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
 }
-.check1{
-	color:red;
-	background-color:white;
-	width:100%;
-	text-align:center;
-	font-size:15px;
-	font-weight:bold;
+
+.check1 {
+    color: red;
+    background-color: white;
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
 }
+
 #trang {
-	clear:left;
-	margin-left:50%;
+    clear: left;
+    margin-left: 50%;
 }
-#tr{
-	margin-left:50%;
-	clear:left;
+
+#tr {
+    margin-left: 50%;
+    clear: left;
 }
-.active div, .page div:hover{
-	background-color:black;
-	color:white;
-	border:2px solid white;
+
+.active div, .page div:hover {
+    background-color: black;
+    color: white;
+    border: 2px solid white;
 }
-.page div{
-	width:30px;
-	height:30px;
-	border:2px solid black;
-	outline:none;
-	font-size:15px;
-	text-align:center;
-	vertical-align:middle;
-	border-radius:5px;
-	
+
+.page div {
+    width: 30px;
+    height: 30px;
+    border: 2px solid black;
+    outline: none;
+    font-size: 15px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 5px;
+
 }
+
 .page {
-	padding:10px 0;
-	float:left;
-	color:black;
-	text-decoration:none;
-	cursor:pointer;
-	padding:2px;
+    padding: 10px 0;
+    float: left;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 2px;
 }
-.CP, .DP{
-	font-size:11px;
-	color:white;
-	border:1px solid black;
-	background-color:black;
-	cursor:pointer;
-	outline:none;
+
+.CP, .DP {
+    font-size: 11px;
+    color: white;
+    border: 1px solid black;
+    background-color: black;
+    cursor: pointer;
+    outline: none;
 }
-.CP:hover, .DP:hover{
-	color:black;
-	border:1px solid black;
-	background-color:white;
+
+.CP:hover, .DP:hover {
+    color: black;
+    border: 1px solid black;
+    background-color: white;
 }
-.acc{
-	color:black;
-	font-weight:bold;
+
+.acc {
+    color: black;
+    font-weight: bold;
 }
-.nggd{
-	color:#8000ff;
-	font-weight:bold;
+
+.nggd {
+    color: #8000ff;
+    font-weight: bold;
 }
-.DC{
-	color:#8000ff;
-	font-weight:bold;
+
+.DC {
+    color: #8000ff;
+    font-weight: bold;
 }
+
 .col {
-	font-size:12px;
-	border:1px solid black;
-	text-align:center;
-	width:8.181%;
-	float:left;
-	overflow:hidden;
-	height:70px;
+    font-size: 12px;
+    border: 1px solid black;
+    text-align: center;
+    width: 8.181%;
+    float: left;
+    overflow: hidden;
+    height: 70px;
 }
-.dh{
+
+.dh {
 }
-.col:hover{
-	overflow:auto;
+
+.col:hover {
+    overflow: auto;
 }
-.row{
-	width:100%;
-	clear:left;
-	text-align:center;
-	
+
+.row {
+    width: 100%;
+    clear: left;
+    text-align: center;
+
 }
-.th{
-	color:black;
-	border:1px solid black;
-	text-align:center;
-	width:8.181%;
-	float:left;
-	font-size:14px;
-	font-weight:bold;
-	overflow:hidden;
-	height:30px;
+
+.th {
+    color: black;
+    border: 1px solid black;
+    text-align: center;
+    width: 8.181%;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    overflow: hidden;
+    height: 30px;
 }
-.th:hover{
-	overflow:auto;
+
+.th:hover {
+    overflow: auto;
 }
-.theloai{
-	background-color:black;
-	border:1px solid white;
-	color:white;
-	line-height:1.15;
+
+.theloai {
+    background-color: black;
+    border: 1px solid white;
+    color: white;
+    line-height: 1.15;
 }
-.theloai:hover{
-	background-color:white;
-	border:1px solid black;
-	color:black;
+
+.theloai:hover {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
 }
-.close{
-	float:right;
-	font-size:40px;
-	font-weight:bold;
-	cursor:pointer;
-	padding-right:10px;
+
+.close {
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    padding-right: 10px;
 }
-.tendt{
-	font-size:35px;
-	font-weight:bold;
-	float:left;	
-	padding:0 5px 0 2px;
-	color:black;
+
+.tendt {
+    font-size: 35px;
+    font-weight: bold;
+    float: left;
+    padding: 0 5px 0 2px;
+    color: black;
 }
-.soLuong{
-	text-align:center;
-	font-size:18px;
-	font-weight:bold;
+
+.soLuong {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
 }
-.mota{
-	float:left;
-	clear:left;
-	font-size:16px;
+
+.mota {
+    float: left;
+    clear: left;
+    font-size: 16px;
 }
-.details{
-	width:60%;
-	height:100%;
-	float:left;
-	clear:left;
+
+.details {
+    width: 60%;
+    height: 100%;
+    float: left;
+    clear: left;
 }
-.dsimg{
-	height:100%;
-	width:40%;
-	float:right;
+
+.dsimg {
+    height: 100%;
+    width: 40%;
+    float: right;
 }
-.addToCart{
-	height:70%;
-	width:100%;
-	display:flex;
+
+.addToCart {
+    height: 70%;
+    width: 100%;
+    display: flex;
 }
-.btnthem{
-	border:2px solid black;
-	text-align:center;
-	margin:auto;
-	width:50%;
+
+.btnthem {
+    border: 2px solid black;
+    text-align: center;
+    margin: auto;
+    width: 50%;
 }
-.modalsp{
-	height:82%;
-	margin: 3% auto 2% auto;
-	line-height:1.15;
+
+.modalsp {
+    height: 82%;
+    margin: 3% auto 2% auto;
+    line-height: 1.15;
 }
-.AProd{
-	color:white;
-	border:1px solid black;
-	background-color:black;
-	float:right;
-	padding:5px;
+
+.AProd {
+    color: white;
+    border: 1px solid black;
+    background-color: black;
+    float: right;
+    padding: 5px;
 }
-.AProd:hover{
-	color:black;
-	border:1px solid black;
-	background-color:white;
+
+.AProd:hover {
+    color: black;
+    border: 1px solid black;
+    background-color: white;
 }
-.CProd{
-	color:red;
-	border:1px solid red;
+
+.CProd {
+    color: red;
+    border: 1px solid red;
 }
-.CProd:hover{
-	color:blue;
-	border:1px solid blue;
+
+.CProd:hover {
+    color: blue;
+    border: 1px solid blue;
 }
-.funcad{
-	border:1px solid black;
-	width:25%;
-	height:100%;
-	float:left;
-	text-align:center;
+
+.funcad {
+    border: 1px solid black;
+    width: 25%;
+    height: 100%;
+    float: left;
+    text-align: center;
 }
-.funcad a{
-	text-decoration:none;
-	height:100%;
+
+.funcad a {
+    text-decoration: none;
+    height: 100%;
 }
-.funcadm{
-	font-size:20px;
-	font-weight:bolder;
-	color:black;
-	width:100%;
-	height:100%;
-	padding: 5px;
+
+.funcadm {
+    font-size: 20px;
+    font-weight: bolder;
+    color: black;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
 }
-.funcad:hover,.funcadm:hover{
-	background-color:black;
-	color:white;
+
+.funcad:hover, .funcadm:hover {
+    background-color: black;
+    color: white;
 }
-.gh{
-	width:25%;
+
+.gh {
+    width: 25%;
 }
-.ghcover{
-	height:70px;
-	padding:10px;
+
+.ghcover {
+    height: 70px;
+    padding: 10px;
 }
-.addProd{
-	margin:2% auto 2% auto; 
+
+.addProd {
+    margin: 2% auto 2% auto;
 }
-.themtk{
-	border:1px solid black;
-	font-size:15px;
-	padding:5px;
-	background-color:black;
-	color:white;
+
+.themtk {
+    border: 1px solid black;
+    font-size: 15px;
+    padding: 5px;
+    background-color: black;
+    color: white;
 }
-.themtk:hover{
-	background-color:white;
-	color:black;
+
+.themtk:hover {
+    background-color: white;
+    color: black;
 }
-#opt{
-	padding:5px;
+
+#opt {
+    padding: 5px;
 }
-.delacc{
-	font-size:15px;
-	background-color:black;
-	color:white;
+
+.delacc {
+    font-size: 15px;
+    background-color: black;
+    color: white;
 }
-.lockacc{
-	font-size:15px;
-	background-color:black;
-	color:white;
+
+.lockacc {
+    font-size: 15px;
+    background-color: black;
+    color: white;
 }
-.delacc:hover,.lockacc:hover{
-	background-color:white;
-	color:black;
-	border:1px solid black;
+
+.delacc:hover, .lockacc:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
 }
-.qltks{
-	width:12%;
+
+.qltks {
+    width: 12%;
 }

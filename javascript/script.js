@@ -5,6 +5,47 @@ window.sortedTable = function (tag) {
     sortTableModule.sortedTable.call(this, tag);
 }
 
+window.getPosition = function (e) {
+    var posx = 0;
+    var posy = 0;
+
+    if (!e) var e = window.event;
+
+    if (e.pageX || e.pageY) {
+        posx = e.pageX;
+        posy = e.pageY;
+    } else if (e.clientX || e.clientY) {
+        posx = e.clientX + document.body.scrollLeft +
+            document.documentElement.scrollLeft;
+        posy = e.clientY + document.body.scrollTop +
+            document.documentElement.scrollTop;
+    }
+
+    return {
+        x: posx,
+        y: posy
+    }
+}
+
+window.escapeContext = function (event) {
+    const menu = document.getElementById("menu_" + this.id);
+    const call = document.getElementById(this.functionCalls + '_' + this.id);
+    const position = getPosition(event);
+    const x = position.x;
+    const y = position.y;
+    menu.style.top = `${y}px`;
+    menu.style.left = `${x}px`;
+    menu.style.display = 'block';
+    const documentClickHandler = function (e) {
+        const isClickedOutside = !menu.contains(e.target);
+        if (isClickedOutside && !call.contains(e.target)) {
+            menu.style.display = 'none';
+            document.removeEventListener('click', documentClickHandler);
+        }
+    };
+    document.addEventListener('click', documentClickHandler);
+}
+
 window.showCTSP = function () {
     if (this != null) {
         localStorage.setItem("productDetail", JSON.stringify(this));
@@ -465,16 +506,17 @@ window.Search = function (pActive) {
 }
 
 window.del = function (x, pActive) {
-    jq351.ajax({
-        url: 'php/xuly.php?action=del',
-        data: {user: x},
-        type: 'POST',
-        success: function (result) {
-            if (Number(result) == 1) alert('Xóa thành công');
-            else alert('Đã tồn tại đơn hàng có tài khoản này!');
-            console.log(result);
-        }
-    });
+    if (confirm('Bạn có muốn xóa tài khoản này không?'))
+        jq351.ajax({
+            url: 'php/xuly.php?action=del',
+            data: {user: x},
+            type: 'POST',
+            success: function (result) {
+                if (Number(result) == 1) customDialog('Xóa thành công');
+                else customDialog('Đã tồn tại đơn hàng có tài khoản này!');
+                console.log(result);
+            }
+        });
     qltk(pActive);
 }
 
@@ -492,8 +534,17 @@ window.Unlock_lock = function (x, l, pActive) {
     qltk(pActive);
 }
 
-window.accountManage = function () {
-
+window.accountManage = function (event, visible) {
+    if (!visible) {
+        let context_menu = '<ul id="menu_' + this.id + '" class="menu">' +
+            '<li class="menu-item" onclick="del(' + escapeHtml(JSON.stringify(this.result['maUser'])) + ', ' + this.pActive + ')">Xóa tài khoản</li>';
+        if (this.result['lock/unlock'] == 1) context_menu += '<li class="menu-item" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(this.result['TK'])) + ', 0, ' + this.pActive + ')">Khóa tài khoản</li>';
+        else context_menu += '<li class="menu-item" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(this.result['TK'])) + ', 1, ' + this.pActive + ')">Mở khóa tài khoản</li>';
+        context_menu += '</ul>';
+        jq351('#sp').append(context_menu);
+    } else {
+        escapeContext.call(this, event);
+    }
 }
 
 window.qltk = function (pActive) {
@@ -514,9 +565,12 @@ window.qltk = function (pActive) {
                             result: result,
                             colToSort: "TK",
                             alias: ["TK", "TenUser", "Diachi", "Email", "Sdt"],
+                            type: ["string", "string", "string", "string", "number"],
+                            functions: [accountManage],
                             functionCalls: ['accountManage'],
                             buttonName: ['...'],
                             pages: pages,
+                            toPage: "qltk",
                             pActive: pActive
                         };
                         sortedTable.apply(toSortObject, [null]);
@@ -777,6 +831,22 @@ window.showAddSp = function () {
     });
 }
 
+window.productDetail = function (x, pActive) {
+
+}
+
+window.productManage = function (event, visible) {
+    if (!visible) {
+        let context_menu = '<ul id="menu_' + this.id + '" class="menu">' +
+            '<li class="menu-item" onclick="delSp(' + escapeHtml(JSON.stringify(this.result['maSP'])) + ', ' + this.pActive + ')">Xóa sản phẩm</li>';
+        context_menu += '<li class="menu-item" onclick="productDetail(' + escapeHtml(JSON.stringify(this.result)) + ', ' + this.pActive + ')">Xem chi tiết</li>';
+        context_menu += '</ul>';
+        jq351('#sp').append(context_menu);
+    } else {
+        escapeContext.call(this, event);
+    }
+}
+
 window.productList = function (pActive) {
     jq351(function () {
         document.addEventListener('keydown', function (ev) {
@@ -833,7 +903,25 @@ window.productList = function (pActive) {
                 console.log(results);
                 if (Number(results) != -1) {
                     if (Number(results) != 0) {
-                        sortedProduct(results, false, "maSP", pActive, null);
+                        let result = JSON.parse(results);
+                        let pages = result[result.length - 1];
+                        result.length -= 1;
+                        let toSortObject = {
+                            id: "#sp",
+                            headers: ["Hình Ảnh", "Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Đơn giá", "Tên thể loại", "Mô tả", "Ngày nhập hàng"],
+                            result: result,
+                            colToSort: "maSP",
+                            alias: ["HinhAnh", "maSP", "tenSp", "SL", "GiaCa", "tenDM", "MoTa", "Ngày nhập hàng"],
+                            type: ["img", "string", "string", "number", "currency", "string", "string", "date"],
+                            functions: [productManage],
+                            functionCalls: ['productManage'],
+                            buttonName: ['...'],
+                            pages: pages,
+                            toPage: "productList",
+                            pActive: pActive
+                        };
+                        sortedTable.call(toSortObject, null);
+                        //sortedProduct(results, false, "maSP", pActive, null);
                     } else {
                         jq351('#sp').html('Không tìm thấy sản phẩm!');
                         jq351('#trang').html('');
@@ -843,7 +931,7 @@ window.productList = function (pActive) {
         });
     });
 }
-
+/*
 window.sortedProduct = function (results, isDate, colToSort, pActive, tag) {
     var result = JSON.parse(results);
     result.sort(function (a, b) {
@@ -892,7 +980,7 @@ window.sortedProduct = function (results, isDate, colToSort, pActive, tag) {
     let but = document.getElementById("sp").getElementsByTagName("button");
     for (var t = 0; t < but.length; t++) but[t].style.width = "100%";
 }
-
+*/
 window.product = function () {
     var url = location.href.split("?");
     if (url[1] == "dssp") {
@@ -1039,11 +1127,12 @@ window.LsGd = function (lsgdJSON, pActive, pNum) {
         } else {
             var check = true;
             var curr = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'});
-            for (var i = 0; i < lsgdJSON.length; i++) {
+            for (var i = 0, count = 1; i < lsgdJSON.length; i++) {
                 if (check) {
                     var ng = new moment(lsgdJSON[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
-                    dh += '<div id="' + i + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(lsgdJSON[i]['Hovaten']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày thanh toán: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(lsgdJSON[i]['Diachi']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + lsgdJSON[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">Tình trạng đơn hàng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(lsgdJSON[i]['Tinhtrang']) + '</span></div><div id="lsgdcover">';
+                    dh += '<h3> Đơn hàng ' + count + '</h3><div id="' + count + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(lsgdJSON[i]['Hovaten']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày thanh toán: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(lsgdJSON[i]['Diachi']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + lsgdJSON[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">Tình trạng đơn hàng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(lsgdJSON[i]['Tinhtrang']) + '</span></div><div class="lsgdcover">';
                     check = false;
+                    count++;
                 }
                 if (!check) {
                     dh += '<div class="donHang" style="clear:both;"><div class="col gh"><span onclick="location.assign(\'?productID=' + lsgdJSON[i]["maSP"] + '\');" style="cursor: pointer; font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">' + escapeHtml(lsgdJSON[i]['tenSp']) + '</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: <span style="font-size:18px;color:black;font-weight:normal;">' + lsgdJSON[i]['SL'] + ' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">' + curr.format(lsgdJSON[i]['TongTien']) + '</span></div></div>';
@@ -1052,15 +1141,21 @@ window.LsGd = function (lsgdJSON, pActive, pNum) {
                 }
                 if (i != lsgdJSON.length - 1) if (lsgdJSON[i]['maDH'] != lsgdJSON[i + 1]['maDH']) check = true;
                 if (i == lsgdJSON.length - 1) check = true;
-                if (check) dh += '</div>';
+                if (check) dh += '</div></div>';
             }
             document.getElementById("sp").innerHTML = dh;
+            jq351(function () {
+                $("#sp").accordion({
+                    collapsible: true
+                });
+                $("#sp").accordion("refresh");
+            });
             page("trang", pNum, null, pActive);
         }
     }
 }
 
-window.xnDh = function (x, input, pActive) {
+window.xnDh = function (x, input, pActive, id) {
     var check;
     if (input.checked == true) check = 1;
     else check = 0;
@@ -1072,10 +1167,10 @@ window.xnDh = function (x, input, pActive) {
         success: function (result) {
             if (result == 1) {
                 alert('Xác nhận thành công');
-                xlDhVance(pActive);
+                xlDhVance(pActive, id);
             } else {
                 alert('Hủy xác nhận thành công');
-                xlDhVance(pActive);
+                xlDhVance(pActive, id);
             }
         }
     });
@@ -1098,7 +1193,7 @@ window.huyDh = function (x, pActive) {
     }
 }
 
-window.xlDhVance = function (pActive) {
+window.xlDhVance = function (pActive, id) {
     jq351(function () {
         var sDate = document.getElementById('startDate').value;
         var eDate = document.getElementById('endDate').value;
@@ -1148,24 +1243,32 @@ window.xlDhVance = function (pActive) {
                     if (results != 0) {
                         var result = JSON.parse(results);
                         var curr = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'});
-                        for (var i = 0; i < result.length - 1; i++) {
+                        for (var i = 0, count = 1; i < result.length - 1; i++) {
                             if (check) {
                                 var ng = new moment(result[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
-                                dh += '<div id="' + i + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Tên']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Địa chỉ']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div id="dhcover">';
+                                dh += '<h3>Đơn hàng ' + count + ' <button onclick="huyDh(' + result[i]['maDH'] + ',' + pActive + ');" style="float:left;">Hủy Đơn Hàng</button></h3><div id="' + count + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Hovaten']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Diachi']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">Tình trạng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div class="dhcover">';
                                 check = false;
+                                count++;
                             }
                             if (!check) {
-                                dh += '<div class="donHang" style="clear:both;"><div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">' + result[i]['tenSp'] + '</span></div><div class="col dh" style="width:20%;">SL: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div><div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">' + curr.format(result[i]['Tổng tiền']) + '</span></div></div>';
+                                dh += '<div class="donHang" style="clear:both;"><div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">' + result[i]['tenSp'] + '</span></div><div class="col dh" style="width:20%;">SL: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div><div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">' + curr.format(result[i]['TongTien']) + '</span></div></div>';
                             }
                             if (i != result.length - 2) if (result[i]['maDH'] != result[i + 1]['maDH']) check = true;
                             if (i == result.length - 2) check = true;
                             if (check) {
-                                dh += '</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: ' + curr.format(result[i]['tongtien']) + '</div><label class="switch" style="float:left;clear:left;"><input class="xacnhan" type="checkbox" onclick="xnDh(' + result[i]['maDH'] + ',this, ' + pActive + ');"style="clear:right;float:left;" ';
-                                if (result[i]['Tinhtrang'] == 'Đã xác nhận') dh += 'checked><span class="slider round"></span></label>';
-                                else dh += '><span class="slider round"></span></label><button onclick="huyDh(' + result[i]['maDH'] + ',' + pActive + ');" style="float:left;">Hủy Đơn Hàng</button>';
+                                dh += '</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: ' + curr.format(result[i]['tongtien']) + '</div><label class="switch" style="float:left;clear:left;"><input class="xacnhan" type="checkbox" onclick="xnDh(' + result[i]['maDH'] + ',this, ' + pActive + ', ' + (count - 2) + ');"style="clear:right;float:left;" ';
+                                if (result[i]['Tinhtrang'] == 'Đã xác nhận') dh += 'checked><span class="slider round"></span></label></div>';
+                                else dh += '><span class="slider round"></span></label></div>';
                             }
                         }
                         document.getElementById("sp").innerHTML = dh;
+                        jq351(function () {
+                            $("#sp").accordion({
+                                collapsible: true
+                            });
+                            $("#sp").accordion("refresh");
+                            if (id != null) $("#sp").accordion("option", "active", id);
+                        });
                         page("trang", result[result.length - 1], "xlDhVance", pActive);
                     } else {
                         document.getElementById("sp").innerHTML = '<div class="check">Không có đơn hàng trong khoảng thời gian này!</div>';

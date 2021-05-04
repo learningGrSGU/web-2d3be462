@@ -509,7 +509,7 @@ function xulyDHVance()
                 $start = $num[0][0];
                 if ($lasts != 0) {
                     for ($i = 0; $i < count($lasts); $i++) $start -= $lasts[$i]['count'];
-                    $sql = "select dh.`TongTien` as tongtien ,dh.`maDH`,dh.`Ngaykhoitao`,user.`Hovaten`,user.`Diachi`,user.`Sdt`,sp.`tenSp`,ctdh.`SL`,ctdh.`TongTien`,ctdh.`Tinhtrang` from `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH` join user on user.`maUser` = dh.`maUser` join `sanpham` sp on sp.`maSP` = ctdh.`maSP` where (ctdh.`Tinhtrang` NOT IN('Đã hủy')) and (dh.`Ngaykhoitao` between '$sDate' and '$eDate 23:59:59.9999')";
+                    $sql = "select dh.`TongTien` as tongtien ,dh.`maDH`,dh.`Ngaykhoitao`,user.`Hovaten`,user.`Diachi`,user.`Sdt`,sp.`tenSp`,ctdh.`SL`,ctdh.`TongTien`,ctdh.`Tinhtrang` from `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH` join khachhang user on user.`maKH` = dh.`maKH` join `sanpham` sp on sp.`maSP` = ctdh.`maSP` where (ctdh.`Tinhtrang` NOT IN('Đã hủy')) and (dh.`Ngaykhoitao` between '$sDate' and '$eDate 23:59:59.9999')";
                     if (isset($_GET['brandOption'])) {
                         $sql .= " and (ctdh.`maDH` = any (select ctdh1.`maDH` from `chitietdonhang` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='" . $_GET['brandOption'] . "'))";
                     }
