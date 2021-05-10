@@ -2,6 +2,18 @@
 session_start();
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
+        case "delPermission":
+            delPermission();
+            break;
+        case "qlquyen":
+            qlquyen();
+            break;
+        case "ncc":
+            ncc();
+            break;
+        case "checkPermission":
+            checkPermission();
+            break;
         case "getUName":
             getUName();
             break;
@@ -95,7 +107,7 @@ if (isset($_GET['action'])) {
 }
 function test()
 {
-    echo $_SESSION['sql'];
+
 }
 
 function encrypt()
@@ -137,6 +149,25 @@ function errorLogin()
 function userError()
 {
     if (isset($_GET['user'])) echo $_GET['user'];
+}
+
+function checkPermission()
+{
+    if (isset($_POST['permission'])) {
+        include_once 'DBConnect.php';
+        $permission = DBconnect::getInstance()->execSQL('select ChiTiet from phanquyen where RoleID = "' . $_SESSION['role'] . '"');
+        if ($permission[0][0] == 'Có đầy đủ tất cả các quyền') echo 1;
+        else {
+            $permissions = explode(', ', $permission[0][0]);
+            foreach ($permissions as $each) {
+                if ($each == $_POST['permission']) {
+                    echo 1;
+                    return;
+                }
+            }
+            echo 0;
+        }
+    }
 }
 
 ?>
@@ -187,6 +218,28 @@ function home()
     echo json_encode($sp);
 }
 
+function delPermission()
+{
+
+}
+
+function qlquyen()
+{
+    include_once 'DBConnect.php';
+    $sql = "SELECT * from phanquyen where RoleID <> 0 limit " . ($_GET['pActive'] - 1) * 10 . ", 10";
+    $permission = DBconnect::getInstance()->execSQL($sql);
+    if ($permission) {
+        $numpage = ceil(DBconnect::getInstance()->execSQL('select count(RoleID) from phanquyen where RoleID <> 0')[0][0] / 10);
+        $permission[count($permission)] = $numpage;
+        echo json_encode($permission);
+    } else echo 0;
+}
+
+function ncc()
+{
+
+}
+
 function del()
 {
     if (isset($_POST['user'])) {
@@ -221,12 +274,15 @@ function unlock_lock()
 function qltk()
 {
     include_once 'DBConnect.php';
-    $sql = "SELECT nd.maUser, nd.RoleID, nd.TenUser, nd.TK, nd.`lock/unlock`, kh.maKH, kh.Hovaten, kh.Diachi, kh.Sdt, kh.Email, kh.CMND FROM nguoidung nd, khachhang kh where nd.maUser = kh.maUser";
+    $sql = "SELECT nd.maUser, nd.RoleID, nd.TenUser, nd.TK, nd.`lock/unlock`, kh.maKH, kh.Hovaten, kh.Diachi, kh.Sdt, kh.Email, kh.CMND FROM nguoidung nd, khachhang kh where nd.maUser = kh.maUser limit " . ($_GET['pActive'] - 1) * 5 . ", 5";
+    $sql1 = "SELECT nd.maUser, nd.RoleID, nd.TenUser, nd.TK, nd.`lock/unlock`, nv.maNV, nv.TenNV as Hovaten, nv.Diachi, nv.SDT as Sdt, nv.Email, nv.CMND FROM nguoidung nd, nhanvien nv where nd.maUser = nv.maUser limit " . ($_GET['pActive'] - 1) * 5 . ", 5";
     $user = DBconnect::getInstance()->execSQL($sql);
+    $nv = DBconnect::getInstance()->execSQL($sql1);
     if ($user) {
-        $numpage = ceil(count($user) / 10);
-        $user[count($user)] = $numpage;
-        echo json_encode($user);
+        $result = array_merge($user, $nv);
+        $numpage = ceil(DBconnect::getInstance()->execSQL('select count(maUser) from nguoidung where maUser <> 0')[0][0] / 10);
+        $result[count($result)] = $numpage;
+        echo json_encode($result);
     } else echo 0;
 }
 
@@ -337,6 +393,18 @@ function productList()
 
 function TKDH()
 {
+    if (isset($_POST['sDate']) && isset($_POST['eDate'])) {
+        include_once 'DBConnect.php';
+        $sDate = $_POST['sDate'];
+        $eDate = $_POST['eDate'];
+        $sql = "SELECT DISTINCT dh.TongTien as sale, dh.Ngaykhoitao as date, ctdh.Tinhtrang  FROM `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH` where (dh.`Ngaykhoitao` between '$sDate' and '$eDate 23:59:59.9999')";
+        echo json_encode(DBconnect::getInstance()->execSQL($sql));
+    }
+}
+
+/*
+function TKDH()
+{
     if (isset($_POST['pageActive']) && isset($_POST['each']) && isset($_POST['sDate']) && isset($_POST['eDate'])) {
         include_once 'DBConnect.php';
         $sDate = $_POST['sDate'];
@@ -390,7 +458,7 @@ function TKDH()
         } else echo 0;
     } else echo -1;
 }
-
+*/
 function numPagelsgd($lsgd1Page)
 {
     if (isset($_GET['LSGD']) && isset($_GET['pageActive']) && isset($_SESSION['id'])) {
@@ -477,6 +545,10 @@ function xulyDHVance()
         $each = $_POST['each'];
         $sqlNum = "SELECT COUNT(dh.`maDH`) as SL FROM `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH` where (ctdh.`Tinhtrang` NOT IN('Đã hủy')) and (dh.`Ngaykhoitao` between '$sDate' and '$eDate 23:59:59.9999')";
         $sqlPage = "SELECT COUNT(DISTINCT dh.`maDH`) as SL FROM `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH` where (ctdh.`Tinhtrang` NOT IN('Đã hủy')) and (dh.`Ngaykhoitao` between '$sDate' and '$eDate 23:59:59.9999')";
+        if (isset($_GET['dataSearch'])) {
+            $sqlNum .= ' and dh.maDH = \'' . $_GET['dataSearch'] . '\'';
+            $sqlPage .= ' and dh.maDH = \'' . $_GET['dataSearch'] . '\'';
+        }
         if (isset($_GET['brandOption'])) {
             $sqlPage .= " and (ctdh.`maDH` = any (select ctdh1.`maDH` from `chitietdonhang` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='" . $_GET['brandOption'] . "'))";
             $sqlNum .= " and (ctdh.`maDH` = any (select ctdh1.`maDH` from `chitietdonhang` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='" . $_GET['brandOption'] . "'))";
@@ -492,6 +564,10 @@ function xulyDHVance()
                 $numPage = ceil($page[0][0] / $each);
                 $sqlLimit = "SELECT COUNT(ctdh.`maDH`) as count FROM `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH`  where (ctdh.`Tinhtrang` NOT IN('Đã hủy')) and (dh.`Ngaykhoitao` between '$sDate' and '$eDate 23:59:59.9999')";
                 $sqlLast = "SELECT COUNT(ctdh.`maDH`) as count FROM `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH`  where (ctdh.`Tinhtrang` NOT IN('Đã hủy')) and (dh.`Ngaykhoitao` between '$sDate' and '$eDate 23:59:59.9999')";
+                if (isset($_GET['dataSearch'])) {
+                    $sqlLimit .= ' and dh.maDH = \'' . $_GET['dataSearch'] . '\'';
+                    $sqlLast .= ' and dh.maDH = \'' . $_GET['dataSearch'] . '\'';
+                }
                 if (isset($_GET['brandOption'])) {
                     $sqlLimit .= " and (ctdh.`maDH` = any (select ctdh1.`maDH` from `chitietdonhang` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='" . $_GET['brandOption'] . "'))";
                     $sqlLast .= " and (ctdh.`maDH` = any (select ctdh1.`maDH` from `chitietdonhang` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='" . $_GET['brandOption'] . "'))";
@@ -510,6 +586,9 @@ function xulyDHVance()
                 if ($lasts != 0) {
                     for ($i = 0; $i < count($lasts); $i++) $start -= $lasts[$i]['count'];
                     $sql = "select dh.`TongTien` as tongtien ,dh.`maDH`,dh.`Ngaykhoitao`,user.`Hovaten`,user.`Diachi`,user.`Sdt`,sp.`tenSp`,ctdh.`SL`,ctdh.`TongTien`,ctdh.`Tinhtrang` from `donhang` dh join `chitietdonhang` ctdh on dh.`maDH` = ctdh.`maDH` join khachhang user on user.`maKH` = dh.`maKH` join `sanpham` sp on sp.`maSP` = ctdh.`maSP` where (ctdh.`Tinhtrang` NOT IN('Đã hủy')) and (dh.`Ngaykhoitao` between '$sDate' and '$eDate 23:59:59.9999')";
+                    if (isset($_GET['dataSearch'])) {
+                        $sql .= ' and dh.maDH = \'' . $_GET['dataSearch'] . '\'';
+                    }
                     if (isset($_GET['brandOption'])) {
                         $sql .= " and (ctdh.`maDH` = any (select ctdh1.`maDH` from `chitietdonhang` ctdh1 join `chitietsp` ctsp on ctdh1.`maSP`=ctsp.`maSP` where ctsp.`maDM`='" . $_GET['brandOption'] . "'))";
                     }
@@ -667,14 +746,18 @@ function xuLyDN()
                 } else header('location:/pttk/index.php?errorLock=true');
             } else {
                 if (!isset($_SESSION['error'])) $_SESSION['error'] = 0;
-                else $_SESSION['error']++;
+                if (!isset($_SESSION['lastUser'])) $_SESSION['lastUser'] = $_POST['user'];
+                if ($_SESSION['lastUser'] != $_POST['user']) {
+                    $_SESSION['lastUser'] = $_POST['user'];
+                    $_SESSION['error'] = 0;
+                } else $_SESSION['error']++;
                 if (isset($user[0]['maUser'])) {
                     if (isset($_SESSION['error']) && $_SESSION['error'] == 3 && ($user[0]['RoleID'] != 0 || !isset($user[0]['RoleID']))) {
                         DBconnect::getInstance()->execUpdate("update nguoidung set `lock/unlock`=0 where `TK`='" . replace_regex($_POST['user']) . "'");
                         session_unset();
                     }
-                    header('location:/pttk/login.php?error=true&user=' . $_POST['user'] . '&num=' . $_SESSION['error']);
-                } else header('location:/pttk/login.php?error=true&user=' . $_POST['user']);
+                    header('location:/pttk/DN.php?error=true&user=' . $_POST['user'] . '&num=' . $_SESSION['error']);
+                } else header('location:/pttk/DN.php?error=true&user=' . $_POST['user']);
             }
         }
     }
