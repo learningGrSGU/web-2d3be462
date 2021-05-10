@@ -220,7 +220,13 @@ function home()
 
 function delPermission()
 {
-
+    if (isset($_POST['id'])) {
+        include_once 'DBConnect.php';
+        $sql = "delete from phanquyen where `RoleID`='" . $_POST['id'] . "';";
+        $update = DBconnect::getInstance()->execUpdate($sql);
+        if ($update == 1) echo 1;
+        else echo $update;
+    } else echo -1;
 }
 
 function qlquyen()

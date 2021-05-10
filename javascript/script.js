@@ -1586,6 +1586,7 @@ window.thanhToan = function () {
         url: url,
         async: false,
         success: function (answer) {
+            console.log(answer);
             switch (Number(answer)) {
                 case 1:
                     var sanPhamDH = JSON.parse(localStorage.getItem("sanPhamDH"));
@@ -1621,7 +1622,7 @@ window.delAll = function () {
     Cart();
 }
 
-function delSpDH(x) {
+window.delSpDH = function(x) {
     var sanPhamDH = JSON.parse(localStorage.getItem("sanPhamDH"));
     var input = document.getElementById("gh" + sanPhamDH[x].masp).getElementsByTagName("input");
     var value = input[0].value;
@@ -1690,6 +1691,8 @@ window.changeValue = function (i) {
 window.Cart = function () {
     var url = location.href.split("?");
     if (url[1] == "gh") {
+        jq351('#none').hide();
+        jq351('.categories').hide();
         var acc = JSON.parse(localStorage.getItem("acc"));
         var sanPhamDH = JSON.parse(localStorage.getItem("sanPhamDH"));
         var sp = "", tong = 0;
@@ -1962,7 +1965,6 @@ window.page = function (idPage, pageNum, functionCall, pActive) {
 window.checkSP = function (masp, soluong) {
     var div = document.getElementById(masp);
     if (soluong == 0) {
-        var content = div.getElementsByClassName('product-content');
         var button = div.getElementsByTagName('button');
         var soluong = div.getElementsByClassName('soLuong');
         if (button[0] != null) {
@@ -1972,7 +1974,7 @@ window.checkSP = function (masp, soluong) {
             node.setAttribute("class", "check");
             node.innerHTML = "Hết Hàng";
             node.style.color = 'red';
-            content[0].appendChild(node);
+            div.appendChild(node);
         }
     }
 }

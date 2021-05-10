@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Apr 12, 2021 at 12:40 PM
--- Server version: 8.0.21
--- PHP Version: 7.3.21
+-- Máy chủ: 127.0.0.1:3306
+-- Thời gian đã tạo: Th5 10, 2021 lúc 09:40 AM
+-- Phiên bản máy phục vụ: 8.0.21
+-- Phiên bản PHP: 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `phone`
+-- Cơ sở dữ liệu: `phone`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `binhluan`
+-- Cấu trúc bảng cho bảng `binhluan`
 --
 
 DROP TABLE IF EXISTS `binhluan`;
@@ -37,20 +37,39 @@ CREATE TABLE IF NOT EXISTS `binhluan` (
   PRIMARY KEY (`maBL`),
   KEY `maSP` (`maSP`),
   KEY `maKH` (`maKH`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `binhluan`
+-- Đang đổ dữ liệu cho bảng `binhluan`
 --
 
 INSERT INTO `binhluan` (`maBL`, `maKH`, `maSP`, `ND`, `ThoiGianBL`) VALUES
 (1, 1, 166, 'hello bao dep trai', '2021-04-13 18:00:00'),
-(2, 1, 166, 'hi', '2021-04-11 18:41:33');
+(2, 1, 166, 'hi', '2021-04-11 18:41:33'),
+(9, 1, 601, '\"das\"', '2021-04-22 00:00:00'),
+(10, 1, 601, '\"hello\"', '2021-04-22 00:00:00'),
+(11, 1, 601, '\"ssdas\"', '2021-04-22 00:00:00'),
+(12, 1, 601, '\"dsdads\"', '2021-04-22 00:00:00'),
+(13, 1, 601, '\"dasd\"', '2021-04-22 00:00:00'),
+(14, 1, 601, '\"baodeptrai\"', '2021-04-22 00:00:00'),
+(15, 1, 601, '\"baodeptrai\"', '2021-04-22 00:00:00'),
+(16, 1, 601, '\"baodeptrai\"', '2021-04-22 00:00:00'),
+(17, 1, 601, '\"hola\"', '2021-04-22 00:00:00'),
+(28, 2, 174, 'dasd', '2021-04-23 00:00:00'),
+(29, 2, 174, 'hello bao dep trai', '2021-04-23 00:00:00'),
+(30, 2, 166, 'hello', '2021-04-23 00:00:00'),
+(31, 2, 166, 'hello', '2021-04-23 00:00:00'),
+(32, 2, 166, 'hello', '2021-04-23 00:00:00'),
+(33, 2, 166, 'hello', '2021-04-23 00:00:00'),
+(34, 2, 166, 'hello', '2021-04-23 00:00:00'),
+(35, 2, 166, 'hello ', '2021-04-23 00:00:00'),
+(36, 2, 166, 'hello bao dep trai tuyet cu meo :))', '2021-04-23 00:00:00'),
+(37, 2, 622, 'hi', '2021-04-23 00:00:00');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chitietdonhang`
+-- Cấu trúc bảng cho bảng `chitietdonhang`
 --
 
 DROP TABLE IF EXISTS `chitietdonhang`;
@@ -65,10 +84,26 @@ CREATE TABLE IF NOT EXISTS `chitietdonhang` (
   KEY `maDH` (`maDH`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `chitietdonhang`
+--
+
+INSERT INTO `chitietdonhang` (`maDH`, `maSP`, `SL`, `TongTien`, `Tinhtrang`) VALUES
+(1, 601, 1, 10850000, 'Đã xác nhận'),
+(2, 166, 1, 3800000, 'Đã xác nhận'),
+(3, 166, 1, 3800000, 'Đang chờ xử lý'),
+(3, 174, 1, 4990000, 'Đang chờ xử lý'),
+(3, 712, 1, 3300000, 'Đang chờ xử lý'),
+(4, 347, 1, 6990000, 'Đang chờ xử lý'),
+(5, 347, 1, 6990000, 'Đang chờ xử lý'),
+(6, 347, 2, 13980000, 'Đã xác nhận'),
+(7, 347, 1, 6990000, 'Đã xác nhận'),
+(8, 347, 1, 6990000, 'Đã xác nhận');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chitietpn`
+-- Cấu trúc bảng cho bảng `chitietpn`
 --
 
 DROP TABLE IF EXISTS `chitietpn`;
@@ -85,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `chitietpn` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chitietsp`
+-- Cấu trúc bảng cho bảng `chitietsp`
 --
 
 DROP TABLE IF EXISTS `chitietsp`;
@@ -112,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `chitietsp` (
 ) ENGINE=InnoDB AUTO_INCREMENT=987 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `chitietsp`
+-- Đang đổ dữ liệu cho bảng `chitietsp`
 --
 
 INSERT INTO `chitietsp` (`maCT`, `maSP`, `maDM`, `Size`, `Weight`, `Color`, `BoNhoTrong`, `BoNho`, `HDH`, `CamTruoc`, `CamSau`, `Pin`, `BaoHanh`, `TinhTrang`, `Ngày nhập hàng`, `HinhAnh`) VALUES
@@ -150,7 +185,7 @@ INSERT INTO `chitietsp` (`maCT`, `maSP`, `maDM`, `Size`, `Weight`, `Color`, `BoN
 -- --------------------------------------------------------
 
 --
--- Table structure for table `danhmuc`
+-- Cấu trúc bảng cho bảng `danhmuc`
 --
 
 DROP TABLE IF EXISTS `danhmuc`;
@@ -161,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `danhmuc` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `danhmuc`
+-- Đang đổ dữ liệu cho bảng `danhmuc`
 --
 
 INSERT INTO `danhmuc` (`maDM`, `tenDM`) VALUES
@@ -176,7 +211,7 @@ INSERT INTO `danhmuc` (`maDM`, `tenDM`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `donhang`
+-- Cấu trúc bảng cho bảng `donhang`
 --
 
 DROP TABLE IF EXISTS `donhang`;
@@ -189,12 +224,26 @@ CREATE TABLE IF NOT EXISTS `donhang` (
   PRIMARY KEY (`maDH`),
   KEY `maKH` (`maKH`),
   KEY `maNV` (`maNV`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `donhang`
+--
+
+INSERT INTO `donhang` (`maDH`, `maKH`, `maNV`, `TongTien`, `Ngaykhoitao`) VALUES
+(1, 1, NULL, 10850000, '2021-04-22 22:25:47'),
+(2, 2, NULL, 3800000, '2021-04-23 20:14:57'),
+(3, 5, NULL, 12090000, '2021-05-03 17:33:09'),
+(4, 5, NULL, 6990000, '2021-05-03 17:35:01'),
+(5, 5, NULL, 6990000, '2021-05-03 17:35:11'),
+(6, 5, NULL, 13980000, '2021-05-03 17:35:22'),
+(7, 5, NULL, 6990000, '2021-05-03 17:35:40'),
+(8, 5, NULL, 6990000, '2021-05-03 17:35:50');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `khachhang`
+-- Cấu trúc bảng cho bảng `khachhang`
 --
 
 DROP TABLE IF EXISTS `khachhang`;
@@ -205,29 +254,34 @@ CREATE TABLE IF NOT EXISTS `khachhang` (
   `Diachi` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `Sdt` int NOT NULL,
   `Email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `CMND` int NOT NULL,
+  `CMND` int DEFAULT NULL,
   PRIMARY KEY (`maKH`) USING BTREE,
   KEY `maUser` (`maUser`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `khachhang`
+-- Đang đổ dữ liệu cho bảng `khachhang`
 --
 
 INSERT INTO `khachhang` (`maKH`, `maUser`, `Hovaten`, `Diachi`, `Sdt`, `Email`, `CMND`) VALUES
-(1, NULL, 'Bao dep trai', 'dsadasda', 132213123, 'dsadasd@dads.daw', 312313341);
+(1, NULL, 'Bao dep trai', 'dsadasda', 132213123, 'dsadasd@dads.daw', 312313341),
+(2, NULL, 'duong ngoc bao', 'sadasdasdasdasd', 837574301, 'baovippro318@gmail.com', NULL),
+(3, NULL, 'duong ngoc bao', 'Quận Bình thạnh', 837574301, 'duongngocbaob109@gmail.com', NULL),
+(4, 'KH2', 'duong ngoc bao', 'Quận Bình thạnh', 837574301, 'duongngocbaob109@gmail.com', NULL),
+(5, 'KH3', 'bao dep trai', 'SGU University', 830343525, 'anhduyy04@gmail.com', NULL),
+(6, 'KH4', 'Tran Bao Long', 'SGU University', 830343525, 'tranbaolongtbb@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nguoidung`
+-- Cấu trúc bảng cho bảng `nguoidung`
 --
 
 DROP TABLE IF EXISTS `nguoidung`;
 CREATE TABLE IF NOT EXISTS `nguoidung` (
   `maUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `RoleID` int DEFAULT NULL,
-  `TenUser` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `TenUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `TK` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `MK` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `lock/unlock` tinyint(1) NOT NULL,
@@ -237,19 +291,22 @@ CREATE TABLE IF NOT EXISTS `nguoidung` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `nguoidung`
+-- Đang đổ dữ liệu cho bảng `nguoidung`
 --
 
 INSERT INTO `nguoidung` (`maUser`, `RoleID`, `TenUser`, `TK`, `MK`, `lock/unlock`) VALUES
-('0', 0, 'admin', 'admin', '123456', 1),
-('1', 1, 'nhanvien1', 'nhanvien1', '123456', 1),
-('2', 1, 'nhanvien2', 'nhanvien2', '123456', 1),
-('3', 1, 'nhanvien3', 'nhanvien3', '123456', 1);
+('0', 0, 'admin', 'admin', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
+('1', 1, 'nhan vien 1', 'nhanvien1', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
+('2', 2, 'nhan vien 2', 'nhanvien2', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
+('3', 1, 'nhan vien 3', 'nhanvien3', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
+('KH2', NULL, 'duong ngoc bao', 'user321', '$2y$10$yZpGGIc00pCFqJY33u5egeDQQT8eSfJZ/IxIUIGuujRZO6flJ/6Fi', 1),
+('KH3', NULL, 'khach hang than thiet', 'user123', '$2y$10$nqRpITfj/z98iqBI4mskFuo29aNPs7Yv6bCeoHVEC3Hca7VYmsiiq', 1),
+('KH4', NULL, 'Tran Bao Long', 'baolong123', '$2y$10$TnZr8JC02P6CQCng91IDTOhWhxF0hdfnh7npv9eVawAz3B9RXL4Du', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nhacungcap`
+-- Cấu trúc bảng cho bảng `nhacungcap`
 --
 
 DROP TABLE IF EXISTS `nhacungcap`;
@@ -265,7 +322,7 @@ CREATE TABLE IF NOT EXISTS `nhacungcap` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nhanvien`
+-- Cấu trúc bảng cho bảng `nhanvien`
 --
 
 DROP TABLE IF EXISTS `nhanvien`;
@@ -275,40 +332,52 @@ CREATE TABLE IF NOT EXISTS `nhanvien` (
   `TenNV` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `GT` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `NgaySinh` date NOT NULL,
+  `Diachi` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `SDT` int NOT NULL,
+  `Email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `CMND` int NOT NULL,
   `ChucVu` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `NgayVaoLam` date NOT NULL,
   PRIMARY KEY (`maNV`),
   KEY `maUser` (`maUser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `nhanvien`
+--
+
+INSERT INTO `nhanvien` (`maNV`, `maUser`, `TenNV`, `GT`, `NgaySinh`, `Diachi`, `SDT`, `Email`, `CMND`, `ChucVu`, `NgayVaoLam`) VALUES
+(1, '1', 'nhan vien 1', 'Nam', '2021-04-13', 'sai gon university', 52585224, 'nhanvien1@gmail.com', 54527578, 'culi', '2021-04-13'),
+(2, '2', 'nhan vien 2', 'Nữ', '2000-03-05', 'sai gon university', 825374264, 'nhanvien2@gmail.com', 215445254, 'Nhân viên quèn', '2021-05-02'),
+(3, '3', 'nhan vien 3', 'Nam', '2000-05-05', 'sai gon university', 758964581, 'nhanvien3@gmail.com', 215412450, 'Nhân viên culi', '2021-05-01');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `phanquyen`
+-- Cấu trúc bảng cho bảng `phanquyen`
 --
 
 DROP TABLE IF EXISTS `phanquyen`;
 CREATE TABLE IF NOT EXISTS `phanquyen` (
   `RoleID` int NOT NULL AUTO_INCREMENT,
-  `tenQuyen` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ChiTiet` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tenQuyen` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ChiTiet` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`RoleID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `phanquyen`
+-- Đang đổ dữ liệu cho bảng `phanquyen`
 --
 
 INSERT INTO `phanquyen` (`RoleID`, `tenQuyen`, `ChiTiet`) VALUES
 (0, 'Admin', 'Có đầy đủ tất cả các quyền'),
-(1, 'Nhân viên', '');
+(1, 'Nhân viên toàn thời gian', 'qlsanpham, thongke, qldonhang, qlncc, qltaikhoan, nhaphang, qlquyen'),
+(2, 'Nhân viên nhập hàng', 'nhaphang, qlncc');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `phieunhap`
+-- Cấu trúc bảng cho bảng `phieunhap`
 --
 
 DROP TABLE IF EXISTS `phieunhap`;
@@ -326,7 +395,7 @@ CREATE TABLE IF NOT EXISTS `phieunhap` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rating`
+-- Cấu trúc bảng cho bảng `rating`
 --
 
 DROP TABLE IF EXISTS `rating`;
@@ -346,7 +415,7 @@ CREATE TABLE IF NOT EXISTS `rating` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sanpham`
+-- Cấu trúc bảng cho bảng `sanpham`
 --
 
 DROP TABLE IF EXISTS `sanpham`;
@@ -360,27 +429,27 @@ CREATE TABLE IF NOT EXISTS `sanpham` (
 ) ENGINE=InnoDB AUTO_INCREMENT=987 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `sanpham`
+-- Đang đổ dữ liệu cho bảng `sanpham`
 --
 
 INSERT INTO `sanpham` (`maSP`, `tenSp`, `MoTa`, `GiaCa`, `SL`) VALUES
-(166, 'Xiaomi Redmi Note 9', '4 GB - 128 GB', 3800000, 12),
-(174, 'Realme 6', '8 GB - 128 GB', 4990000, 9),
+(166, 'Xiaomi Redmi Note 9', '4 GB - 128 GB', 3800000, 11),
+(174, 'Realme 6', '8 GB - 128 GB', 4990000, 8),
 (188, 'Realme 7 Pro', '8 GB - 128 GB', 7690000, 24),
 (189, 'Vsmart Joy 4', '4 GB - 64 GB', 3290000, 25),
 (238, 'Samsung Galaxy Z Fold2 5G', '12 GB - 256 GB', 47500000, 7),
-(347, 'Samsung Galaxy A50s', '4 GB - 64 GB', 6990000, 14),
+(347, 'Samsung Galaxy A50s', '4 GB - 64 GB', 6990000, 8),
 (371, 'Oppo Reno5', '8 GB - 128 GB', 7490000, 25),
 (402, 'Realme C11', '2 GB - 32 GB', 2490000, 8),
 (472, 'Realme 15C', '4 GB - 64 GB', 3590000, 6),
 (557, 'Xiaomi POCO X3 NFC', '6 GB - 64 GB', 5550000, 13),
 (601, 'Xiaomi Mi 10T Pro 5G', '8 GB  - 128 GB', 10850000, 13),
-(622, 'iPhone 11 Pro Max', '256GB - Chính hãng VN/A', 32000000, 2),
+(622, 'iPhone 11 Pro Max', '256GB - Chính hãng VN/A', 32000000, 0),
 (645, 'Vsmart Active 3', '6 GB - 64 GB', 3290000, 25),
 (653, 'Realme 7I', '8 GB - 128 GB', 5590000, 12),
 (680, 'Vsmart Aris', '8 GB - 128 GB', 5990000, 22),
 (685, 'Samsung Galaxy S20 Ultra', '12 GB - 128 GB', 19490000, 5),
-(712, 'iPhone 12 Pro', '512GB - Chính hãng VN/A', 3300000, 1),
+(712, 'iPhone 12 Pro', '512GB - Chính hãng VN/A', 3300000, 0),
 (722, 'Samsung Galaxy Note 20', '8 GB - 56 GB', 21990000, 14),
 (748, 'Samsung Galaxy A71', '8 GB - 128 GB', 7700000, 30),
 (799, 'Xiaomi Mi 11', '8 GB - 256 GB', 21990000, 25),
@@ -392,75 +461,75 @@ INSERT INTO `sanpham` (`maSP`, `tenSp`, `MoTa`, `GiaCa`, `SL`) VALUES
 (946, 'OPPO A93', '8 GB - 128 GB', 5790000, 25),
 (951, 'Nokia 8.3 5G', '8 GB - 128 GB', 9290000, 3),
 (963, 'Oppo Reno4 Pro', '8 GB - 256 GB', 9690000, 5),
-(972, 'iPhone 12 Pro Max', '512GB - Chính hãng VN/A', 39000000, 2),
+(972, 'iPhone 12 Pro Max', '512GB - Chính hãng VN/A', 39000000, 0),
 (986, 'POCO F2 PRO 5G', '8 GB  -256 GB', 10200000, 20);
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `binhluan`
+-- Các ràng buộc cho bảng `binhluan`
 --
 ALTER TABLE `binhluan`
   ADD CONSTRAINT `binhluan_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
-  ADD CONSTRAINT `binhluan_ibfk_2` FOREIGN KEY (`maKH`) REFERENCES `khachhang` (`maKH`);
+  ADD CONSTRAINT `binhluan_ibfk_2` FOREIGN KEY (`maKH`) REFERENCES `khachhang` (`maKH`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints for table `chitietdonhang`
+-- Các ràng buộc cho bảng `chitietdonhang`
 --
 ALTER TABLE `chitietdonhang`
   ADD CONSTRAINT `chitietdonhang_ibfk_1` FOREIGN KEY (`maDH`) REFERENCES `donhang` (`maDH`),
   ADD CONSTRAINT `chitietdonhang_ibfk_2` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`);
 
 --
--- Constraints for table `chitietpn`
+-- Các ràng buộc cho bảng `chitietpn`
 --
 ALTER TABLE `chitietpn`
   ADD CONSTRAINT `chitietpn_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
   ADD CONSTRAINT `chitietpn_ibfk_2` FOREIGN KEY (`maPN`) REFERENCES `phieunhap` (`maPN`);
 
 --
--- Constraints for table `chitietsp`
+-- Các ràng buộc cho bảng `chitietsp`
 --
 ALTER TABLE `chitietsp`
   ADD CONSTRAINT `chitietsp_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
   ADD CONSTRAINT `chitietsp_ibfk_2` FOREIGN KEY (`maDM`) REFERENCES `danhmuc` (`maDM`);
 
 --
--- Constraints for table `donhang`
+-- Các ràng buộc cho bảng `donhang`
 --
 ALTER TABLE `donhang`
   ADD CONSTRAINT `donhang_ibfk_1` FOREIGN KEY (`maKH`) REFERENCES `khachhang` (`maKH`),
   ADD CONSTRAINT `donhang_ibfk_2` FOREIGN KEY (`maNV`) REFERENCES `nhanvien` (`maNV`);
 
 --
--- Constraints for table `khachhang`
+-- Các ràng buộc cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  ADD CONSTRAINT `khachhang_ibfk_1` FOREIGN KEY (`maUser`) REFERENCES `nguoidung` (`maUser`);
+  ADD CONSTRAINT `khachhang_ibfk_1` FOREIGN KEY (`maUser`) REFERENCES `nguoidung` (`maUser`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints for table `nguoidung`
+-- Các ràng buộc cho bảng `nguoidung`
 --
 ALTER TABLE `nguoidung`
   ADD CONSTRAINT `nguoidung_ibfk_1` FOREIGN KEY (`RoleID`) REFERENCES `phanquyen` (`RoleID`);
 
 --
--- Constraints for table `nhanvien`
+-- Các ràng buộc cho bảng `nhanvien`
 --
 ALTER TABLE `nhanvien`
   ADD CONSTRAINT `nhanvien_ibfk_1` FOREIGN KEY (`maUser`) REFERENCES `nguoidung` (`maUser`);
 
 --
--- Constraints for table `phieunhap`
+-- Các ràng buộc cho bảng `phieunhap`
 --
 ALTER TABLE `phieunhap`
   ADD CONSTRAINT `phieunhap_ibfk_1` FOREIGN KEY (`maNV`) REFERENCES `nhanvien` (`maNV`),
   ADD CONSTRAINT `phieunhap_ibfk_2` FOREIGN KEY (`maNCC`) REFERENCES `nhacungcap` (`maNCC`);
 
 --
--- Constraints for table `rating`
+-- Các ràng buộc cho bảng `rating`
 --
 ALTER TABLE `rating`
   ADD CONSTRAINT `rating_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`) ON DELETE RESTRICT ON UPDATE RESTRICT;

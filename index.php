@@ -52,10 +52,10 @@
                     <li><a href="DN.php">Account</a></li>
                 </ul>
             </nav>
-            <img src="images/cart.png" width="30px" height="30px">
+            <a href="?gh"><img src="images/cart.png" width="30px" height="30px"></a>
             <img src="images/menu.png" class="menu-icon" onclick="menutoggle()">
         </div>
-        <div class="row">
+        <div id="none" class="row">
             <div class="col-1">
                 <h1>main-title</h1>
                 <p>sub-title</p>
@@ -68,21 +68,29 @@
     </div>
 
 </div>
-<!--Danh mục-->
-<div class="categories">
+
+<!--nhà cung cấp,Danh mục-->
+<div class="brands">
     <div class="small-container">
         <div class="row">
-            <div class="col-2">
-                <img src="images/category-1.jpg">
+            <div class="col-4">
+                <img src="images/logo-oppo.png">
             </div>
-            <div class="col-2">
-                <img src="images/category-2.jpg">
+            <div class="col-4">
+                <img src="images/logo-oppo.png">
             </div>
-            <div class="col-2">
-                <img src="images/category-3.jpg">
+            <div class="col-4">
+                <img src="images/logo-oppo.png">
+            </div>
+            <div class="col-4">
+                <img src="images/logo-oppo.png">
+            </div>
+            <div class="col-4">
+                <img src="images/logo-oppo.png">
             </div>
         </div>
     </div>
+
 </div>
 <!--Sản phẩm
 ***1 sao: <i class="fa fa-star"></i>
@@ -171,29 +179,7 @@
     </div>
 </div>
 
-<!--nhà cung cấp-->
-<div class="brands">
-    <div class="small-container">
-        <div class="row">
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-        </div>
-    </div>
 
-</div>
 <!-- footer-->
 <div class="footer">
     <div class="container">
