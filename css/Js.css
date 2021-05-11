@@ -268,13 +268,11 @@
 }
 
 .col {
-    font-size: 12px;
-    border: 1px solid black;
-    text-align: center;
-    width: 8.181%;
+    font-size: 16px;
+    border: 2px solid #ff523b;
     float: left;
     overflow: hidden;
-    height: 70px;
+    height: 40px;
 }
 
 .dh {
@@ -496,4 +494,9 @@
     background: #e6e6e6;
     margin: 5px;
     border-radius: 10px;
+}
+
+#topmenu{
+    height: 50px;
+    background: #333;
 }

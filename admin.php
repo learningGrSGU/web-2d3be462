@@ -35,18 +35,18 @@
     </script>
 </head>
 <body>
-<div id="topmenu" style="height:30px;">
-
-    <div style="width:100%;heigth:30px;">
-        <div style="width:50%;float:left;padding:12px;font-size:24px;font-family:Georgia, 'Times New Roman', Times, serif;text-align:right;color:white">
+<div id="topmenu">
+    <div >
+        <div style="font-size:22px;color:white">
             Xin Chào Admin
         </div>
-        <div style="padding:8px;width:50%;float:right;"><a href="" onClick="logout();" id="ad"><span
-                        onMouseOver="admover();"
-                        onMouseOut="admout();" id="admin"
-                        style="color:white;font-size:24px;"></span></a>
+        <div>
+            <a href="" onClick="logout();" id="ad">
+                <span onMouseOver="admover();" onMouseOut="admout();" id="admin" style="color:white;font-size:24px;"></span>
+            </a>
         </div>
     </div>
+    
 
     <script>
         function user() {
@@ -96,13 +96,13 @@
     </script>
 </div>
 <div>
-    <ul style="list-style-type: none;margin-top: 50px;padding: 0;overflow: hidden;background-color: #333;">
-        <li class="admin-menu"><a href="?ncc">Nhập hàng</a></li>
-        <li class="admin-menu"><a href="?qltk">Quản lý tài khoản</a></li>
-        <li class="admin-menu"><a href="?dssp">Quản lý sản phẩm</a></li>
-        <li class="admin-menu"><a href="?tksp">Thống kê đơn hàng</a></li>
-        <li class="admin-menu"><a href="?DH=xldh">Xác nhận đơn hàng</a></li>
-        <li class="admin-menu"><a href="?quyen">Phân quyền</a></li>
+    <ul style="list-style-type: none;margin-top: 75px;padding: 0;overflow: hidden;">
+        <li class="admin-menu" style="margin-left:5%"><a href="?ncc">Nhập Hàng</a></li>
+        <li class="admin-menu"><a href="?qltk">Quản Lý Tài Khoản</a></li>
+        <li class="admin-menu"><a href="?dssp">Quản Lý Sản Phẩm</a></li>
+        <li class="admin-menu"><a href="?tksp">Thống Kê Đơn Hàng</a></li>
+        <li class="admin-menu"><a href="?DH=xldh">Xác Nhận Đơn Hàng</a></li>
+        <li class="admin-menu"><a href="?quyen">Quản Lý Quyền</a></li>
     </ul>
 </div>
 <div id="id02" class="modal ">
