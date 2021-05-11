@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th5 10, 2021 lúc 09:40 AM
+-- Thời gian đã tạo: Th5 11, 2021 lúc 06:59 AM
 -- Phiên bản máy phục vụ: 8.0.21
 -- Phiên bản PHP: 7.3.21
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `binhluan` (
   PRIMARY KEY (`maBL`),
   KEY `maSP` (`maSP`),
   KEY `maKH` (`maKH`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `binhluan`
@@ -64,7 +64,8 @@ INSERT INTO `binhluan` (`maBL`, `maKH`, `maSP`, `ND`, `ThoiGianBL`) VALUES
 (34, 2, 166, 'hello', '2021-04-23 00:00:00'),
 (35, 2, 166, 'hello ', '2021-04-23 00:00:00'),
 (36, 2, 166, 'hello bao dep trai tuyet cu meo :))', '2021-04-23 00:00:00'),
-(37, 2, 622, 'hi', '2021-04-23 00:00:00');
+(37, 2, 622, 'hi', '2021-04-23 00:00:00'),
+(38, 6, 174, 'hello', '2021-05-11 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -98,7 +99,9 @@ INSERT INTO `chitietdonhang` (`maDH`, `maSP`, `SL`, `TongTien`, `Tinhtrang`) VAL
 (5, 347, 1, 6990000, 'Đang chờ xử lý'),
 (6, 347, 2, 13980000, 'Đã xác nhận'),
 (7, 347, 1, 6990000, 'Đã xác nhận'),
-(8, 347, 1, 6990000, 'Đã xác nhận');
+(8, 347, 1, 6990000, 'Đã xác nhận'),
+(9, 174, 8, 39920000, 'Đang chờ xử lý'),
+(9, 371, 1, 7490000, 'Đang chờ xử lý');
 
 -- --------------------------------------------------------
 
@@ -192,6 +195,7 @@ DROP TABLE IF EXISTS `danhmuc`;
 CREATE TABLE IF NOT EXISTS `danhmuc` (
   `maDM` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tenDM` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logo` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`maDM`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -199,14 +203,14 @@ CREATE TABLE IF NOT EXISTS `danhmuc` (
 -- Đang đổ dữ liệu cho bảng `danhmuc`
 --
 
-INSERT INTO `danhmuc` (`maDM`, `tenDM`) VALUES
-('IP', 'Iphone'),
-('NO', 'Nokia'),
-('OP', 'OPPO'),
-('RM', 'Realme'),
-('SS', 'Samsung'),
-('VM', 'Vsmart'),
-('XM', 'Xiaomi');
+INSERT INTO `danhmuc` (`maDM`, `tenDM`, `logo`) VALUES
+('IP', 'Iphone', 'images/logo/logo-iphone.png'),
+('NO', 'Nokia', 'images/logo/logo-nokia.png'),
+('OP', 'OPPO', 'images/logo/logo-oppo.png'),
+('RM', 'Realme', 'images/logo/logo-realme.png'),
+('SS', 'Samsung', 'images/logo/logo-samsung.png'),
+('VM', 'Vsmart', 'images/logo/logo-vsmart.png'),
+('XM', 'Xiaomi', 'images/logo/logo-xiaomi.png');
 
 -- --------------------------------------------------------
 
@@ -224,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `donhang` (
   PRIMARY KEY (`maDH`),
   KEY `maKH` (`maKH`),
   KEY `maNV` (`maNV`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `donhang`
@@ -238,7 +242,8 @@ INSERT INTO `donhang` (`maDH`, `maKH`, `maNV`, `TongTien`, `Ngaykhoitao`) VALUES
 (5, 5, NULL, 6990000, '2021-05-03 17:35:11'),
 (6, 5, NULL, 13980000, '2021-05-03 17:35:22'),
 (7, 5, NULL, 6990000, '2021-05-03 17:35:40'),
-(8, 5, NULL, 6990000, '2021-05-03 17:35:50');
+(8, 5, NULL, 6990000, '2021-05-03 17:35:50'),
+(9, 6, NULL, 47410000, '2021-05-11 10:54:31');
 
 -- --------------------------------------------------------
 
@@ -296,9 +301,9 @@ CREATE TABLE IF NOT EXISTS `nguoidung` (
 
 INSERT INTO `nguoidung` (`maUser`, `RoleID`, `TenUser`, `TK`, `MK`, `lock/unlock`) VALUES
 ('0', 0, 'admin', 'admin', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
-('1', 1, 'nhan vien 1', 'nhanvien1', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
-('2', 2, 'nhan vien 2', 'nhanvien2', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
-('3', 1, 'nhan vien 3', 'nhanvien3', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
+('1', 2, 'nhan vien 1', 'nhanvien1', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
+('2', 1, 'nhan vien 2', 'nhanvien2', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
+('3', 10, 'nhan vien 3', 'nhanvien3', '$2y$10$QCa0unA45x01UzuVRl5ii.qAFWj2cGiO96FiSD2oCtyiJFo4dOGse', 1),
 ('KH2', NULL, 'duong ngoc bao', 'user321', '$2y$10$yZpGGIc00pCFqJY33u5egeDQQT8eSfJZ/IxIUIGuujRZO6flJ/6Fi', 1),
 ('KH3', NULL, 'khach hang than thiet', 'user123', '$2y$10$nqRpITfj/z98iqBI4mskFuo29aNPs7Yv6bCeoHVEC3Hca7VYmsiiq', 1),
 ('KH4', NULL, 'Tran Bao Long', 'baolong123', '$2y$10$TnZr8JC02P6CQCng91IDTOhWhxF0hdfnh7npv9eVawAz3B9RXL4Du', 1);
@@ -363,7 +368,7 @@ CREATE TABLE IF NOT EXISTS `phanquyen` (
   `tenQuyen` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ChiTiet` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`RoleID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `phanquyen`
@@ -371,8 +376,9 @@ CREATE TABLE IF NOT EXISTS `phanquyen` (
 
 INSERT INTO `phanquyen` (`RoleID`, `tenQuyen`, `ChiTiet`) VALUES
 (0, 'Admin', 'Có đầy đủ tất cả các quyền'),
-(1, 'Nhân viên toàn thời gian', 'qlsanpham, thongke, qldonhang, qlncc, qltaikhoan, nhaphang, qlquyen'),
-(2, 'Nhân viên nhập hàng', 'nhaphang, qlncc');
+(1, 'Nhân viên toàn thời gian', 'qlsanpham, thongke, qldonhang, qlncc, nhaphang'),
+(2, 'Nhân viên nhập hàng', 'nhaphang, qlncc'),
+(10, 'Nhân viên cao cấp', 'qlsanpham, thongke, qldonhang, qlncc, qltaikhoan, nhaphang, qlquyen');
 
 -- --------------------------------------------------------
 
@@ -434,12 +440,12 @@ CREATE TABLE IF NOT EXISTS `sanpham` (
 
 INSERT INTO `sanpham` (`maSP`, `tenSp`, `MoTa`, `GiaCa`, `SL`) VALUES
 (166, 'Xiaomi Redmi Note 9', '4 GB - 128 GB', 3800000, 11),
-(174, 'Realme 6', '8 GB - 128 GB', 4990000, 8),
+(174, 'Realme 6', '8 GB - 128 GB', 4990000, 0),
 (188, 'Realme 7 Pro', '8 GB - 128 GB', 7690000, 24),
 (189, 'Vsmart Joy 4', '4 GB - 64 GB', 3290000, 25),
 (238, 'Samsung Galaxy Z Fold2 5G', '12 GB - 256 GB', 47500000, 7),
 (347, 'Samsung Galaxy A50s', '4 GB - 64 GB', 6990000, 8),
-(371, 'Oppo Reno5', '8 GB - 128 GB', 7490000, 25),
+(371, 'Oppo Reno5', '8 GB - 128 GB', 7490000, 24),
 (402, 'Realme C11', '2 GB - 32 GB', 2490000, 8),
 (472, 'Realme 15C', '4 GB - 64 GB', 3590000, 6),
 (557, 'Xiaomi POCO X3 NFC', '6 GB - 64 GB', 5550000, 13),

@@ -109,6 +109,15 @@ export function sortedTable(tag) {
         }
         jq351(this.id).append(table);
     }
+    let width = 100/(this.headers.length + 2);
+    let theaders = document.getElementsByClassName('th');
+    let cols = document.getElementsByClassName('col');
+    for (let i = 0; i < cols.length; i++) {
+        cols[i].style.width = `${width}%`;
+    }
+    for (let i = 0; i < theaders.length; i++) {
+        theaders[i].style.width = `${width}%`;
+    }
     const eles = document.getElementsByClassName('row');
     for (let i = 1; i < eles.length; i++) {
         const menu = document.getElementById('menu_' + (i - 1));
