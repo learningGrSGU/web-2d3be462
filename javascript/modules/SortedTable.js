@@ -66,6 +66,10 @@ export function sortedTable(tag) {
                 tag.className = "th asc";
                 break;
         }
+        let tags = document.getElementsByClassName('th');
+        for (let i = 1; i < tags.length; i++) {
+            if (tags[i] != tag) tags[i].className = 'th';
+        }
         var removalElement = $(".row");
         for (let i = 1; i < removalElement.length; i++)
             removalElement[i].remove();

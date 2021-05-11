@@ -34,11 +34,7 @@
         <div class="wrap-login100">
             <form name="login" method="post" class="login100-form validate-form" action="php/xuly.php?action=login">
 					<span class="login100-form-logo">
-						<i class="zmdi zmdi-landscape"></i>
-					</span>
-
-                <span class="login100-form-title p-b-34 p-t-27">
-						Đăng Nhập
+                        <img src="images/logo-shop.png" style="width: 100%;border-radius: 50%;">
 					</span>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter username">

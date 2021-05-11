@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Phone Shop</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="css/main-web.css">
     <link rel="stylesheet" type="text/css"
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" type="text/css"
@@ -39,30 +38,26 @@
     <div class="container">
         <div class="navbar">
             <div class="logo">
-                <img src="images/logo.png" width="125px">
+                <img src="images/logo-shop.png" style="width:125px;border-radius:50%;">
             </div>
             <nav>
                 <ul id="MenuItems">
-                    <li><a href="">Home</a></li>
-                    <li class="list-item" style="position:relative;"><a>Thể Loại</a>
-                        <ul id="m" type="none"></ul>
-                    </li>
-                    <li><a href="">About</a></li>
-                    <li><a href="">Contact</a></li>
-                    <li><a href="DN.php">Account</a></li>
+                    <li><a href="">Trang Chủ</a></li>
+                    <li><a href="">Giới Thiệu</a></li>
+                    <li><a href="">Liên Hệ</a></li>
+                    <li><a href="DN.php">Đăng Nhập</a></li>
                 </ul>
             </nav>
             <a href="?gh"><img src="images/cart.png" width="30px" height="30px"></a>
-            <img src="images/menu.png" class="menu-icon" onclick="menutoggle()">
         </div>
         <div id="none" class="row">
             <div class="col-1">
-                <h1>main-title</h1>
-                <p>sub-title</p>
+                <h1>Samsung Galaxy A50s</h1>
+                <p>Galaxy A50s lựa chọn tốt nhất năm 2021</p>
                 <a href="" class="btn">Khám phá ngay &#8594;</a>
             </div>
             <div class="col-1">
-                <img src="images/image1.png">
+                <img src="images/samsung-galaxy-a50s.png">
             </div>
         </div>
     </div>
@@ -72,31 +67,11 @@
 <!--nhà cung cấp,Danh mục-->
 <div class="brands">
     <div class="small-container">
-        <div class="row">
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
-            <div class="col-4">
-                <img src="images/logo-oppo.png">
-            </div>
+        <div id="m" class="row">
         </div>
     </div>
 
 </div>
-<!--Sản phẩm
-***1 sao: <i class="fa fa-star"></i>
-   nửa sao: <i class="fa fa-star-half-o"></i>
-   0 sao: <i class="fa fa-star-o"></i>
--->
 <div class="small-container">
     <h2 class="title">Sản Phẩm</h2>
     <div id="menu"></div>
@@ -105,74 +80,17 @@
 </div>
 
 </div>
-<!--
-      <div class="row">
-         <div class="col-3">
-            <img src="images/product-1.jpg">
-            <h4>Iphone</h4>
-            <div class="rating">
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star-o"></i>
-            </div>
-            <p>$100</p>
-         </div>
-         <div class="col-3">
-            <img src="images/product-2.jpg">
-            <h4>Iphone</h4>
-            <div class="rating">
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star-o"></i>
-            </div>
-            <p>$101</p>
-         </div>
-         <div class="col-3">
-            <img src="images/product-3.jpg">
-            <h4>Iphone</h4>
-            <div class="rating">
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star-o"></i>
-            </div>
-            <p>$102</p>
-         </div>
-         <div class="col-3">
-            <img src="images/product-4.jpg">
-            <h4>Iphone</h4>
-            <div class="rating">
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star"></i>
-               <i class="fa fa-star-o"></i>
-            </div>
-            <p>$103</p>
-         </div>
-      </div>
--->
-<!-- tạo vòng lặp từ <h2>...</h2>
-   chia ra 3 hàng nha mỗi hàng 4 sp t để sẵn rồi đó(1 row - 4sp col-3 nha)-->
 </div>
 <!--Đề xuất-->
 <div class="offer">
     <div class="small-container">
         <div class="row">
             <div class="col-1">
-                <img src="images/exclusive.png" class="offer-img">
+                <img src="images/Xiaomi-x3.png" class="offer-img">
             </div>
             <div class="col-1">
                 <p>Mặt hàng đang bán chạy</p>
-                <h1>Xiaomi...</h1>
-                <small>
-                    Một số mô tả
-                </small>
+                <h1>Xiaomi POCO X3 NFC</h1>
                 <a href="" class="btn">Mua Ngay &#8594;</a>
             </div>
         </div>
@@ -205,21 +123,8 @@
             </div>
         </div>
         <hr>
-        <p class="copyright">Copyright 2021 Some Where</p>
+        <p class="copyright">Copyright 2021</p>
     </div>
 </div>
-<!-- JS -->
-<script>
-    var MenuItems = document.getElementById("MenuItems")
-    MenuItems.style.maxHeight = "0px";
-
-    function menutoggle() {
-        if (MenuItems.style.maxHeight == "0px") {
-            MenuItems.style.maxHeight = "200px";
-        } else {
-            MenuItems.style.maxHeight = "0px";
-        }
-    }
-</script>
 </body>
 </html>

@@ -34,47 +34,47 @@
         <div class="wrap-login100">
             <form name="register" class="login100-form validate-form" method="post" action="php/xuly.php?action=register">
 					<span class="login100-form-logo">
-						<i class="zmdi zmdi-landscape"></i>
+						<img src="images/logo-shop.png" style="width: 100%;border-radius: 50%;">
 					</span>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter Name">
-                    <div class="Valid check1"></div>
+                    <div class="Valid check1" style="color:#e5f510;"></div>
                     <input class="input100" type="text" name="ht" placeholder="Họ và Tên">
                     <span class="focus-input100" data-placeholder="&#xf207;"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter Username">
-                    <div class="Valid check1"></div>
+                    <div class="Valid check1" style="color:#e5f510;"></div>
                     <input onKeyUp="checkUser();" class="input100" type="text" name="user" placeholder="Tên Đăng Nhập">
                     <span class="focus-input100" data-placeholder="&#xf207;"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter Password">
-                    <div class="Valid check1"></div>
+                    <div class="Valid check1" style="color:#e5f510;"></div>
                     <input class="input100" type="password" name="pass" placeholder="Mật Khẩu">
                     <span class="focus-input100" data-placeholder="&#xf191;"></span>
                 </div>
 
-                <div class="wrap-input100 validate-input" data-validate="Enter Password">
-                    <div class="Valid check1"></div>
+                <div class="wrap-input100 validate-input" data-validate="Repeat  Password">
+                    <div class="Valid check1" style="color:#e5f510;"></div>
                     <input class="input100" type="password" name="repass" placeholder="Nhập Lại Mật Khẩu">
                     <span class="focus-input100" data-placeholder="&#xf191;"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter Email">
-                    <div class="Valid check1"></div>
+                    <div class="Valid check1" style="color:#e5f510;"></div>
                     <input class="input100" type="text" name="email" placeholder="Email">
                     <span class="focus-input100" data-placeholder="&#xf191;"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter PhoneNumber">
-                    <div class="Valid check1"></div>
+                    <div class="Valid check1" style="color:#e5f510;" style="color:#e5f510;"></div>
                     <input class="input100" type="text" name="sdt" placeholder="Số Điện Thoại">
                     <span class="focus-input100" data-placeholder="&#xf191;"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter Address">
-                    <div class="Valid check1"></div>
+                    <div class="Valid check1" style="color:#e5f510;"></div>
                     <input class="input100" type="text" name="address" placeholder="Địa Chỉ">
                     <span class="focus-input100" data-placeholder="&#xf191;"></span>
                 </div>

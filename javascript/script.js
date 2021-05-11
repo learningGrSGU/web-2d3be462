@@ -19,6 +19,18 @@ window.checkPermission = function (permission) {
     return bool;
 }
 
+window.isCheckedPermission = function (permission) {
+    let permissions = this.split(', ');
+    let bool = false;
+    permissions.forEach(function (item, index) {
+        if (item == permission) {
+            bool = true;
+            return;
+        }
+    });
+    return bool;
+}
+
 window.getPosition = function (e) {
     var posx = 0;
     var posy = 0;
@@ -543,15 +555,145 @@ window.delPermission = function (id, pActive) {
     permission(pActive);
 }
 
-window.showPermission = function () {
+window.addNewPermission = function (pActive) {
+    let permissions = [];
+    let checkbox = document.getElementById('add-permission').getElementsByTagName('input');
+    for (let i = 1; i < checkbox.length; i++) {
+        if (checkbox[i].checked) {
+            permissions.push(checkbox[i].value);
+        }
+    }
+    let Chitiet = permissions.join(', ');
+    if (checkbox[0].value != '') {
+        jq351.ajax({
+            url: 'php/xuly.php?action=addPermission',
+            data: {permissions: Chitiet, name: checkbox[0].value},
+            type: 'POST',
+            async: false,
+            success: function (result) {
+                if (Number(result) == 1) {
+                    customDialog('Cập nhật thành công');
+                    document.getElementById('add-permission').style.display = 'none';
+                    permission(pActive);
+                } else {
+                    console.log(result);
+                    customDialog('Phát sinh lỗi trong quá trình cập nhật!');
+                }
+            }
+        });
+    } else customDialog('Vui lòng nhập tên quyền!');
+}
 
+window.addPermission = function () {
+    var modal = document.getElementById('add-permission');
+    if (modal == null) {
+        var mod = '';
+        var myModal = document.createElement('div');
+        myModal.className = 'modal';
+        myModal.id = 'add-permission';
+        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
+            '<div>Tên quyền: <input type="text" placeholder="Nhập tên quyền"></div>'
+        mod += '<div class="input-checkbox"><input value="qlsanpham" type="checkbox" ';
+        mod += '/> Quản lý sản phẩm</div>';
+        mod += '<div class="input-checkbox"><input value="thongke" type="checkbox" ';
+        mod += '/> Thống kê</div>';
+        mod += '<div class="input-checkbox"><input value="qldonhang" type="checkbox" ';
+        mod += '/> Quản lý đơn hàng</div>';
+        mod += '<div class="input-checkbox"><input value="qlncc" type="checkbox" ';
+        mod += '/> Quản lý nhà cung cấp</div>';
+        mod += '<div class="input-checkbox"><input value="qltaikhoan" type="checkbox" ';
+        mod += '/> Quản lý tài khoản</div>';
+        mod += '<div class="input-checkbox"><input value="nhaphang" type="checkbox" ';
+        mod += '/> Nhập hàng</div>';
+        mod += '<div class="input-checkbox"><input value="qlquyen" type="checkbox" ';
+        mod += '/> Quản lý quyền</div>';
+        mod += '<div><button onclick="addNewPermission(' + this + ')">Thêm quyền</button></div></div>'
+        myModal.innerHTML = mod;
+        document.getElementsByTagName('body')[0].appendChild(myModal);
+        modal = myModal;
+    }
+    modal.style.display = 'block';
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+window.updatePermission = function (id, pActive) {
+    let permissions = [];
+    let checkbox = document.getElementById('detail-permission-' + id).getElementsByTagName('input');
+    for (let i = 0; i < checkbox.length; i++) {
+        if (checkbox[i].checked) {
+            permissions.push(checkbox[i].value);
+        }
+    }
+    let Chitiet = permissions.join(', ');
+    jq351.ajax({
+        url: 'php/xuly.php?action=updatePermission',
+        data: {permissions: Chitiet, id: id},
+        type: 'POST',
+        async: false,
+        success: function (result) {
+            if (Number(result) == 1) {
+                customDialog('Cập nhật thành công');
+                permission(pActive);
+            } else {
+                console.log(result);
+                customDialog('Phát sinh lỗi trong quá trình cập nhật!');
+            }
+        }
+    });
+}
+
+window.showPermission = function () {
+    var modal = document.getElementById('detail-permission-' + this.result['RoleID']);
+    if (modal == null) {
+        var mod = '';
+        var myModal = document.createElement('div');
+        myModal.className = 'modal';
+        myModal.id = 'detail-permission-' + this.result['RoleID'];
+        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">'
+        mod += '<div class="input-checkbox"><input value="qlsanpham" type="checkbox" ';
+        if (isCheckedPermission.call(this.result['ChiTiet'], 'qlsanpham')) mod += 'checked="true"';
+        mod += '/> Quản lý sản phẩm</div>';
+        mod += '<div class="input-checkbox"><input value="thongke" type="checkbox" ';
+        if (isCheckedPermission.call(this.result['ChiTiet'], 'thongke')) mod += 'checked="true"';
+        mod += '/> Thống kê</div>';
+        mod += '<div class="input-checkbox"><input value="qldonhang" type="checkbox" ';
+        if (isCheckedPermission.call(this.result['ChiTiet'], 'qldonhang')) mod += 'checked="true"';
+        mod += '/> Quản lý đơn hàng</div>';
+        mod += '<div class="input-checkbox"><input value="qlncc" type="checkbox" ';
+        if (isCheckedPermission.call(this.result['ChiTiet'], 'qlncc')) mod += 'checked="true"';
+        mod += '/> Quản lý nhà cung cấp</div>';
+        mod += '<div class="input-checkbox"><input value="qltaikhoan" type="checkbox" ';
+        if (isCheckedPermission.call(this.result['ChiTiet'], 'qltaikhoan')) mod += 'checked="true"';
+        mod += '/> Quản lý tài khoản</div>';
+        mod += '<div class="input-checkbox"><input value="nhaphang" type="checkbox" ';
+        if (isCheckedPermission.call(this.result['ChiTiet'], 'nhaphang')) mod += 'checked="true"';
+        mod += '/> Nhập hàng</div>';
+        mod += '<div class="input-checkbox"><input value="qlquyen" type="checkbox" ';
+        if (isCheckedPermission.call(this.result['ChiTiet'], 'qlquyen')) mod += 'checked="true"';
+        mod += '/> Quản lý quyền</div>';
+        mod += '<div><button onclick="updatePermission(\'' + this.result['RoleID'] + '\', ' + this.pActive + ')">Cập nhật quyền</button></div></div>'
+        myModal.innerHTML = mod;
+        document.getElementsByTagName('body')[0].appendChild(myModal);
+        modal = myModal;
+    }
+    modal.style.display = 'block';
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
 }
 
 window.permissionManage = function (event, visible) {
     if (!visible) {
         let context_menu = '<ul id="menu_' + this.id + '" class="menu">' +
             '<li class="menu-item" onclick="delPermission(' + escapeHtml(JSON.stringify(this.result['RoleID'])) + ', ' + this.pActive + ')">Xóa Quyền</li>' +
-            '<li class="menu-item" onclick="showPermission.call(' + JSON.stringify(this) + ')">Sửa Quyền</li>';
+            '<li class="menu-item" onclick="showPermission.call(' + escapeHtml(JSON.stringify(this)) + ')">Xem chi tiết</li>' +
+            '<li class="menu-item" onclick="addPermission.call(' + this.pActive + ')">Thêm quyền mới</li>';
         context_menu += '</ul>';
         jq351('#sp').append(context_menu);
     } else {
@@ -595,6 +737,60 @@ window.permission = function (pActive) {
     }
 }
 
+window.grantPermission = function (user, pActive) {
+    let select = document.getElementById('choose-permission-' + user).getElementsByTagName('select');
+    jq351.ajax({
+        url: 'php/xuly.php?action=grantPermission',
+        data: {maUser: user, role: select[0].value},
+        type: 'POST',
+        async: false,
+        success: function (result) {
+            if (Number(result) == 1) {
+                customDialog('Cấp quyền thành công');
+                document.getElementById('choose-permission-' + user).style.display = 'none';
+                qltk(pActive);
+            } else {
+                console.log(result);
+                customDialog('Phát sinh lỗi trong quá trình cập nhật!');
+            }
+        }
+    });
+}
+
+window.phanquyen = function (id, pActive, user) {
+    var modal = document.getElementById('choose-permission-' + user);
+    if (modal == null) {
+        var mod = '';
+        var myModal = document.createElement('div');
+        myModal.className = 'modal';
+        myModal.id = 'choose-permission-' + user;
+        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">'
+        jq351.ajax({
+            url: 'php/xuly.php?action=getPermission',
+            async: false,
+            success: function (result) {
+                let results = JSON.parse(result);
+                mod += '<select>';
+                for (let i = 0; i < results.length; i++) {
+                    if (results[i]['RoleID'] == id) mod += '<option value="' + results[i]['RoleID'] + '" selected>' + results[i]['tenQuyen'] + '</option>';
+                    else mod += '<option value="' + results[i]['RoleID'] + '">' + results[i]['tenQuyen'] + '</option>';
+                }
+                mod += '</select>';
+            }
+        });
+        mod += '<div><button onclick="grantPermission(\'' + user + '\', ' + pActive + ')">Cấp quyền</button></div></div>'
+        myModal.innerHTML = mod;
+        document.getElementsByTagName('body')[0].appendChild(myModal);
+        modal = myModal;
+    }
+    modal.style.display = 'block';
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
 window.del = function (x, pActive) {
     if (confirm('Bạn có muốn xóa tài khoản này không?'))
         jq351.ajax({
@@ -629,7 +825,7 @@ window.accountManage = function (event, visible) {
             '<li class="menu-item" onclick="del(' + escapeHtml(JSON.stringify(this.result['maUser'])) + ', ' + this.pActive + ')">Xóa tài khoản</li>';
         if (this.result['lock/unlock'] == 1) context_menu += '<li class="menu-item" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(this.result['TK'])) + ', 0, ' + this.pActive + ')">Khóa tài khoản</li>';
         else context_menu += '<li class="menu-item" onclick="Unlock_lock(' + escapeHtml(JSON.stringify(this.result['TK'])) + ', 1, ' + this.pActive + ')">Mở khóa tài khoản</li>';
-        if (this.result['RoleID'] != null) context_menu += '<li class="menu-item" onclick="">Phân quyền</li>';
+        if (this.result['RoleID'] != null) context_menu += '<li class="menu-item" onclick="phanquyen(\'' + this.result['RoleID'] + '\', ' + this.pActive + ', \'' + this.result['maUser'] + '\')">Phân quyền</li>';
         context_menu += '</ul>';
         jq351('#sp').append(context_menu);
     } else {
@@ -866,7 +1062,7 @@ window.addSp = function (x) {
     }
 }
 
-window.showAddSp = function () {
+/*window.showAddSp = function () {
     var modal = document.getElementById('addSp');
     if (modal != null)
         modal.style.display = 'block';
@@ -875,43 +1071,7 @@ window.showAddSp = function () {
         var myModal = document.createElement('div');
         myModal.className = 'modal product';
         myModal.id = 'addSp';
-        mod += '<div class="modal-content addProd" style="width:100%;height:90%;"><div id="newSp" class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
-            '<h1 style="color:red;">Nhập đầy đủ thông tin để thêm sản phẩm!!!!</h1>' +
-            '<hr>' +
-            //1
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Upload HinhAnh:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px" type="file" accept="image/*"></div>' +
-            //2
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">maSP:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width:90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //3
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Tên sản phẩm:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 89%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //4
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">SL:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //5
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Đơn giá:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //6
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Chi tiết:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //7
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mã thể loại:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //8
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Tên thể loại:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //9
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mã chi tiết:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //10
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mô tả:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-            //11
-            '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Ngày nhập:</div>' +
-            '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="date"></div>' +
-            '</div><div class="container"><button class="but" onclick="addSp(\'newSp\');">Thêm</button></div></div></div>';
+        
         myModal.innerHTML = mod;
         document.getElementsByTagName('body')[0].appendChild(myModal);
     }
@@ -922,9 +1082,46 @@ window.showAddSp = function () {
         }
     });
 }
-
+*/
 window.productDetail = function (x, pActive) {
 
+    /*mod += '<div class="modal-content addProd" style="width:100%;height:90%;"><div id="newSp" class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
+                '<h1 style="color:red;">Nhập đầy đủ thông tin để thêm sản phẩm!!!!</h1>' +
+                '<hr>' +
+                //1
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Upload HinhAnh:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px" type="file" accept="image/*"></div>' +
+                //2
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">maSP:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width:90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //3
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Tên sản phẩm:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 89%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //4
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">SL:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //5
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Đơn giá:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //6
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Chi tiết:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //7
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mã thể loại:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //8
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Tên thể loại:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //9
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mã chi tiết:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //10
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mô tả:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
+                //11
+                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Ngày nhập:</div>' +
+                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="date"></div>' +
+                '</div><div class="container"><button class="but" onclick="addSp(\'newSp\');">Thêm</button></div></div></div>';*/
 }
 
 window.productManage = function (event, visible) {
@@ -1397,8 +1594,6 @@ window.tkDH = function () {
 window.LsGd = function (lsgdJSON, pActive, pNum) {
     if (lsgdJSON != -1) {
         var dh = "", s = "";
-        document.getElementsByClassName("featured")[0].style.display = "none";
-        document.getElementsByClassName("sub-featured")[0].style.display = "none";
         if (lsgdJSON == 0) {
             document.getElementById("sp").innerHTML = '<div class="check">Chưa có đơn đặt hàng!</div>';
             document.getElementById("trang").innerHTML = s;
@@ -1622,7 +1817,7 @@ window.delAll = function () {
     Cart();
 }
 
-window.delSpDH = function(x) {
+window.delSpDH = function (x) {
     var sanPhamDH = JSON.parse(localStorage.getItem("sanPhamDH"));
     var input = document.getElementById("gh" + sanPhamDH[x].masp).getElementsByTagName("input");
     var value = input[0].value;
@@ -1859,7 +2054,7 @@ window.checkUser = function () {
 window.menu = function () {
     var s = "";
     for (var i = 0; i < this.length; i++) {
-        s += '<li><a style="text-decoration:none;width:100%;" href="?idBrand=' + this[i]['maDM'] + '&pageActive=1"><div class="theloai">' + this[i]['tenDM'] + "</div></a></li>";
+        s += '<div class="col-4"><a href="?idBrand=' + this[i]['maDM'] + '&pageActive=1"><img src="' + this[i]['logo'] + '"></a></div>'
     }
     document.getElementById("m").innerHTML = s;
 }

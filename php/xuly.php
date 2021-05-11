@@ -2,8 +2,20 @@
 session_start();
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
+        case "grantPermission":
+            grantPermission();
+            break;
+        case "getPermission":
+            getPermission();
+            break;
+        case "addPermission":
+            addPermission();
+            break;
         case "delPermission":
             delPermission();
+            break;
+        case "updatePermission":
+            updatePermission();
             break;
         case "qlquyen":
             qlquyen();
@@ -218,11 +230,52 @@ function home()
     echo json_encode($sp);
 }
 
+function grantPermission()
+{
+    if (isset($_POST['maUser'])) {
+        include_once 'DBConnect.php';
+        $sql = "update nguoidung set RoleID = '" . $_POST['role'] . "' where maUser = '" . $_POST['maUser'] . "'";
+        $sp = DBconnect::getInstance()->execUpdate($sql);
+        if ($sp === true) echo 1;
+        else echo json_encode($sp);
+    } else echo -1;
+}
+
+function getPermission()
+{
+    include_once 'DBConnect.php';
+    $sql = "SELECT * FROM phanquyen where RoleID <> 0";
+    $sp = DBconnect::getInstance()->execSQL($sql);
+    echo json_encode($sp);
+}
+
 function delPermission()
 {
     if (isset($_POST['id'])) {
         include_once 'DBConnect.php';
         $sql = "delete from phanquyen where `RoleID`='" . $_POST['id'] . "';";
+        $update = DBconnect::getInstance()->execUpdate($sql);
+        if ($update == 1) echo 1;
+        else echo $update;
+    } else echo -1;
+}
+
+function addPermission()
+{
+    if (isset($_POST['permissions'])) {
+        include_once 'DBConnect.php';
+        $sql = "insert into phanquyen(tenQuyen, ChiTiet) values ('" . replace_regex($_POST['name']) . "', '" . $_POST['permissions'] . "')";
+        $update = DBconnect::getInstance()->execUpdate($sql);
+        if ($update == 1) echo 1;
+        else echo $update;
+    } else echo -1;
+}
+
+function updatePermission()
+{
+    if (isset($_POST['permissions'])) {
+        include_once 'DBConnect.php';
+        $sql = "update phanquyen set ChiTiet='" . $_POST['permissions'] . "' where `RoleID`='" . $_POST['id'] . "';";
         $update = DBconnect::getInstance()->execUpdate($sql);
         if ($update == 1) echo 1;
         else echo $update;

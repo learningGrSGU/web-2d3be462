@@ -41,50 +41,37 @@
 
 /*  */
 #name {
-    color: white;
-    background-color: black;
-    position: relative;
+    color: #555;
     cursor: pointer;
-}
-
-.logout {
-    width: 100%;
-    background-color: black;
-    color: white;
-    border-top: 1px solid white;
-}
-
-.logout:hover {
-    background-color: grey;
-    color: black;
+    display: inline-block;
 }
 
 #user {
-    border: 1px solid white;
-    position: absolute;
     display: none;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+}
+
+#name:hover #user {
+    display: block;
+}
+
+#user li {
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+#user a:hover {
+    color: pink;
 }
 
 #ten {
     font-size: 25px;
     font-family: auto;
     padding-left: 5px;
-}
-
-#user a {
-    width: 100%;
-    padding: 6px;
-    color: white;
-    background-color: black;
-}
-
-#user a:hover {
-    color: black;
-    background-color: grey;
-}
-
-#name:hover #user {
-    display: block;
 }
 
 .switch {
@@ -169,13 +156,6 @@
 #menu {
     display: grid;
     width: 100%;
-}
-
-#m {
-    display: none;
-    position: absolute;
-    right: -35%;
-    width: 200px;
 }
 
 #MenuItems li:hover #m {
@@ -351,28 +331,34 @@
 .tendt {
     font-size: 35px;
     font-weight: bold;
-    float: left;
+    text-align: center;
     padding: 0 5px 0 2px;
     color: black;
 }
 
-.soLuong {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
+.mota {
+    padding: 10px;
+    font-size: 16px;
+    background: #f5f5f5;
 }
 
-.mota {
-    float: left;
-    clear: left;
+.mota1 {
+    padding: 10px;
     font-size: 16px;
 }
 
 .details {
-    width: 60%;
-    height: 100%;
     float: left;
-    clear: left;
+    padding: 15px 0;
+    width: 50%;
+    height: 100%;
+}
+
+.details1 {
+    float: right;
+    padding: 15px 0;
+    width: 50%;
+    height: 100%;
 }
 
 .dsimg {
@@ -388,15 +374,16 @@
 }
 
 .btnthem {
-    border: 2px solid black;
-    text-align: center;
-    margin: auto;
-    width: 50%;
+    display: inline-block;
+    background: #ff523b;
+    color: #fff;
+    padding: 8px 30px;
+    margin: 30px 0;
+    border-radius: 30px;
+    transition: background 0.5s;
 }
 
 .modalsp {
-    height: 82%;
-    margin: 3% auto 2% auto;
     line-height: 1.15;
 }
 
@@ -501,4 +488,12 @@
 
 .qltks {
     width: 12%;
+}
+
+.cmt {
+    float: left;
+    width: 100%;
+    background: #e6e6e6;
+    margin: 5px;
+    border-radius: 10px;
 }
