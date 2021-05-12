@@ -273,7 +273,7 @@ window.vanceOption = function (id, func) {
                 s += '<option value="ALL" selected>Tất cả</option></select>';
                 var span = document.createElement('span');
                 span.innerHTML = 'Chọn Thương Hiệu: ' + s;
-                span.style = 'color:white;background-color:black;';
+                span.style = 'color:white;background-color:#333;';
                 jq351(id).append(span);
             }
         });
@@ -281,7 +281,7 @@ window.vanceOption = function (id, func) {
         var span = document.createElement('span');
         span.style.marginLeft = '5px';
         span.innerHTML = 'Chọn Mức Giá: ' + s;
-        span.style = "color:white;background-color:black;";
+        span.style = "color:white;background-color:#333;";
         jq351(id).append(span);
     });
 }
@@ -838,7 +838,7 @@ window.qltk = function (pActive) {
     if (url[1] == 'qltk') {
         if (checkPermission('qltaikhoan')) {
             jq351(function () {
-                jq351('#opt').html('<button class="themtk" onclick="document.getElementById(\'id02\').style.display=\'block\';">Thêm tài khoản mới</button>');
+                jq351('#opt').html('<button class="btn" onclick="document.getElementById(\'id02\').style.display=\'block\';">Thêm tài khoản mới</button>');
                 jq351.ajax({
                     url: 'php/xuly.php?action=qltk&pActive=' + pActive,
                     success: function (results) {
@@ -1062,73 +1062,82 @@ window.addSp = function (x) {
     }
 }
 
-/*window.showAddSp = function () {
-    var modal = document.getElementById('addSp');
-    if (modal != null)
-        modal.style.display = 'block';
-    else {
+window.showAddSp = function () {
+    
+}
+window.productDetail = function (x, pActive) {
+var modal = document.getElementById('detail-product-' + x['maSP']);
+    if (modal == null) {
         var mod = '';
         var myModal = document.createElement('div');
         myModal.className = 'modal product';
-        myModal.id = 'addSp';
+        myModal.id = 'detail-product-' + x['maSP'];
+        mod += '<div class="modal-content" style="width:90%;height:95%;margin:1% 5%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
+                '<h1>Thông Tin Chi Tiết Của Sản Phẩm</h1>' +
+                '<hr>' +
+                '<div class="ctleft">'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Mã sản phẩm:</div> <input style="width:60%;text-align:center;" class="ipt-ctsp" disabled type="text" value="'+ x['maSP'] +'"></div>' +
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['tenSp']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Thể Loại</div> <input style="width:60%;text-align:center;" type="text" disabled value="'+x['maDM']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Kích Thước</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Size']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Trọng Lượng:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Weight']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Màu sắc:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Color']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bộ Nhớ Trong:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BoNhoTrong']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bộ Nhớ Đệm:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BoNho']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Hệ điều hành:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['HDH']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['CamTruoc']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['CamSau']+'"></div>'+                
+                '</div>'+
+                '<div class="ctright" style="text-align:center;">'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Pin']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BaoHanh']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['TinhTrang']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Số Lượng:</div> <input style="width:60%;text-align:center;" disabled type="text" value="'+x['SL']+'"></div>'+
+                '<div class="update-sp1"><img src="' + x['HinhAnh'] + '"><input type="file"></div>'+
+                '</div>'+
+                '<div style="clear:left;text-align:center;">'+
+                '<button style="background-color:#333;" class="btn">Cập Nhập Thông tin</button>'+
+                '</div>'+
+                '</div>';
+                mod += '</div></div>';
+                /*'<div id="' + detail['maSP'] + '" class="modalsp"><div class="tendt">' + detail["tenSp"] + '</div>' +
+                    '<div>' +
+                    '<div class="details"><span style="font-size:20px;font-weight:bold;color:#404040;padding:15px">Cấu Hình</span>' +
+                    '<div class="mota">Kích Cỡ: ' + detail["Size"] + '</div>' +
+                    '<div class="mota1">Trọng Lượng: ' + detail["Weight"] + '</div>' +
+                    '<div class="mota">Màu Sắc: ' + detail["Color"] + '</div>' +
+                    '<div class="mota1">Bộ Nhớ Trong: ' + detail["BoNhoTrong"] + '</div>' +
+                    '<div class="mota">Bộ nhớ đệm(Ram): ' + detail["BoNho"] + '</div>' +
+                    '<div class="mota1">Hệ Điều Hành: ' + detail["HDH"] + '</div>' +
+                    '<div class="mota">Cam Trước: ' + detail["CamTruoc"] + '</div>' +
+                    '<div class="mota1">Cam Sau: ' + detail["CamSau"] + '</div>' +
+                    '<div class="mota">Dung Lượng Pin: ' + detail["Pin"] + '</div>' +
+                    '<div class="mota1">Bảo Hành: ' + detail["BaoHanh"] + '</div>' +
+                    '<div class="mota">Tình Trạng Máy: ' + detail["TinhTrang"] + '</div>' +
+                    '<div class="mota1 soLuong">Số Lượng: '+ detail["SL"]+'</div>' +
+                    '</div>' +
+                    '<div class="details1">' +
+                    '<div style="height:100%;width:100%;"><img style="height:100%;width:100%;" src="' + detail['HinhAnh'] + '"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'*/
         
         myModal.innerHTML = mod;
         document.getElementsByTagName('body')[0].appendChild(myModal);
+        modal = myModal;
     }
-    if (modal == null) modal = myModal;
+    modal.style.display = 'block';
     window.addEventListener('click', function (event) {
         if (event.target == modal) {
             modal.style.display = 'none';
         }
     });
 }
-*/
-window.productDetail = function (x, pActive) {
-
-    /*mod += '<div class="modal-content addProd" style="width:100%;height:90%;"><div id="newSp" class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
-                '<h1 style="color:red;">Nhập đầy đủ thông tin để thêm sản phẩm!!!!</h1>' +
-                '<hr>' +
-                //1
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Upload HinhAnh:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px" type="file" accept="image/*"></div>' +
-                //2
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">maSP:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width:90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //3
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Tên sản phẩm:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 89%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //4
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">SL:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //5
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Đơn giá:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //6
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Chi tiết:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //7
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mã thể loại:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //8
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Tên thể loại:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //9
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mã chi tiết:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //10
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Mô tả:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="text"></div>' +
-                //11
-                '<div style="clear:left;margin-bottom:3%;"><div style="float:left;font-size:13px;font-weight:bold;">Ngày nhập:</div>' +
-                '<input style="float:left;margin:-8px auto auto 5px;width: 90%;padding: 3px 15px;display:inline-block;border: 1px solid black;border-radius: 5px;box-sizing: border-box;" type="date"></div>' +
-                '</div><div class="container"><button class="but" onclick="addSp(\'newSp\');">Thêm</button></div></div></div>';*/
-}
-
 window.productManage = function (event, visible) {
     if (!visible) {
         let context_menu = '<ul id="menu_' + this.id + '" class="menu">' +
             '<li class="menu-item" onclick="delSp(' + escapeHtml(JSON.stringify(this.result['maSP'])) + ', ' + this.pActive + ')">Xóa sản phẩm</li>';
-        context_menu += '<li class="menu-item" onclick="productDetail(' + escapeHtml(JSON.stringify(this.result)) + ', ' + this.pActive + ')">Xem chi tiết</li>';
+        context_menu += '<li class="menu-item" onclick="productDetail(' + escapeHtml(JSON.stringify(this.result)) + ', ' + this.pActive + ')">Sửa Sản Phẩm</li>';
         context_menu += '</ul>';
         jq351('#sp').append(context_menu);
     } else {
@@ -1276,7 +1285,7 @@ window.product = function () {
         if (checkPermission('qlsanpham')) {
             var sDate = new moment(new Date()).subtract(1, 'month').format('YYYY-MM-DD');
             var eDate = new moment(new Date()).format('YYYY-MM-DD');
-            document.getElementById('opt').innerHTML = '<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập Mã sản phẩm hoặc Tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="' + sDate + '"><input id="endDate" type="date" onchange="productList(1)" value="' + eDate + '"><button class="AProd" onclick="showAddSp();">Thêm sản phẩm</button>';
+            document.getElementById('opt').innerHTML = '<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập Mã sản phẩm hoặc Tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="' + sDate + '"><input id="endDate" type="date" onchange="productList(1)" value="' + eDate + '">';
             jq351(function () {
                 productList(1);
             });

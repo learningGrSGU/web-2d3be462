@@ -9,14 +9,14 @@ export function sortedTable(tag) {
     });
     if (tag == null) {
         let curr = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'});
-        let table = '<div class="row"><div class="th">STT</div>';
+        let table = '<div class="row"><div class="th"><p style="margin:5%;">STT</p></div>';
         for (let i = 0; i < this.headers.length; i++) {
             this.colToSort = this.alias[i];
-            table += '<div class="th" onclick=\'sortedTable.call(' + JSON.stringify(this) + ', this)\'>' + this.headers[i] + '</div>';
+            table += '<div class="th" onclick=\'sortedTable.call(' + JSON.stringify(this) + ', this)\'><p style="margin:5%;">' + this.headers[i] + '</p></div>';
         }
         table += '<div class="th">chức năng</div></div>';
         for (let i = 0; i < this.result.length; i++) {
-            table += '<div class="row" style="height: 70px;" id="' + i + '"><div class="col">' + (i + 1) + '</div>';
+            table += '<div class="row" style="height: 70px;" id="' + i + '"><div class="col"><p style="margin:10%;">' + (i + 1) + '</p></div>';
             for (let j = 0; j < this.alias.length; j++) {
                 let value = this.result[i][this.alias[j]];
                 switch (this.type[j]) {
@@ -35,7 +35,7 @@ export function sortedTable(tag) {
                     default:
                         break;
                 }
-                table += '<div class="col">' + value + '</div>';
+                table += '<div class="col"><p style="margin:10%;">' + value + '</p></div>';
             }
             for (let j = 0; j < this.functionCalls.length; j++) {
                 functionObj.push({
@@ -44,7 +44,7 @@ export function sortedTable(tag) {
                     result: this.result[i],
                     pActive: this.pActive
                 });
-                table += '<div class="col" id="' + this.functionCalls[j] + '_' + i + '"><button onclick=\'' + this.functionCalls[j] + '.call(' + JSON.stringify(functionObj[i]) + ', event, true)\'>' + this.buttonName + '</button></div>';
+                table += '<div class="col" id="' + this.functionCalls[j] + '_' + i + '"><button style="margin:10%;" onclick=\'' + this.functionCalls[j] + '.call(' + JSON.stringify(functionObj[i]) + ', event, true)\'>' + this.buttonName + '</button></div>';
             }
             table += '</div>'
         }
@@ -75,7 +75,7 @@ export function sortedTable(tag) {
             removalElement[i].remove();
         let table = '';
         for (let i = 0; i < this.result.length; i++) {
-            table += '<div class="row" id="' + i + '"><div class="col">' + (i + 1) + '</div>';
+            table += '<div class="row" id="' + i + '"><div class="col"><p style="margin:10%;">' + (i + 1) + '</p></div>';
             for (let j = 0; j < this.alias.length; j++) {
                 let value = this.result[i][this.alias[j]];
                 switch (this.type[j]) {
@@ -94,7 +94,7 @@ export function sortedTable(tag) {
                     default:
                         break;
                 }
-                table += '<div class="col">' + value + '</div>';
+                table += '<div class="col"><p style="margin:10%;">' + value + '</p></div>';
             }
             for (let j = 0; j < this.functionCalls.length; j++) {
                 functionObj.push({

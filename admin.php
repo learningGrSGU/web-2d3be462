@@ -1,10 +1,16 @@
 ﻿<!doctype html>
 <html>
 <head>
-    <title>BLDSHOP(Admin)</title>
+    <title>Phone Shop(Admin)</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/Js.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/main-web.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" type="text/css"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/Js.css" type="text/css">
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <script src="external/jquery/jquery.js"></script>
@@ -35,14 +41,14 @@
     </script>
 </head>
 <body>
-<div id="topmenu">
+<div class="header">
     <div >
-        <div style="font-size:22px;color:white">
+        <div style="font-size:22px;color:black;">
             Xin Chào Admin
         </div>
         <div>
             <a href="" onClick="logout();" id="ad">
-                <span onMouseOver="admover();" onMouseOut="admout();" id="admin" style="color:white;font-size:24px;"></span>
+                <span onMouseOver="admover();" onMouseOut="admout();" id="admin" style="color:black;font-size:24px;"></span>
             </a>
         </div>
     </div>
@@ -97,7 +103,7 @@
 </div>
 <div>
     <ul style="list-style-type: none;margin-top: 75px;padding: 0;overflow: hidden;">
-        <li class="admin-menu" style="margin-left:5%"><a href="?ncc">Nhập Hàng</a></li>
+        <li class="admin-menu" style="margin-left:10%;"><a href="?ncc">Nhập Hàng</a></li>
         <li class="admin-menu"><a href="?qltk">Quản Lý Tài Khoản</a></li>
         <li class="admin-menu"><a href="?dssp">Quản Lý Sản Phẩm</a></li>
         <li class="admin-menu"><a href="?tksp">Thống Kê Đơn Hàng</a></li>
@@ -140,11 +146,9 @@
             <input type="text" placeholder="Nhập địa chỉ" name="address">
         </div>
         <div class="container" style="text-align:center;padding:10px 20px;">
-            <button style="border:2px solid black;border-radius:5px;padding:5px;" type="button"
-                    onClick="document.getElementById('id02').style.display='none'" class="cancelbtn">Hủy
+            <button  type="button" onClick="document.getElementById('id02').style.display='none'" class="btn">Hủy
             </button>
-            <button style="border:2px solid black;border-radius:5px;padding:5px;" type="submit" class="signupbtn"
-                    onClick="return checkValid();">Thêm tài khoản
+            <button class="btn" type="submit" class="signupbtn" onClick="return checkValid();">Thêm tài khoản
             </button>
         </div>
     </form>
