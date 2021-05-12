@@ -591,23 +591,25 @@ window.addPermission = function () {
         var myModal = document.createElement('div');
         myModal.className = 'modal';
         myModal.id = 'add-permission';
-        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
-            '<div>Tên quyền: <input type="text" placeholder="Nhập tên quyền"></div>'
-        mod += '<div class="input-checkbox"><input value="qlsanpham" type="checkbox" ';
-        mod += '/> Quản lý sản phẩm</div>';
-        mod += '<div class="input-checkbox"><input value="thongke" type="checkbox" ';
+        mod += '<div class="modal-content" style="width:50%;height:70%;margin:7% 25%;"><div class="container" style="margin:5%;">' +
+            '<div style="font-size:28px;width:100%;"><div style="text-align:center;">Tên quyền: <input style="width:60%;margin-left:5%;" type="text" placeholder="Nhập tên quyền"></div>'
+        mod += '<div style="margin:4% 20%;font-size:24px;">';
+        mod += '<div style="margin:3% 0;"><input style="margin:0 10%;" value="qlsanpham" type="checkbox" ';
+        mod += '/> <span style="">Quản lý sản phẩm</span></div>';
+        mod += '<div style="margin:3% 0;"><input style="margin:0 10%;" value="thongke" type="checkbox" ';
         mod += '/> Thống kê</div>';
-        mod += '<div class="input-checkbox"><input value="qldonhang" type="checkbox" ';
+        mod += '<div style="margin:3% 0;"><input style="margin:0 10%;" value="qldonhang" type="checkbox" ';
         mod += '/> Quản lý đơn hàng</div>';
-        mod += '<div class="input-checkbox"><input value="qlncc" type="checkbox" ';
+        mod += '<div style="margin:3% 0;"><input style="margin:0 10%;" value="qlncc" type="checkbox" ';
         mod += '/> Quản lý nhà cung cấp</div>';
-        mod += '<div class="input-checkbox"><input value="qltaikhoan" type="checkbox" ';
+        mod += '<div style="margin:3% 0;"><input style="margin:0 10%;" value="qltaikhoan" type="checkbox" ';
         mod += '/> Quản lý tài khoản</div>';
-        mod += '<div class="input-checkbox"><input value="nhaphang" type="checkbox" ';
+        mod += '<div style="margin:3% 0;"><input style="margin:0 10%;" value="nhaphang" type="checkbox" ';
         mod += '/> Nhập hàng</div>';
-        mod += '<div class="input-checkbox"><input value="qlquyen" type="checkbox" ';
+        mod += '<div style="margin:3% 0;"><input style="margin:0 10%;" value="qlquyen" type="checkbox" ';
         mod += '/> Quản lý quyền</div>';
-        mod += '<div><button onclick="addNewPermission(' + this + ')">Thêm quyền</button></div></div>'
+        mod += '</div>';
+        mod += '<div style="text-align:center;"><button class="btn" style="background-color:#333;font-size:20px;" onclick="addNewPermission(' + this + ')">Thêm quyền</button></div></div>'
         myModal.innerHTML = mod;
         document.getElementsByTagName('body')[0].appendChild(myModal);
         modal = myModal;
@@ -653,7 +655,7 @@ window.showPermission = function () {
         var myModal = document.createElement('div');
         myModal.className = 'modal';
         myModal.id = 'detail-permission-' + this.result['RoleID'];
-        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">'
+        mod += '<div class="modal-content" style="width:90%;height:95%;margin:1% 5%;"><div class="container" style="padding:0 20px 10px 20px;">'
         mod += '<div class="input-checkbox"><input value="qlsanpham" type="checkbox" ';
         if (isCheckedPermission.call(this.result['ChiTiet'], 'qlsanpham')) mod += 'checked="true"';
         mod += '/> Quản lý sản phẩm</div>';
@@ -764,7 +766,7 @@ window.phanquyen = function (id, pActive, user) {
         var myModal = document.createElement('div');
         myModal.className = 'modal';
         myModal.id = 'choose-permission-' + user;
-        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">'
+        mod += '<div class="modal-content" style="width:90%;height:95%;margin:1% 5%;"><div class="container" style="padding:0 20px 10px 20px;">'
         jq351.ajax({
             url: 'php/xuly.php?action=getPermission',
             async: false,
@@ -1072,7 +1074,7 @@ var modal = document.getElementById('detail-product-' + x['maSP']);
         var myModal = document.createElement('div');
         myModal.className = 'modal product';
         myModal.id = 'detail-product-' + x['maSP'];
-        mod += '<div class="modal-content" style="width:90%;height:95%;margin:1% 5%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
+        mod += '<div class="modal-content" style="width:90%;height:95%;margin:1% 5%;"><div class="container" style="padding:0 20px 10px 20px;">' +
                 '<h1>Thông Tin Chi Tiết Của Sản Phẩm</h1>' +
                 '<hr>' +
                 '<div class="ctleft">'+
