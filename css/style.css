@@ -251,19 +251,6 @@ input[type=text], input[type=password] {
   display: inline-block;
   border-radius:10px;
 }
-button {
-  background-color: white;
-  color: black;
-  padding: 2px 4px;
-  border: none;
-  cursor: pointer;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 13px;
-}
-button:hover {
-  color: #ABABAB;
-}
 .container {
   padding:20px;
 }
@@ -475,24 +462,4 @@ span.psw {
 }
 .foot2, .foot3, .foot4{
 	text-align:center;
-}
-/* admin*/
-
-.admin-menu{ 
-	float: left;
-}
-.admin-menu a{
-  font-size: 20px;
-	display: block;
-  color: #fff;
-  text-align: center;
- 	padding: 14px 16px;
-  margin:0 5px;
-  text-decoration: none;
-  background: #ff523b;
-  border-radius: 30px;
-  transition: background 0.5s;
-}
-.admin-menu a:hover {
-  background-color: #563434;
 }

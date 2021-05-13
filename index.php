@@ -8,6 +8,7 @@
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" type="text/css"
           href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <link rel="stylesheet" href="css/Js.css" type="text/css">
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <script src="external/jquery/jquery.js"></script>
@@ -42,6 +43,13 @@
             </div>
             <nav>
                 <ul id="MenuItems">
+                    <li>
+                        <div style="border:1px black solid;border-radius: 5rem;">
+                            <input class="search-txt" type="text" name="search-bar" placeholder="Tìm Kiếm gì đó...">
+                            <a style="margin-right: 5px;" href="#">
+                                <i class="fas fa-search"></i>
+                            </a>
+                        </div></li>
                     <li><a href="">Trang Chủ</a></li>
                     <li><a href="">Giới Thiệu</a></li>
                     <li><a href="">Liên Hệ</a></li>
@@ -106,13 +114,13 @@
                 <h3>Phone Shop</h3>
             </div>
             <div class="footer-col-2">
-                <h3>Make By:</h3>
+                <h3>Người Thành Lập Web</h3>
                 <p>Dương Ngọc Bảo</p>
                 <p>Trần Bảo Long</p>
                 <p>Thái Bảo Long</p>
             </div>
             <div class="footer-col-3">
-                <h3>Địa chỉ</h3>
+                <h3>Địa Chỉ</h3>
                 <p>273 An Dương Vương</p>
                 <p>Thành Phố Hồ Chí Minh,Việt Nam</p>
             </div>

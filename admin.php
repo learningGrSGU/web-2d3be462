@@ -102,8 +102,8 @@
     </script>
 </div>
 <div>
-    <ul style="list-style-type: none;margin-top: 75px;padding: 0;overflow: hidden;">
-        <li class="admin-menu" style="margin-left:10%;"><a href="?ncc">Nhập Hàng</a></li>
+    <ul style="margin-top: 1%;padding: 0;overflow: hidden;">
+        <li class="admin-menu" style="margin-left: 3%"><a href="?ncc">Nhập Hàng</a></li>
         <li class="admin-menu"><a href="?qltk">Quản Lý Tài Khoản</a></li>
         <li class="admin-menu"><a href="?dssp">Quản Lý Sản Phẩm</a></li>
         <li class="admin-menu"><a href="?tksp">Thống Kê Đơn Hàng</a></li>
@@ -163,8 +163,6 @@
 </script>
 <div class="main-content" id="mac">
     <div id="menu">
-        <div style="width:100%;padding:10px;background-color:white;">
-        </div>
         <div id="opt"></div>
         <div id="sp"></div>
         <div id="trang"></div>

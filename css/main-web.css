@@ -200,6 +200,38 @@ small{
 	display: none;
 }
 
+.search-txt{
+	border:none;
+	background: none;
+	outline: none;
+	margin: 5px;
+	color: black;
+	font-size: 16px;
+	transition: 0.4s;
+	width: 25rem;
+}
+
+/* admin*/
+
+.admin-menu{ 
+	float: left;
+}
+.admin-menu a{
+  font-size: 18px;
+	display: block;
+  color: #fff;
+  text-align: center;
+ 	padding: 14px 16px;
+  margin:0 5px;
+  text-decoration: none;
+  background: #ff523b;
+  border-radius: 30px;
+  transition: background 0.5s;
+}
+.admin-menu a:hover {
+  background-color: #563434;
+}
+
 /*-- RESPONSIVE--*/
 @media only screen and(max-width: 800px){
 	nav ul{

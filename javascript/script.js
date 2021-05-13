@@ -1078,23 +1078,23 @@ var modal = document.getElementById('detail-product-' + x['maSP']);
                 '<h1>Thông Tin Chi Tiết Của Sản Phẩm</h1>' +
                 '<hr>' +
                 '<div class="ctleft">'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Mã sản phẩm:</div> <input style="width:60%;text-align:center;" class="ipt-ctsp" disabled type="text" value="'+ x['maSP'] +'"></div>' +
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['tenSp']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Thể Loại</div> <input style="width:60%;text-align:center;" type="text" disabled value="'+x['maDM']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Kích Thước</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Size']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Trọng Lượng:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Weight']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Màu sắc:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Color']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bộ Nhớ Trong:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BoNhoTrong']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bộ Nhớ Đệm:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BoNho']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Hệ điều hành:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['HDH']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['CamTruoc']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['CamSau']+'"></div>'+                
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Mã sản phẩm:</div> <input style="width:60%;text-align:center;" class="ipt-ctsp" disabled type="text" value="'+ x['maSP'] +'"></div>' +
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['tenSp']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Thể Loại</div> <input style="width:60%;text-align:center;" type="text" disabled value="'+x['maDM']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Kích Thước</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Size']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Trọng Lượng:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Weight']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Màu sắc:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Color']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bộ Nhớ Trong:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BoNhoTrong']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bộ Nhớ Đệm:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BoNho']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Hệ điều hành:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['HDH']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['CamTruoc']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['CamSau']+'"></div>'+                
                 '</div>'+
                 '<div class="ctright" style="text-align:center;">'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Pin']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BaoHanh']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['TinhTrang']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Số Lượng:</div> <input style="width:60%;text-align:center;" disabled type="text" value="'+x['SL']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Pin']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BaoHanh']+'"></div>'+
+                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['TinhTrang']+'"></div>'+
+                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Số Lượng:</div> <input style="width:60%;text-align:center;" disabled type="text" value="'+x['SL']+'"></div>'+
                 '<div class="update-sp1"><img src="' + x['HinhAnh'] + '"><input type="file"></div>'+
                 '</div>'+
                 '<div style="clear:left;text-align:center;">'+
@@ -1224,6 +1224,7 @@ window.productList = function (pActive) {
                         //sortedProduct(results, false, "maSP", pActive, null);
                     } else {
                         jq351('#sp').html('Không tìm thấy sản phẩm!');
+                        /*note css:style="text-align:center;font-size:30px;font-weight:bold;color:red;;margin:2% 0;"*/
                         jq351('#trang').html('');
                     }
                 }
@@ -1287,7 +1288,12 @@ window.product = function () {
         if (checkPermission('qlsanpham')) {
             var sDate = new moment(new Date()).subtract(1, 'month').format('YYYY-MM-DD');
             var eDate = new moment(new Date()).format('YYYY-MM-DD');
-            document.getElementById('opt').innerHTML = '<input  id="productSearch" onKeyUp="productList(1);" type="text" placeholder="Nhập Mã sản phẩm hoặc Tên sản phẩm để tìm" name="search"><div id="PDvance"></div><input id="startDate" type="date" onchange="productList(1);" value="' + sDate + '"><input id="endDate" type="date" onchange="productList(1)" value="' + eDate + '">';
+            document.getElementById('opt').innerHTML = '<input  id="productSearch" style="width:100%;" onKeyUp="productList(1);" type="text" placeholder="Nhập Mã sản phẩm hoặc Tên sản phẩm để tìm kiếm..." name="search">'+
+                                                            '<div style="margin:1%;text-align:center;" id="PDvance"></div>'+
+                                                                '<div style="text-align:center;margin:1% 0;">'+
+                                                                    '<input id="startDate" type="date" onchange="productList(1);" value="' + sDate + '"> - '+
+                                                                    '<input id="endDate" type="date" onchange="productList(1)" value="' + eDate + '">'+
+                                                                '</div>';
             jq351(function () {
                 productList(1);
             });
@@ -1614,14 +1620,19 @@ window.LsGd = function (lsgdJSON, pActive, pNum) {
             for (var i = 0, count = 1; i < lsgdJSON.length; i++) {
                 if (check) {
                     var ng = new moment(lsgdJSON[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
-                    dh += '<h3> Đơn hàng ' + format(lsgdJSON[i]['maDH']) + '</h3><div id="' + count + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(lsgdJSON[i]['Hovaten']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày thanh toán: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(lsgdJSON[i]['Diachi']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + lsgdJSON[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">Tình trạng đơn hàng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(lsgdJSON[i]['Tinhtrang']) + '</span></div><div class="lsgdcover">';
+                    dh += '<h3> Đơn hàng ' + format(lsgdJSON[i]['maDH']) + '</h3><div id="' + count + '">'+
+                    '<div class="acc" style="clear:both;">Tên khách hàng: ' + escapeHtml(lsgdJSON[i]['Hovaten']) + '</div>'+
+                    '<div class="nggd" style="clear:both;"><Ngày thanh toán: ' + ng + '</div>'+
+                    '<div style="clear:both;">Địa chỉ giao hàng: ' + escapeHtml(lsgdJSON[i]['Diachi']) + '</div>'+
+                    '<div style="clear:both;">Số điện thoại: ' + lsgdJSON[i]['Sdt'] + '</div>'+
+                    '<div>Tình trạng đơn hàng: ' + escapeHtml(lsgdJSON[i]['Tinhtrang']) + '</div>'+
+                    '<div class="lsgdcover">';
                     check = false;
                     count++;
                 }
                 if (!check) {
                     dh += '<div class="donHang" style="clear:both;"><div class="col gh"><span onclick="location.assign(\'?productID=' + lsgdJSON[i]["maSP"] + '\');" style="cursor: pointer; font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">' + escapeHtml(lsgdJSON[i]['tenSp']) + '</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: <span style="font-size:18px;color:black;font-weight:normal;">' + lsgdJSON[i]['SL'] + ' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">' + curr.format(lsgdJSON[i]['TongTien']) + '</span></div></div>';
-                    /*	<div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding:8px 0 0 4px;">'+result[0]['tenSp']+'</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: </span><div style="padding-top:7px;border:0;"><input style="width:70px;float:left;text-align:center" onchange="changeValue('+i+');" onkeyup="checkValueC('+i+');" type="number" min="0" max="'+soluong+'" value="'+sanPhamDH[i].soluong+'"></div></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: </span><div style="padding-top:7px;border:0;font-style:italic;font-size:18px;">'+curr.format(gia)+'</div></div>
-*/
+                   
                 }
                 if (i != lsgdJSON.length - 1) if (lsgdJSON[i]['maDH'] != lsgdJSON[i + 1]['maDH']) check = true;
                 if (i == lsgdJSON.length - 1) check = true;
@@ -1732,12 +1743,16 @@ window.xlDhVance = function (pActive, id) {
                         for (var i = 0, count = 1; i < result.length - 1; i++) {
                             if (check) {
                                 var ng = new moment(result[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
-                                dh += '<h3>Đơn hàng ' + format(result[i]['maDH']) + ' <button onclick="huyDh(' + result[i]['maDH'] + ',' + pActive + ');" style="float:left;">Hủy Đơn Hàng</button></h3><div id="' + count + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Hovaten']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Diachi']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">Tình trạng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div class="dhcover">';
+                                dh += '<h3>Đơn hàng ' + format(result[i]['maDH']) + ' <button onclick="huyDh(' + result[i]['maDH'] + ',' + pActive + ');" style="float:right;background:none;color:white;border:none;cursor:pointer;">Hủy Đơn Hàng</button></h3><div id="' + count + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Hovaten']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Diachi']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">Tình trạng: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div class="dhcover">';
                                 check = false;
                                 count++;
                             }
                             if (!check) {
-                                dh += '<div class="donHang" style="clear:both;"><div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">' + result[i]['tenSp'] + '</span></div><div class="col dh" style="width:20%;">SL: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div><div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">' + curr.format(result[i]['TongTien']) + '</span></div></div>';
+                                dh += '<div class="donHang" style="clear:both;">'+
+                                '<div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">' + result[i]['tenSp'] + '</span></div>'+
+                                '<div class="col dh" style="width:20%;">SL: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div>'+
+                                '<div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">' + curr.format(result[i]['TongTien']) + '</span></div>'+
+                                '</div>';
                             }
                             if (i != result.length - 2) if (result[i]['maDH'] != result[i + 1]['maDH']) check = true;
                             if (i == result.length - 2) check = true;
