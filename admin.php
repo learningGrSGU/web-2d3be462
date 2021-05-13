@@ -42,13 +42,13 @@
 </head>
 <body>
 <div class="header">
-    <div >
-        <div style="font-size:22px;color:black;">
-            Xin Chào Admin
+    <div style="padding: 30px;">
+        <div style="font-size:24px;color:black;width:50%;float:left;text-align: end;">
+            Xin Chào Nhân Viên: 
         </div>
-        <div>
+        <div style="width:50%;float:right;text-align: start;">
             <a href="" onClick="logout();" id="ad">
-                <span onMouseOver="admover();" onMouseOut="admout();" id="admin" style="color:black;font-size:24px;"></span>
+                <span onMouseOver="admover();" onMouseOut="admout();" id="admin" style="color:black;font-size:24px;margin-left: 2%;"></span>
             </a>
         </div>
     </div>

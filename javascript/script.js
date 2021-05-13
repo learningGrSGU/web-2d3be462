@@ -640,12 +640,12 @@ window.addNCC = function () {
         var myModal = document.createElement('div');
         myModal.className = 'modal';
         myModal.id = 'add-ncc';
-        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
-            '<div>Tên nhà cung cấp: <input type="text"></div>' +
-            '<div>Địa chỉ: <input type="text"></div>' +
-            '<div>Số điện thoại: <input type="text"></div>' +
-            '<div>Email: <input type="text"></div>';
-        mod += '<div><button onclick="addNewNCC(' + this + ')">Thêm Nhà cung cấp</button></div></div>'
+        mod += '<div class="modal-content" style="width:50%;height:70%;margin:7% 25%;"><div class="container" style="margin:5%;">' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tên nhà cung cấp: </div><input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Địa chỉ: </div><input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Số điện thoại: </div><input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Email: </div><input style="width:60%;text-align:center;" type="text"></div>';
+        mod += '<div style="width:100%;text-align:center;"><button class="btn" style="background-color:#333;" onclick="addNewNCC(' + this + ')">Thêm Nhà cung cấp</button></div></div>'
         myModal.innerHTML = mod;
         document.getElementsByTagName('body')[0].appendChild(myModal);
         modal = myModal;
@@ -666,7 +666,7 @@ window.getTL = function () {
         success: function (results) {
             console.log(results);
             let result = JSON.parse(results);
-            s += "<select style=\"width:60%;text-align:center;\">";
+            s += "<select style=\"width:60%;text-align:center;margin:1%;\">";
             for (var i = 0; i < result.length; i++) {
                 s += '<option value="' + escapeHtml(result[i]['maDM']) + '">' + escapeHtml(result[i]['tenDM']) + '</option>';
             }
@@ -683,7 +683,7 @@ window.getSP = function () {
         async: false,
         success: function (result) {
             let results = JSON.parse(result);
-            select += '<select>';
+            select += '<select style="width:60%;text-align:center;margin:17px 0;">';
             for (let i = 0; i < results.length; i++) {
                 select += '<option value="' + results[i]['maSP'] + '-' + results[i]['GiaCa'] + '-' + results[i]['SL'] + '">' + results[i]['tenSp'] + '</option>';
             }
@@ -766,27 +766,27 @@ window.addProduct = function (pActive) {
         myModal.id = 'add-product-' + this;
         let masp = getMaSP();
         mod += '<div class="modal-content" style="width:90%;height:95%;margin:1% 5%;"><div class="container" style="padding:0 20px 10px 20px;">' +
-            '<h1>Thông Tin Chi Tiết Của Sản Phẩm</h1>' +
+            '<h1>Thêm Sản Phẩm mới</h1>' +
             '<hr>' +
             '<div class="ctleft">' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Mã sản phẩm:</div> <input disabled style="width:60%;text-align:center;" type="text" value="' + masp + '"></div>' +
-            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Thể Loại:</div>' + getTL() + '</div>' +
-            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Kích Thước:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Trọng Lượng:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Màu sắc:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bộ Nhớ Trong:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bộ Nhớ Đệm:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Hệ điều hành:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Mã sản phẩm:</div> <input disabled style="width:60%;text-align:center;" type="text" value="' + masp + '"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Thể Loại:</div>' + getTL() + '</div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Kích Thước:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Trọng Lượng:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Màu sắc:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bộ Nhớ Trong:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bộ Nhớ Đệm:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Hệ điều hành:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
             '</div>' +
-            '<div class="ctright" style="text-align:center;">' +
-            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Đơn giá:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
-            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Số lượng:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="ctright" style="text-align:center;">' +            
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Đơn giá:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Số lượng:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
             '<div class="update-sp"><img src=""><input type="file"></div>' +
             '</div>';
         mod += '<div style="clear:left;text-align:center;"><button style="background-color:#333;" class="btn" onclick="addNewProduct(\'' + this + '\', ' + pActive + ', \'' + masp + '\')">Cập nhật</button></div></div></div>'
@@ -855,10 +855,10 @@ window.importFromNCC = function (maNCC, pActive) {
             var myModal = document.createElement('div');
             myModal.className = 'modal';
             myModal.id = 'import-product-' + maNCC;
-            mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
-                '<div>Chọn sản phẩm: ' + getSP() + '</div>' +
-                '<div>Số lượng: <input type="text"></div>';
-            mod += '<div><button onclick="startImport(\'' + maNCC + '\', ' + pActive + ')">Cập nhật</button></div><div><button onclick="addProduct.call(\'' + maNCC + '\', ' + pActive + ')">Thêm sản phẩm mới</button></div></div></div>'
+            mod += '<div class="modal-content" style="width:50%;height:70%;margin:7% 25%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
+                '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Chọn sản phẩm: </div>' + getSP() + '</div>' +
+                '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Số lượng nhập: </div><input style="width:60%;text-align:center;" type="text"></div>';
+            mod += '<div style="width:100%;text-align:center;"><button class="btn" style="background:#333;" onclick="startImport(\'' + maNCC + '\', ' + pActive + ')">Cập nhật</button></div><div style="width:100%; text-align:center;"><button class="btn" style="background:#333;" onclick="addProduct.call(\'' + maNCC + '\', ' + pActive + ')">Thêm sản phẩm mới</button></div></div></div>'
             myModal.innerHTML = mod;
             document.getElementsByTagName('body')[0].appendChild(myModal);
             modal = myModal;
@@ -919,13 +919,13 @@ window.showNCC = function () {
         var myModal = document.createElement('div');
         myModal.className = 'modal';
         myModal.id = 'update-ncc-' + this.result['maNCC'];
-        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
-            '<div>Mã nhà cung cấp: <input disabled type="text" value="' + this.result['maNCC'] + '"></div>' +
-            '<div>Tên nhà cung cấp: <input type="text" value="' + this.result['tenNCC'] + '"></div>' +
-            '<div>Địa chỉ: <input type="text" value="' + this.result['DiaChi'] + '"></div>' +
-            '<div>Số điện thoại: <input type="text" value="' + this.result['SDT'] + '"></div>' +
-            '<div>Email: <input type="text" value="' + this.result['Email'] + '"></div>';
-        mod += '<div><button onclick="updateNCC(\'' + this.result['maNCC'] + '\', ' + this.pActive + ')">Cập nhật</button></div></div>'
+        mod += '<div class="modal-content" style="width:50%;height:70%;margin:7% 25%;"><div class="container" style="margin:5%;">' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Mã nhà cung cấp: </div><input style="width:60%;text-align:center;margin:17px 0;" disabled type="text" value="' + this.result['maNCC'] + '"></div>' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tên nhà cung cấp: </div><input style="width:60%;text-align:center;margin:17px 0;" type="text" value="' + this.result['tenNCC'] + '"></div>' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Địa chỉ: </div><input style="width:60%;text-align:center;margin:17px 0;" type="text" value="' + this.result['DiaChi'] + '"></div>' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Số điện thoại: </div><input style="width:60%;text-align:center;margin:17px 0;" type="text" value="' + this.result['SDT'] + '"></div>' +
+            '<div style="width:100%;"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Email: </div><input style="width:60%;text-align:center;margin:17px 0;" type="text" value="' + this.result['Email'] + '"></div>';
+        mod += '<div style="width:100%;text-align:center;"><button class="btn" style="background:#333;" onclick="updateNCC(\'' + this.result['maNCC'] + '\', ' + this.pActive + ')">Cập nhật</button></div></div>'
         myModal.innerHTML = mod;
         document.getElementsByTagName('body')[0].appendChild(myModal);
         modal = myModal;
@@ -1012,7 +1012,7 @@ window.ncc = function () {
     var url = location.href.split('?');
     if (url[1] == 'ncc') {
         if (checkPermission('qlncc')) {
-            jq351('#opt').html('<input  id="nccSearch" onKeyUp="onchangeNCC(1);" type="text" placeholder="Nhập mã nhà cung cấp hoặc tên nhà cung cấp để tìm" name="search">');
+            jq351('#opt').html('<input  id="nccSearch" style="width:100%;" onKeyUp="onchangeNCC(1);" type="text" placeholder="Nhập mã nhà cung cấp hoặc tên nhà cung cấp để tìm" name="search">');
             onchangeNCC(1);
         } else jq351('#sp').html('<div class="check">Bạn không có quyền truy cập chức năng này</div>');
     }
@@ -1595,7 +1595,7 @@ window.productDetail = function (x, pActive) {
             '<h1>Thông Tin Chi Tiết Của Sản Phẩm</h1>' +
             '<hr>' +
             '<div class="ctleft">' +
-            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Mã sản phẩm:</div> <input style="width:60%;text-align:center;" class="ipt-ctsp" disabled type="text" value="' + x['maSP'] + '"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Mã sản phẩm:</div> <input style="width:60%;text-align:center;" disabled type="text" value="' + x['maSP'] + '"></div>' +
             '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['tenSp'] + '"></div>' +
             '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Thể Loại</div> ' + getTL() + '</div>' +
             '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Kích Thước</div> <input style="width:60%;text-align:center;" type="text" value="' + x['Size'] + '"></div>' +
@@ -1755,7 +1755,7 @@ window.productList = function (pActive) {
                         sortedTable.call(toSortObject, null);
                         //sortedProduct(results, false, "maSP", pActive, null);
                     } else {
-                        jq351('#sp').html('Không tìm thấy sản phẩm!');
+                        jq351('#sp').html('<div class="check">Không tìm thấy sản phẩm!</div>');
                         /*note css:style="text-align:center;font-size:30px;font-weight:bold;color:red;;margin:2% 0;"*/
                         jq351('#trang').html('');
                     }

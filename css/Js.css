@@ -228,15 +228,16 @@
 }
 
 .active div, .page div:hover {
-    background-color: black;
+    background-color: #ff523b;
     color: white;
     border: 2px solid white;
 }
 
 .page div {
-    width: 30px;
-    height: 30px;
-    border: 2px solid black;
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid #ff523b;
+    padding: 7px;
     outline: none;
     font-size: 15px;
     text-align: center;
