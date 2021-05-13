@@ -37,6 +37,7 @@
             qltk(1);
             ncc();
             permission(1);
+            phieunhap(1);
         });
     </script>
 </head>
@@ -44,15 +45,16 @@
 <div class="header">
     <div style="padding: 30px;">
         <div style="font-size:24px;color:black;width:50%;float:left;text-align: end;">
-            Xin Chào Nhân Viên: 
+            Xin Chào Nhân Viên:
         </div>
         <div style="width:50%;float:right;text-align: start;">
             <a href="" onClick="logout();" id="ad">
-                <span onMouseOver="admover();" onMouseOut="admout();" id="admin" style="color:black;font-size:24px;margin-left: 2%;"></span>
+                <span onMouseOver="admover();" onMouseOut="admout();" id="admin"
+                      style="color:black;font-size:24px;margin-left: 2%;"></span>
             </a>
         </div>
     </div>
-    
+
 
     <script>
         function user() {
@@ -146,7 +148,7 @@
             <input type="text" placeholder="Nhập địa chỉ" name="address">
         </div>
         <div class="container" style="text-align:center;padding:10px 20px;">
-            <button  type="button" onClick="document.getElementById('id02').style.display='none'" class="btn">Hủy
+            <button type="button" onClick="document.getElementById('id02').style.display='none'" class="btn">Hủy
             </button>
             <button class="btn" type="submit" class="signupbtn" onClick="return checkValid();">Thêm tài khoản
             </button>

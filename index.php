@@ -6,9 +6,11 @@
     <link rel="stylesheet" type="text/css" href="css/main-web.css">
     <link rel="stylesheet" type="text/css"
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous"/>
     <link rel="stylesheet" type="text/css"
           href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <link rel="stylesheet" href="css/Js.css" type="text/css">
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
     <script src="external/jquery/jquery.js"></script>
@@ -45,11 +47,19 @@
                 <ul id="MenuItems">
                     <li>
                         <div style="border:1px black solid;border-radius: 5rem;">
-                            <input class="search-txt" type="text" name="search-bar" placeholder="Tìm Kiếm gì đó...">
+                            <input id="dataSearch" onkeyup="Search(1)" class="search-txt" type="text" name="search-bar"
+                                   placeholder="Tìm Kiếm gì đó...">
                             <a style="margin-right: 5px;" href="#">
                                 <i class="fas fa-search"></i>
                             </a>
-                        </div></li>
+                            <!--
+                            Chỗ này để chứa kết quả search này :)))))
+
+                            <div id='vance' style='display:none;clear:left;'></div><div id="spSearch"></div><div id="tr"></div>
+
+                            -->
+                        </div>
+                    </li>
                     <li><a href="">Trang Chủ</a></li>
                     <li><a href="">Giới Thiệu</a></li>
                     <li><a href="">Liên Hệ</a></li>

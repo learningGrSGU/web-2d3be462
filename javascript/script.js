@@ -447,39 +447,41 @@ window.Search = function (pActive) {
     var url = 'php/xuly.php?action=searchVance';
     var data = escapeHtml(jq351('#dataSearch').val());
     if (data != '') {
-        var brandOption = document.getElementById('vance').getElementsByTagName('select')[0].value;
-        var priceOption = document.getElementById('vance').getElementsByTagName('select')[1].value;
-        switch (brandOption) {
-            case "ALL":
-                break;
-            default:
-                url += '&brandOption=' + brandOption;
-                break;
-        }
-        switch (priceOption) {
-            case "0-2tr":
-                url += '&startPrice=0&endPrice=2000000';
-                break;
-            case "2-4tr":
-                url += '&startPrice=2000000&endPrice=4000000';
-                break;
-            case "4-6tr":
-                url += '&startPrice=4000000&endPrice=6000000';
-                break;
-            case "6-8tr":
-                url += '&startPrice=6000000&endPrice=8000000';
-                break;
-            case "8-12tr":
-                url += '&startPrice=8000000&endPrice=12000000';
-                break;
-            case "12-20tr":
-                url += '&startPrice=12000000&endPrice=20000000';
-                break;
-            case ">20tr":
-                url += '&startPrice=20000000&endPrice=999999999';
-                break;
-            default:
-                break;
+        if (document.getElementById('vance') != null) {
+            var brandOption = document.getElementById('vance').getElementsByTagName('select')[0].value;
+            var priceOption = document.getElementById('vance').getElementsByTagName('select')[1].value;
+            switch (brandOption) {
+                case "ALL":
+                    break;
+                default:
+                    url += '&brandOption=' + brandOption;
+                    break;
+            }
+            switch (priceOption) {
+                case "0-2tr":
+                    url += '&startPrice=0&endPrice=2000000';
+                    break;
+                case "2-4tr":
+                    url += '&startPrice=2000000&endPrice=4000000';
+                    break;
+                case "4-6tr":
+                    url += '&startPrice=4000000&endPrice=6000000';
+                    break;
+                case "6-8tr":
+                    url += '&startPrice=6000000&endPrice=8000000';
+                    break;
+                case "8-12tr":
+                    url += '&startPrice=8000000&endPrice=12000000';
+                    break;
+                case "12-20tr":
+                    url += '&startPrice=12000000&endPrice=20000000';
+                    break;
+                case ">20tr":
+                    url += '&startPrice=20000000&endPrice=999999999';
+                    break;
+                default:
+                    break;
+            }
         }
         jq351.ajax({
             url: url,
@@ -533,59 +535,65 @@ window.phieunhap = function (pActive) {
     if (url[1] == 'phieunhap') {
         jq351('#opt').html('');
         jq351.ajax({
-            url: url,
-            type: 'POST',
+            url: 'php/xuly.php?action=getPN&pActive=' + pActive,
             async: false,
-            data: {pageActive: pActive, each: 6, sDate: sDate, eDate: eDate},
             success: function (results) {
                 console.log(results);
                 if (results != -1) {
                     if (results != 0) {
                         var result = JSON.parse(results);
+                        let check = true;
+                        let dh = '';
                         var data = [];
-                        var columns = ['tenSp', 'SL', 'Tổng tiền'];
+                        var curr = new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'});
+                        var columns = ['Tên nhà cung cấp', 'Tên sản phẩm', 'số lượng', 'tổng tiền'];
+                        let name = ['tenNCC', 'tenSp', 'SL', 'tổng tiền'];
                         var headers = [];
                         for (var k = 0; k < columns.length; k++) {
                             headers.push({
                                 alias: columns[k],
-                                name: columns[k],
+                                name: name[k],
                                 flex: 1
                             });
                         }
                         for (var i = 0; i < result.length - 1; i++) {
                             if (check) {
-                                var ng = new moment(result[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
-                                dh += '<div id="' + i + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Tên']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Địa chỉ']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div id="tkcover">';
+                                var ng = new moment(result[i]['NgayNhap']).format('DD/MM/YYYY HH:mm:ss');
+                                dh += '<h3>Phiếu nhập ' + format(result[i]['maPN']) + '</h3><div id="' + result[i]['maPN'] + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên Nhà cung cấp: </span>' + escapeHtml(result[i]['tenNCC']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày Nhập: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ Nhà cung cấp: </span><span style="font-style:italic;">' + escapeHtml(result[i]['DiaChi']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['SDT'] + '</span></div><div id="tkcover">';
                                 check = false;
                             }
                             if (!check) {
-                                dh += '<div class="donHang" style="clear:both;"><div class="col tk" style="width:20%;"><span style="font-size:15px;color:black;">' + escapeHtml(result[i]['tenSp']) + '</span></div><div class="col tk" style="width:20%;">SL: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div><div class="col tk" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">' + curr.format(result[i]['Tổng tiền']) + '</span></div></div>';
+                                dh += '<div class="donHang" style="clear:both;"><div class="col tk" style="width:20%;"><span style="font-size:15px;color:black;">' + escapeHtml(result[i]['tenSp']) + '</span></div><div class="col tk" style="width:20%;">Số lượng: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div><div class="col tk" style="width:20%;">Đơn giá: <span style="font-size:15px;color:black;">' + curr.format(result[i]['DonGia']) + '</span></div></div>';
 
-                                var rowData = {};
-                                for (var j = 0; j < columns.length; j++) {
-                                    if (columns[j] == "Tổng tiền") rowData[columns[j]] = curr.format(result[i]['Tổng tiền']);
-                                    else rowData[columns[j]] = result[i][columns[j]];
+                                var rawData = {};
+                                for (var j = 0; j < name.length; j++) {
+                                    if (name[j] == "tổng tiền") rawData[name[j]] = curr.format(result[i]['DonGia']);
+                                    else rawData[name[j]] = result[i][name[j]];
                                 }
-                                data.push(rowData);
+                                data.push(rawData);
                             }
-                            if (i != result.length - 2) if (result[i]['maDH'] != result[i + 1]['maDH']) check = true;
+                            if (i != result.length - 2) if (result[i]['maPN'] != result[i + 1]['maPN']) check = true;
                             if (i == result.length - 2) check = true;
                             if (check) {
-                                dh += '</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: ' + curr.format(result[i]['tongtien']) + '</div>';
-                                if (result[i]['Tinhtrang'] == 'Đã xác nhận') tc += Number(result[i]['tongtien']);
+                                dh += '</div><div class="tongDH" style="clear:both;">Tổng tiền phiếu nhập: ' + curr.format(result[i]['Tong']) + '</div></div>';
                             }
                         }
-                        dh += '<div style="clear:both;font-size:20px;color:#8000ff;">Tổng doanh thu trên 1 trang: <span style="font-size:26px;color:black;">' + curr.format(tc) + '</span></div>';
                         if (document.getElementById('export') == null) {
                             var div = document.createElement('div');
                             div.id = 'export';
-                            div.innerHTML = '<button onclick=\'exportExcel("Thống kê điện thoại đã bán được", ' + JSON.stringify(headers) + ', ' + escapeHtml(JSON.stringify(data)) + ', "Thống kê", "Thống kê theo khoảng thời gian")\'>Xuất Excel</button><button onclick="exportPDF(\'sp\')">Xuất PDF</button>';
+                            div.innerHTML = '<button onclick=\'exportExcel("Phiếu nhập hàng", ' + JSON.stringify(headers) + ', ' + escapeHtml(JSON.stringify(data)) + ', "Phiếu nhập", "Phiếu nhập theo khoảng thời gian")\'>Xuất Excel</button><button onclick="exportPDF(\'sp\')">Xuất PDF</button>';
                             document.getElementById("menu").insertBefore(div, document.getElementById('opt'));
                         }
                         document.getElementById("sp").innerHTML = dh;
-                        page("trang", result[result.length - 1], "onchangeTkDH", pActive);
+                        jq351(function () {
+                            $("#sp").accordion({
+                                collapsible: true
+                            });
+                            $("#sp").accordion("refresh");
+                        });
+                        page("trang", result[result.length - 1], "phieunhap", pActive);
                     } else {
-                        document.getElementById("sp").innerHTML = '<div class="check">Không có đơn hàng trong khoảng thời gian này!</div>';
+                        document.getElementById("sp").innerHTML = '<div class="check">Không có phiếu nhập trong khoảng thời gian này!</div>';
                         document.getElementById("trang").innerHTML = "";
                         var expo = document.getElementById('export');
                         if (expo != null)
@@ -781,7 +789,7 @@ window.addProduct = function (pActive) {
             '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
             '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
             '</div>' +
-            '<div class="ctright" style="text-align:center;">' +            
+            '<div class="ctright" style="text-align:center;">' +
             '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
             '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
             '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
@@ -2168,7 +2176,7 @@ window.LsGd = function (lsgdJSON, pActive, pNum) {
                 }
                 if (i != lsgdJSON.length - 1) if (lsgdJSON[i]['maDH'] != lsgdJSON[i + 1]['maDH']) check = true;
                 if (i == lsgdJSON.length - 1) check = true;
-                if (check) dh += '</div></div>';
+                if (check) dh += '</div></div></div>';
             }
             document.getElementById("sp").innerHTML = dh;
             jq351(function () {

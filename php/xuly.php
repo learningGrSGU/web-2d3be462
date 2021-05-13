@@ -2,6 +2,9 @@
 session_start();
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
+        case "getPN":
+            getPN();
+            break;
         case "grantPermission":
             grantPermission();
             break;
@@ -246,6 +249,29 @@ function home()
     $sql = "SELECT * FROM `sanpham` sp JOIN `chitietsp` ctsp ON sp.`maSP`=ctsp.`maSP` limit 0,12";
     $sp = DBconnect::getInstance()->execSQL($sql);
     echo json_encode($sp);
+}
+
+function getPN()
+{
+    include_once 'DBConnect.php';
+    $sqlNum = "SELECT COUNT(`maPN`) FROM `phieunhap`";
+    $num = DBconnect::getInstance()->execSQL($sqlNum);
+    $numPage = ceil($num[0][0] / 5);
+    $limits = DBconnect::getInstance()->execSQL("select count(ctpn.`maPN`) count from `chitietpn` ctpn join `phieunhap` pn on pn.`maPN`=ctpn.`maPN` group by ctpn.`maPN` limit " . ($_GET['pActive'] - 1) * 5 . ",5");
+    $limit = 0;
+    if ($limits != 0) for ($i = 0; $i < count($limits); $i++) $limit += $limits[$i]['count'];
+    $all = DBconnect::getInstance()->execSQL("select count(ctpn.`maPN`) from `chitietpn` ctpn join `phieunhap` pn on pn.`maPN`=ctpn.`maPN`");
+    if ($all != 0) {
+        $lasts = DBconnect::getInstance()->execSQL("select count(ctpn.`maPN`) count from `chitietpn` ctpn join `phieunhap` pn on pn.`maPN`=ctpn.`maPN` group by ctpn.`maPN` limit " . ($_GET['pActive'] - 1) * 5 . "," . $all[0][0]);
+        $start = $all[0][0];
+        if ($lasts != 0) for ($i = 0; $i < count($lasts); $i++) $start -= $lasts[$i]['count'];
+        $sql = "select sp.`maSP`, pn.`maPN`,pn.`NgayNhap`,ncc.`tenNCC`,ncc.`DiaChi`,ncc.`SDT`,sp.`tenSp`,ctpn.`SL`,ctpn.`DonGia`, pn.Tong from `phieunhap` pn join `chitietpn` ctpn on pn.`maPN` = ctpn.`maPN` join nhacungcap ncc on ncc.`maNCC` = pn.`maNCC` join `sanpham` sp on sp.`maSP` = ctpn.`maSP` order by pn.`maPN` limit $start, $limit";
+        if ($all[0][0] != 0) {
+            $lsgd = DBconnect::getInstance()->execSQL($sql);
+            $lsgd[count($lsgd)] = $numPage;
+            echo json_encode($lsgd);
+        } else echo 0;
+    } else echo 0;
 }
 
 function grantPermission()
