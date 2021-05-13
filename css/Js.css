@@ -1,3 +1,22 @@
+/* sort Arrow */
+.dsc p:after,
+.asc p:after {
+    content: '';
+    position: relative;
+    left: 10px;
+    border: 8px solid transparent;
+}
+
+.dsc p:after {
+    top: 20px;
+    border-top-color: silver;
+}
+
+.asc p:after {
+    bottom: 15px;
+    border-bottom-color: silver;
+}
+
 /* loading animation */
 #loading {
     display: block;
@@ -270,7 +289,7 @@
     border: 2px solid #ff523b;
     float: left;
     overflow: hidden;
-    height:70px;
+    height: 70px;
 }
 
 .dh {
@@ -488,32 +507,33 @@
     border-radius: 10px;
 }
 
-#topmenu{
+#topmenu {
     height: 50px;
     background: #333;
 }
 
-.update-sp{
-    width:100%;
+.update-sp {
+    width: 100%;
     float: left;
     font-size: 16px;
     background: #f5f5f5;
 }
 
-.update-sp1{
+.update-sp1 {
     width: 100%;
     float: left;
     font-size: 16px;
 }
 
-.ctleft{
-    width:50%;
+.ctleft {
+    width: 50%;
     float: left;
 }
 
-.ctright{
-    width:50%;
+.ctright {
+    width: 50%;
     float: right;
 }
-#alert-sp{
+
+#alert-sp {
 }

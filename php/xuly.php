@@ -20,6 +20,24 @@ if (isset($_GET['action'])) {
         case "qlquyen":
             qlquyen();
             break;
+        case "getMaSP":
+            getMaSP();
+            break;
+        case "getSP":
+            getSP();
+            break;
+        case "updateSLSP":
+            updateSLSP();
+            break;
+        case "updateNCC":
+            updateNCC();
+            break;
+        case "addNCC":
+            addNCC();
+            break;
+        case "delNCC":
+            delNCC();
+            break;
         case "ncc":
             ncc();
             break;
@@ -131,7 +149,7 @@ function encrypt()
 function uploadImg()
 {
     if (isset($_FILES['fileToUpload']) && isset($_GET['do'])) {
-        $dir = "../image/files_upload/";
+        $dir = "../image/" . $_GET['folder'] . "/";
         $target_file = $dir . basename($_FILES['fileToUpload']['name']);
         $extension = pathinfo($target_file, PATHINFO_EXTENSION);
         if (getimagesize($_FILES["fileToUpload"]["tmp_name"]) !== false) {
@@ -141,14 +159,14 @@ function uploadImg()
                     $upload_file = ltrim($target_file, "./");
                     if (isset($_GET['masp'])) $masp = $_GET['masp'];
                     include_once 'DBConnect.php';
-                    if ($_GET['do'] == 'update') $sql = "update `chitietsp` set `Hình ảnh`='$upload_file' where `maSP`='$masp'";
+                    if ($_GET['do'] == 'update') $sql = "update `chitietsp` set `HinhAnh`='$upload_file' where `maSP`='$masp'";
                     $update = DBconnect::getInstance()->execUpdate($sql);
                     if ($update === true) echo 1;
                     else echo $update;
                 } else echo -2;
             }
         } else echo -1;
-    } else echo -1;
+    } else echo -3;
 }
 
 function errorLogin()
@@ -294,9 +312,106 @@ function qlquyen()
     } else echo 0;
 }
 
+function phieunhap($data)
+{
+    include_once 'DBConnect.php';
+    $maPN = DBconnect::getInstance()->execSQL('select count(maPN) from phieunhap')[0][0] + 1;
+    $maNV = DBconnect::getInstance()->execSQL('select maNV from nhanvien where maUser = "' . $_SESSION['id'] . '"')[0][0];
+    date_default_timezone_set('Asia/Ho_Chi_Minh');
+    $date = date('Y-m-d');
+    $tong = $data[1] * $data[3];
+    $sql = "insert into phieunhap values ('$maPN', '$data[4]', '$maNV', '$date', '$tong');";
+    $sql .= "insert into chitietpn values ('$maPN', '$data[0]', '$data[3]', '$data[1]');";
+    $insert = DBconnect::getInstance()->execMultiQuery($sql);
+    if ($insert == 1) {
+        DBconnect::getInstance()->nextResult();
+        return true;
+    } else {
+        echo $insert;
+        return false;
+    }
+}
+
+function getMaSP()
+{
+    include_once 'DBConnect.php';
+    $sql = "select Max(cast(maSP as unsigned)) from sanpham";
+    $sp = DBconnect::getInstance()->execSQL($sql)[0][0];
+    echo $sp + 1;
+}
+
+function getSP()
+{
+    include_once 'DBConnect.php';
+    $sql = "select maSP, tenSp, GiaCa, SL from sanpham";
+    $sp = DBconnect::getInstance()->execSQL($sql);
+    echo json_encode($sp);
+}
+
+function updateSLSP()
+{
+    if (isset($_POST['data'])) {
+        include_once 'DBConnect.php';
+        $data = json_decode($_POST['data'], true);
+        $sl = ($data[2] + $data[3]);
+        $sql = "update sanpham set SL = '$sl' where maSP = '$data[0]'";
+        if (phieunhap($data) == true) {
+            $update = DBconnect::getInstance()->execUpdate($sql);
+            if ($update == 1) echo 1;
+            else echo $update;
+        }
+    } else echo -1;
+}
+
+function updateNCC()
+{
+    if (isset($_POST['ncc'])) {
+        include_once 'DBConnect.php';
+        $ncc = json_decode($_POST['ncc'], true);
+        $sql = "update nhacungcap set tenNCC ='$ncc[1]', DiaChi = '$ncc[2]', SDT = '$ncc[3]', Email = '$ncc[4]' where maNCC = '$ncc[0]'";
+        $insert = DBconnect::getInstance()->execUpdate($sql);
+        if ($insert == 1) echo 1;
+        else echo $insert;
+    } else echo -1;
+}
+
+function addNCC()
+{
+    if (isset($_POST['ncc'])) {
+        include_once 'DBConnect.php';
+        $ncc = json_decode($_POST['ncc'], true);
+        $sql = "insert into nhacungcap(tenNCC, DiaChi, SDT, Email) values ('$ncc[0]', '$ncc[1]', '$ncc[2]', '$ncc[3]')";
+        $insert = DBconnect::getInstance()->execUpdate($sql);
+        if ($insert == 1) echo 1;
+        else echo $insert;
+    } else echo -1;
+}
+
+function delNCC()
+{
+    if (isset($_POST['id'])) {
+        include_once 'DBConnect.php';
+        $sql = "delete from nhacungcap where `maNCC`='" . $_POST['id'] . "';";
+        $update = DBconnect::getInstance()->execUpdate($sql);
+        if ($update == 1) echo 1;
+        else echo $update;
+    } else echo -1;
+}
+
 function ncc()
 {
-
+    include_once 'DBConnect.php';
+    $sql = "SELECT * FROM nhacungcap ";
+    if (isset($_GET['dataSearch'])) $sql .= "where maNCC like '%" . $_GET['dataSearch'] . "%' or tenNCC like '%" . $_GET['dataSearch'] . "%'";
+    $sql .= "limit " . ($_GET['pActive'] - 1) * 10 . ", 10";
+    $sqlPages = "SELECT count(maNCC) FROM nhacungcap ";
+    if (isset($_GET['dataSearch'])) $sqlPages .= "where maNCC like '%" . $_GET['dataSearch'] . "%' or tenNCC like '%" . $_GET['dataSearch'] . "%'";
+    $ncc = DBconnect::getInstance()->execSQL($sql);
+    if ($ncc) {
+        $numpage = ceil(DBconnect::getInstance()->execSQL($sqlPages)[0][0] / 10);
+        $ncc[count($ncc)] = $numpage;
+        echo json_encode($ncc);
+    } else echo 0;
 }
 
 function del()
@@ -383,16 +498,27 @@ function updateSP()
     if (isset($_POST['sp']) && isset($_GET['do'])) {
         $sp = json_decode($_POST['sp'], true);
         include_once 'DBConnect.php';
-        if ($_GET['do'] == 'update') $sql1 = "update `sanpham` set `tenSp`='" . replace_regex($sp['tenSp']) . "', `MoTa`='" . replace_regex($sp['MoTa']) . "', `GiaCa`=" . $sp['GiaCa'] . ", `SL`=" . $sp['SL'] . " where `maSP`='" . $sp['maSP'] . "'";
-        if ($_GET['do'] == 'insert') $sql1 = "insert into `sanpham` values ('" . $sp['maSP'] . "','" . replace_regex($sp['tenSp']) . "','" . replace_regex($sp['MoTa']) . "'," . $sp['GiaCa'] . "," . $sp['SL'] . ")";
-        if ($_GET['do'] == 'update') $sql2 = "update `chitietsp` set `maDM`='" . replace_regex($sp['maDM']) . "', `Size`='" . replace_regex($sp['Size']) . "', `Weight`='" . replace_regex($sp['Weight']) . "', `Color`='" . replace_regex($sp['Color']) . "', `BoNhoTrong`='" . replace_regex($sp['BoNhoTrong']) . "', `BoNho`='" . replace_regex($sp['BoNho']) . "', `HDH`='" . replace_regex($sp['HDH']) . "', `CamTruoc`='" . replace_regex($sp['CamTruoc']) . "', `CamSau`='" . replace_regex($sp['CamSau']) . "', `Pin`='" . replace_regex($sp['Pin']) . "', `BaoHanh`='" . replace_regex($sp['BaoHanh']) . "', `TinhTrang`='" . replace_regex($sp['TinhTrang']) . "', `Ngày nhập hàng`='" . $sp['Ngày nhập hàng'] . "' where `maSP`='" . $sp['maSP'] . "'";
-        if ($_GET['do'] == 'insert') $sql2 = "insert into `chitietsp`(`maSP`,`maDM`,`Size`,`Weight`,`Color`,`BoNhoTrong`,`BoNho`,`HDH`,`CamTruoc`,`CamSau`,`Pin`,`BaoHanh`,`TinhTrang`,`Ngày nhập hàng`) values ('" . $sp['maSP'] . "','" . replace_regex($sp['maDM']) . "','" . replace_regex($sp['Size']) . "','" . replace_regex($sp['Weight']) . "','" . replace_regex($sp['Color']) . "','" . replace_regex($sp['BoNhoTrong']) . "','" . replace_regex($sp['BoNho']) . "','" . replace_regex($sp['HDH']) . "','" . replace_regex($sp['CamTruoc']) . "','" . replace_regex($sp['CamSau']) . "','" . replace_regex($sp['Pin']) . "','" . replace_regex($sp['BaoHanh']) . "','" . replace_regex($sp['TinhTrang']) . "','" . $sp['Ngày nhập hàng'] . "')";
-        $update1 = DBconnect::getInstance()->execUpdate($sql1);
-        if ($update1 === true) $update2 = DBconnect::getInstance()->execUpdate($sql2);
-        if (isset($update2) && $update2 === true) echo 1;
-        else {
-            if (isset($update2)) echo $update1 . $update2;
-            else echo $update1;
+        if ($_GET['do'] == 'update') {
+            $sql = "update `sanpham` set `tenSp`='" . replace_regex($sp[1]) . "', `MoTa`='" . replace_regex($sp[5]) . " - " . replace_regex($sp[6]) . "', `SL`=" . $sp[13] . " where `maSP`='" . $sp[0] . "';";
+            $sql .= "update `chitietsp` set `maDM`='" . replace_regex($sp[14]) . "', `Size`='" . replace_regex($sp[2]) . "', `Weight`='" . replace_regex($sp[3]) . "', `Color`='" . replace_regex($sp[4]) . "', `BoNhoTrong`='" . replace_regex($sp[5]) . "', `BoNho`='" . replace_regex($sp[6]) . "', `HDH`='" . replace_regex($sp[7]) . "', `CamTruoc`='" . replace_regex($sp[8]) . "', `CamSau`='" . replace_regex($sp[9]) . "', `Pin`='" . replace_regex($sp[10]) . "', `BaoHanh`='" . replace_regex($sp[11]) . "', `TinhTrang`='" . replace_regex($sp[12]) . "' where `maSP`='" . $sp[0] . "';";
+        }
+        if ($_GET['do'] == 'insert') {
+            $sql = "insert into `sanpham` values ('" . $sp[0] . "','" . replace_regex($sp[1]) . "','" . replace_regex($sp[5]) . " - " . replace_regex($sp[6]) . "'," . $sp[13] . "," . $sp[14] . ");";
+            $sql .= "insert into `chitietsp`(`maSP`,`maDM`,`Size`,`Weight`,`Color`,`BoNhoTrong`,`BoNho`,`HDH`,`CamTruoc`,`CamSau`,`Pin`,`BaoHanh`,`TinhTrang`,`Ngày nhập hàng`) values ('" . $sp[0] . "','" . replace_regex($sp[16]) . "','" . replace_regex($sp[2]) . "','" . replace_regex($sp[3]) . "','" . replace_regex($sp[4]) . "','" . replace_regex($sp[5]) . "','" . replace_regex($sp[6]) . "','" . replace_regex($sp[7]) . "','" . replace_regex($sp[8]) . "','" . replace_regex($sp[9]) . "','" . replace_regex($sp[10]) . "','" . replace_regex($sp[11]) . "','" . replace_regex($sp[12]) . "','" . $sp[17] . "');";
+        }
+        $update = DBconnect::getInstance()->execMultiQuery($sql);
+        if ($update == 1) {
+            DBconnect::getInstance()->nextResult();
+            if ($_GET['do'] == 'insert') {
+                $data = [];
+                $data[0] = $sp[0];
+                $data[1] = $sp[13];
+                $data[2] = 0;
+                $data[3] = $sp[14];
+                $data[4] = $sp[15];
+                phieunhap($data);
+            }
+            echo 1;
         }
     } else echo -1;
 }
@@ -719,7 +845,6 @@ function searchSP()
 
 function logout()
 {
-    session_destroy();
     setcookie(session_name(), session_id(), time() - 1, '/');
 }
 

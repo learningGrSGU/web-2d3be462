@@ -170,11 +170,11 @@ window.decode = function (data) {
     return (window.atob(code) == decode) ? Number(decode) : "";
 }
 
-window.upload = function (file, masp, toDo) {
+window.upload = function (file, masp, toDo, folder) {
     var form = new FormData();
     form.append('fileToUpload', file);
     jq351.ajax({
-        url: 'php/xuly.php?action=uploadImg&masp=' + masp + '&do=' + toDo,
+        url: 'php/xuly.php?action=uploadImg&masp=' + masp + '&do=' + toDo + '&folder=' + folder,
         type: 'POST',
         async: false,
         cache: false,
@@ -183,11 +183,11 @@ window.upload = function (file, masp, toDo) {
         data: form,
         success: function (result) {
             console.log(result);
-            if (Number(result) == 1) alert('Đổi hình thành công!');
-            else if (Number(result) == -1) alert('Không hỗ trợ định dạng này!');
-            else if (Number(result) == 0) alert('Hình có Size quá lớn!');
-            else if (Number(result) == -2) alert('Upload Hình thất bại');
-            else alert('Vui lòng điền đầy đủ thông tin trước khi thêm hình!');
+            if (Number(result) == 1) customDialog('Đổi hình thành công!');
+            else if (Number(result) == -1) customDialog('Không hỗ trợ định dạng này!');
+            else if (Number(result) == 0) customDialog('Hình có Size quá lớn!');
+            else if (Number(result) == -2) customDialog('Upload Hình thất bại');
+            else customDialog('Lỗi!' + result);
         }
     });
 }
@@ -200,8 +200,8 @@ window.update = function (sp, toDo) {
         data: {sp: sp},
         success: function (result) {
             console.log(result);
-            if (Number(result) == 1) alert('Sửa thành công');
-            else alert('Sản phẩm đã tồn tại! ' + result);
+            if (Number(result) == 1) customDialog('Cập nhật thành công');
+            else customDialog('Sản phẩm đã tồn tại! ' + result);
         }
     });
 }
@@ -337,7 +337,7 @@ window.sendBL = function (masp) {
 
 //-------------------------------------------------------------code function here-------------------------------------------------------------------//
 window.isLogin = function (errorCode) {
-    if (Number(errorCode) == 0) alert('Mật khẩu không hợp lệ');
+    if (Number(errorCode) == 0) customDialog('Mật khẩu không hợp lệ');
 }
 
 window.Homead = function () {
@@ -528,15 +528,492 @@ window.Search = function (pActive) {
     }
 }
 
-window.onchangeNCC = function (pActive) {
+window.phieunhap = function (pActive) {
+    var url = location.href.split('?');
+    if (url[1] == 'phieunhap') {
+        jq351('#opt').html('');
+        jq351.ajax({
+            url: url,
+            type: 'POST',
+            async: false,
+            data: {pageActive: pActive, each: 6, sDate: sDate, eDate: eDate},
+            success: function (results) {
+                console.log(results);
+                if (results != -1) {
+                    if (results != 0) {
+                        var result = JSON.parse(results);
+                        var data = [];
+                        var columns = ['tenSp', 'SL', 'Tổng tiền'];
+                        var headers = [];
+                        for (var k = 0; k < columns.length; k++) {
+                            headers.push({
+                                alias: columns[k],
+                                name: columns[k],
+                                flex: 1
+                            });
+                        }
+                        for (var i = 0; i < result.length - 1; i++) {
+                            if (check) {
+                                var ng = new moment(result[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
+                                dh += '<div id="' + i + '"><div class="acc" style="clear:both;"><span style="color:red;">Tên khách hàng: </span>' + escapeHtml(result[i]['Tên']) + '</div><div class="nggd" style="clear:both;"><span style="color:red;">Ngày giao dịch: </span>' + ng + '</div><div style="clear:both;"><span style="font-weight:bold;">Địa chỉ giao hàng: </span><span style="font-style:italic;">' + escapeHtml(result[i]['Địa chỉ']) + '</span></div><div style="clear:both;"><span style="font-weight:bold;">Số điện thoại: </span><span style="font-style:italic;">' + result[i]['Sdt'] + '</span></div><div><span style="font-weight:bold;">TinhTrang: </span><span style="font-weight:bold;font-style:italic;color:#F60;">' + escapeHtml(result[i]['Tinhtrang']) + '</span></div><div id="tkcover">';
+                                check = false;
+                            }
+                            if (!check) {
+                                dh += '<div class="donHang" style="clear:both;"><div class="col tk" style="width:20%;"><span style="font-size:15px;color:black;">' + escapeHtml(result[i]['tenSp']) + '</span></div><div class="col tk" style="width:20%;">SL: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div><div class="col tk" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">' + curr.format(result[i]['Tổng tiền']) + '</span></div></div>';
 
+                                var rowData = {};
+                                for (var j = 0; j < columns.length; j++) {
+                                    if (columns[j] == "Tổng tiền") rowData[columns[j]] = curr.format(result[i]['Tổng tiền']);
+                                    else rowData[columns[j]] = result[i][columns[j]];
+                                }
+                                data.push(rowData);
+                            }
+                            if (i != result.length - 2) if (result[i]['maDH'] != result[i + 1]['maDH']) check = true;
+                            if (i == result.length - 2) check = true;
+                            if (check) {
+                                dh += '</div><div class="tongDH" style="clear:both;">Tổng tiền đơn hàng: ' + curr.format(result[i]['tongtien']) + '</div>';
+                                if (result[i]['Tinhtrang'] == 'Đã xác nhận') tc += Number(result[i]['tongtien']);
+                            }
+                        }
+                        dh += '<div style="clear:both;font-size:20px;color:#8000ff;">Tổng doanh thu trên 1 trang: <span style="font-size:26px;color:black;">' + curr.format(tc) + '</span></div>';
+                        if (document.getElementById('export') == null) {
+                            var div = document.createElement('div');
+                            div.id = 'export';
+                            div.innerHTML = '<button onclick=\'exportExcel("Thống kê điện thoại đã bán được", ' + JSON.stringify(headers) + ', ' + escapeHtml(JSON.stringify(data)) + ', "Thống kê", "Thống kê theo khoảng thời gian")\'>Xuất Excel</button><button onclick="exportPDF(\'sp\')">Xuất PDF</button>';
+                            document.getElementById("menu").insertBefore(div, document.getElementById('opt'));
+                        }
+                        document.getElementById("sp").innerHTML = dh;
+                        page("trang", result[result.length - 1], "onchangeTkDH", pActive);
+                    } else {
+                        document.getElementById("sp").innerHTML = '<div class="check">Không có đơn hàng trong khoảng thời gian này!</div>';
+                        document.getElementById("trang").innerHTML = "";
+                        var expo = document.getElementById('export');
+                        if (expo != null)
+                            document.getElementById('menu').removeChild(expo);
+                    }
+                }
+            }
+        });
+    }
+}
+
+window.addNewNCC = function (pActive) {
+    let nccArray = [];
+    let inputs = document.getElementById('add-ncc').getElementsByTagName('input');
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value != '') {
+            nccArray.push(inputs[i].value);
+        } else {
+            customDialog('vui lòng nhập đầy đủ thông tin');
+            return;
+        }
+    }
+    if (!checkNumber(inputs[2].value)) {
+        customDialog('vui lòng nhập đúng số điện thoại');
+        return;
+    }
+    if (!checkEmail(inputs[3].value)) {
+        customDialog('vui lòng nhập đúng định dạnh email');
+        return;
+    }
+    jq351.ajax({
+        url: 'php/xuly.php?action=addNCC',
+        data: {ncc: JSON.stringify(nccArray)},
+        type: 'POST',
+        success: function (result) {
+            if (Number(result) == 1) {
+                customDialog('Thêm thành công!');
+                onchangeNCC(pActive);
+                jq351('#add-ncc').hide();
+            } else {
+                customDialog('Phát sinh lỗi trong quá trình thêm!');
+                console.log(result);
+            }
+        }
+    });
+}
+
+window.addNCC = function () {
+    var modal = document.getElementById('add-ncc');
+    if (modal == null) {
+        var mod = '';
+        var myModal = document.createElement('div');
+        myModal.className = 'modal';
+        myModal.id = 'add-ncc';
+        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
+            '<div>Tên nhà cung cấp: <input type="text"></div>' +
+            '<div>Địa chỉ: <input type="text"></div>' +
+            '<div>Số điện thoại: <input type="text"></div>' +
+            '<div>Email: <input type="text"></div>';
+        mod += '<div><button onclick="addNewNCC(' + this + ')">Thêm Nhà cung cấp</button></div></div>'
+        myModal.innerHTML = mod;
+        document.getElementsByTagName('body')[0].appendChild(myModal);
+        modal = myModal;
+    }
+    modal.style.display = 'block';
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+window.getTL = function () {
+    let s = '';
+    jq351.ajax({
+        url: 'php/xuly.php?action=getTL',
+        async: false,
+        success: function (results) {
+            console.log(results);
+            let result = JSON.parse(results);
+            s += "<select style=\"width:60%;text-align:center;\">";
+            for (var i = 0; i < result.length; i++) {
+                s += '<option value="' + escapeHtml(result[i]['maDM']) + '">' + escapeHtml(result[i]['tenDM']) + '</option>';
+            }
+            s += "</select>";
+        }
+    });
+    return s;
+}
+
+window.getSP = function () {
+    let select = '';
+    jq351.ajax({
+        url: 'php/xuly.php?action=getSP',
+        async: false,
+        success: function (result) {
+            let results = JSON.parse(result);
+            select += '<select>';
+            for (let i = 0; i < results.length; i++) {
+                select += '<option value="' + results[i]['maSP'] + '-' + results[i]['GiaCa'] + '-' + results[i]['SL'] + '">' + results[i]['tenSp'] + '</option>';
+            }
+            select += '</select>';
+        }
+    });
+    return select;
+}
+
+window.getMaSP = function () {
+    let input = '';
+    jq351.ajax({
+        url: 'php/xuly.php?action=getMaSP',
+        async: false,
+        success: function (result) {
+            input += result;
+        }
+    });
+    return input;
+}
+
+window.addNewProduct = function (maNCC, pActive, maSP) {
+    let modal = document.getElementById('add-product-' + maNCC);
+    let inputs = modal.getElementsByTagName('input');
+    let folder = modal.getElementsByTagName('select')[0].value;
+    let data = [];
+    for (let i = 0; i < inputs.length - 1; i++) {
+        if (inputs[i].value != '') {
+            data.push(inputs[i].value);
+        } else {
+            customDialog('Vui lòng điền đầy đủ thông tin');
+            return;
+        }
+    }
+    if (inputs[0].value != maSP) {
+        customDialog('Vui lòng không chỉnh sửa mã sản phẩm');
+        return;
+    }
+    if (check_num(inputs[13].value)) {
+        if (Number(inputs[13].value) <= 0) {
+            customDialog('Đơn giá phải lớn hơn 0');
+            return;
+        }
+    } else {
+        customDialog('Vui lòng nhập đúng định dạng đơn giá');
+        inputs[13].focus();
+        return;
+    }
+    if (check_num(inputs[14].value)) {
+        if (Number(inputs[14].value) <= 0) {
+            customDialog('Số lượng phải lớn hơn 0');
+            return;
+        }
+    } else {
+        customDialog('Vui lòng nhập đúng định dạng số lượng');
+        inputs[14].focus();
+        return;
+    }
+    data.push(maNCC);
+    data.push(folder);
+    data.push(new moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
+    if (inputs[15].files && inputs[15].files[0]) {
+        update(JSON.stringify(data), 'insert');
+        upload(inputs[15].files[0], inputs[0].value, 'update', folder);
+        modal.style.display = 'none';
+        onchangeNCC(pActive);
+    } else {
+        customDialog('Vui lòng điền đầy đủ thông tin');
+        return;
+    }
+}
+
+window.addProduct = function (pActive) {
+    $('#import-product-' + this).hide()
+    var modal = document.getElementById('add-product-' + this);
+    if (modal == null) {
+        var mod = '';
+        var myModal = document.createElement('div');
+        myModal.className = 'modal product';
+        myModal.id = 'add-product-' + this;
+        let masp = getMaSP();
+        mod += '<div class="modal-content" style="width:90%;height:95%;margin:1% 5%;"><div class="container" style="padding:0 20px 10px 20px;">' +
+            '<h1>Thông Tin Chi Tiết Của Sản Phẩm</h1>' +
+            '<hr>' +
+            '<div class="ctleft">' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Mã sản phẩm:</div> <input disabled style="width:60%;text-align:center;" type="text" value="' + masp + '"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Thể Loại:</div>' + getTL() + '</div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Kích Thước:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Trọng Lượng:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Màu sắc:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bộ Nhớ Trong:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bộ Nhớ Đệm:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Hệ điều hành:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '</div>' +
+            '<div class="ctright" style="text-align:center;">' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Đơn giá:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:17px;">Số lượng:</div> <input style="width:60%;text-align:center;" type="text"></div>' +
+            '<div class="update-sp"><img src=""><input type="file"></div>' +
+            '</div>';
+        mod += '<div style="clear:left;text-align:center;"><button style="background-color:#333;" class="btn" onclick="addNewProduct(\'' + this + '\', ' + pActive + ', \'' + masp + '\')">Cập nhật</button></div></div></div>'
+        myModal.innerHTML = mod;
+        document.getElementsByTagName('body')[0].appendChild(myModal);
+        modal = myModal;
+        modal.getElementsByTagName('input')[15].onchange = function () {
+            if (this.files && this.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    modal.getElementsByTagName('img')[0].src = e.target.result;
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        }
+    }
+    modal.style.display = 'block';
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+window.startImport = function (maNCC, pActive) {
+    let content = document.getElementById('import-product-' + maNCC);
+    let data = [];
+    let splitedArray = content.getElementsByTagName('select')[0].value.split('-');
+    data.push(splitedArray[0]);
+    data.push(splitedArray[1]);
+    data.push(splitedArray[2]);
+    let sl = content.getElementsByTagName('input')[0].value;
+    if (check_num(sl)) {
+        if (sl <= 0) {
+            customDialog('vui lòng nhập số lượng lớn hơn 0');
+            return;
+        }
+    } else {
+        customDialog('vui lòng nhập đúng định dạng số lượng');
+        return;
+    }
+    data.push(sl);
+    data.push(maNCC);
+    jq351.ajax({
+        url: 'php/xuly.php?action=updateSLSP',
+        data: {data: JSON.stringify(data)},
+        type: 'POST',
+        success: function (result) {
+            if (Number(result) == 1) {
+                customDialog('Nhập hàng thành công.');
+                onchangeNCC(pActive);
+                jq351('#import-product-' + maNCC).hide();
+            } else {
+                customDialog('Admin không phải là nhân viên! Chỉ có nhân viên mới dùng được chức năng này.');
+                console.log(result);
+            }
+        }
+    });
+}
+
+window.importFromNCC = function (maNCC, pActive) {
+    if (checkPermission('nhaphang')) {
+        var modal = document.getElementById('import-product-' + maNCC);
+        if (modal == null) {
+            var mod = '';
+            var myModal = document.createElement('div');
+            myModal.className = 'modal';
+            myModal.id = 'import-product-' + maNCC;
+            mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
+                '<div>Chọn sản phẩm: ' + getSP() + '</div>' +
+                '<div>Số lượng: <input type="text"></div>';
+            mod += '<div><button onclick="startImport(\'' + maNCC + '\', ' + pActive + ')">Cập nhật</button></div><div><button onclick="addProduct.call(\'' + maNCC + '\', ' + pActive + ')">Thêm sản phẩm mới</button></div></div></div>'
+            myModal.innerHTML = mod;
+            document.getElementsByTagName('body')[0].appendChild(myModal);
+            modal = myModal;
+        }
+        modal.style.display = 'block';
+        window.addEventListener('click', function (event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+    } else customDialog('Bạn không có quyền truy cập chức năng này');
+}
+
+window.updateNCC = function (id, pActive) {
+    let nccArray = [];
+    let inputs = document.getElementById('update-ncc-' + id).getElementsByTagName('input');
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].value != '') {
+            nccArray.push(inputs[i].value);
+        } else {
+            customDialog('vui lòng nhập đầy đủ thông tin');
+            return;
+        }
+    }
+    if (inputs[0].value != id) {
+        customDialog('vui lòng không sửa mã nhà cung cấp');
+        return;
+    }
+    if (!checkNumber(inputs[3].value)) {
+        customDialog('vui lòng nhập đúng số điện thoại');
+        return;
+    }
+    if (!checkEmail(inputs[4].value)) {
+        customDialog('vui lòng nhập đúng định dạnh email');
+        return;
+    }
+    jq351.ajax({
+        url: 'php/xuly.php?action=updateNCC',
+        data: {ncc: JSON.stringify(nccArray)},
+        type: 'POST',
+        success: function (result) {
+            if (Number(result) == 1) {
+                customDialog('Cập nhật thành công!');
+                onchangeNCC(pActive);
+                jq351('#update-ncc-' + id).hide();
+            } else {
+                customDialog('Vui lòng không cố gắng chỉnh sửa mã nhà cung cấp!');
+                console.log(result);
+            }
+        }
+    });
+}
+
+window.showNCC = function () {
+    var modal = document.getElementById('update-ncc-' + this.result['maNCC']);
+    if (modal == null) {
+        var mod = '';
+        var myModal = document.createElement('div');
+        myModal.className = 'modal';
+        myModal.id = 'update-ncc-' + this.result['maNCC'];
+        mod += '<div class="modal-content" style="width:100%;height:90%;"><div class="container" style="padding:0 20px 10px 20px;line-height:0.3;">' +
+            '<div>Mã nhà cung cấp: <input disabled type="text" value="' + this.result['maNCC'] + '"></div>' +
+            '<div>Tên nhà cung cấp: <input type="text" value="' + this.result['tenNCC'] + '"></div>' +
+            '<div>Địa chỉ: <input type="text" value="' + this.result['DiaChi'] + '"></div>' +
+            '<div>Số điện thoại: <input type="text" value="' + this.result['SDT'] + '"></div>' +
+            '<div>Email: <input type="text" value="' + this.result['Email'] + '"></div>';
+        mod += '<div><button onclick="updateNCC(\'' + this.result['maNCC'] + '\', ' + this.pActive + ')">Cập nhật</button></div></div>'
+        myModal.innerHTML = mod;
+        document.getElementsByTagName('body')[0].appendChild(myModal);
+        modal = myModal;
+    }
+    modal.style.display = 'block';
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+window.delNCC = function (maNCC, pActive) {
+    if (confirm('Bạn có muốn xóa nhà cung cấp này không?'))
+        jq351.ajax({
+            url: 'php/xuly.php?action=delNCC',
+            data: {id: maNCC},
+            type: 'POST',
+            success: function (result) {
+                if (Number(result) == 1) customDialog('Xóa thành công');
+                else {
+                    customDialog('Đã tồn tại sản phẩm từ nhà cung cấp này!');
+                    console.log(result);
+                }
+            }
+        });
+    onchangeNCC(pActive);
+}
+
+window.nccManage = function (event, visible) {
+    if (!visible) {
+        let context_menu = '<ul id="menu_' + this.id + '" class="menu">' +
+            '<li class="menu-item" onclick="delNCC(' + escapeHtml(JSON.stringify(this.result['maNCC'])) + ', ' + this.pActive + ')">Xóa Nhà cung cấp</li>' +
+            '<li class="menu-item" onclick="showNCC.call(' + escapeHtml(JSON.stringify(this)) + ')">Sửa Nhà cung cấp</li>' +
+            '<li class="menu-item" onclick="importFromNCC(' + escapeHtml(JSON.stringify(this.result['maNCC'])) + ', ' + this.pActive + ')">Nhập hàng từ nhà cung cấp này</li>' +
+            '<li class="menu-item" onclick="addNCC.call(' + this.pActive + ')">Thêm Nhà cung cấp mới</li>';
+        context_menu += '</ul>';
+        jq351('#sp').append(context_menu);
+    } else {
+        escapeContext.call(this, event);
+    }
+}
+
+window.onchangeNCC = function (pActive) {
+    document.addEventListener('keydown', function (ev) {
+        if (ev.ctrlKey && ev.altKey && ev.key == 'n') {
+            addNCC.call(pActive);
+        }
+    });
+    let url = 'php/xuly.php?action=ncc';
+    let data = escapeHtml(jq351('#nccSearch').val());
+    if (data != '') url += '&dataSearch=' + data;
+    jq351.ajax({
+        url: url + '&pActive=' + pActive,
+        success: function (results) {
+            if (Number(results) != 0) {
+                let result = JSON.parse(results);
+                let pages = result[result.length - 1];
+                result.length -= 1;
+                let toSortObject = {
+                    id: "#sp",
+                    headers: ["Mã nhà cung cấp", "Tên nhà cung cấp", "Địa chỉ", "Số điện thoại", "Email"],
+                    result: result,
+                    colToSort: "maNCC",
+                    alias: ["maNCC", "tenNCC", "DiaChi", "SDT", "Email"],
+                    type: ["number", "string", "string", "number", "string"],
+                    functions: [nccManage],
+                    functionCalls: ['nccManage'],
+                    buttonName: ['...'],
+                    pages: pages,
+                    toPage: "onchangeNCC",
+                    pActive: pActive
+                };
+                sortedTable.apply(toSortObject, [null]);
+            } else {
+                jq351('#sp').html('<div class="check">Không tìm thấy nhà cung cấp nào!</div>');
+                jq351('#trang').html('');
+            }
+        }
+    });
 }
 
 window.ncc = function () {
     var url = location.href.split('?');
     if (url[1] == 'ncc') {
         if (checkPermission('qlncc')) {
-
+            jq351('#opt').html('<input  id="nccSearch" onKeyUp="onchangeNCC(1);" type="text" placeholder="Nhập mã nhà cung cấp hoặc tên nhà cung cấp để tìm" name="search">');
+            onchangeNCC(1);
         } else jq351('#sp').html('<div class="check">Bạn không có quyền truy cập chức năng này</div>');
     }
 }
@@ -813,8 +1290,8 @@ window.Unlock_lock = function (x, l, pActive) {
         data: {user: x, do: l},
         type: 'POST',
         success: function (result) {
-            if (Number(result) == 1) alert('Mở khóa thành công');
-            else if (Number(result) == 0) alert('Khóa thành công');
+            if (Number(result) == 1) customDialog('Mở khóa thành công');
+            else if (Number(result) == 0) customDialog('Khóa thành công');
             else console.log(result);
         }
     });
@@ -840,6 +1317,11 @@ window.qltk = function (pActive) {
     if (url[1] == 'qltk') {
         if (checkPermission('qltaikhoan')) {
             jq351(function () {
+                document.addEventListener('keydown', function (ev) {
+                    if (ev.ctrlKey && ev.altKey && ev.key == 'n') {
+                        jq351('#id02').show();
+                    }
+                });
                 jq351('#opt').html('<button class="btn" onclick="document.getElementById(\'id02\').style.display=\'block\';">Thêm tài khoản mới</button>');
                 jq351.ajax({
                     url: 'php/xuly.php?action=qltk&pActive=' + pActive,
@@ -940,14 +1422,14 @@ window.ok = function (x, pActive) {
                     console.log(result);
                     if (result == 1) {
                         check = true;
-                        alert('Tên sản phẩm đã tồn tại');
+                        customDialog('Tên sản phẩm đã tồn tại');
                     }
                 }
             });
         }
         if (!check) {
-            if (input[2].value >= 1000000000) alert('SL phải nhỏ hơn 1.000.000.000');
-            if (input[3].value >= 1000000000) alert('Giá phải nhỏ hơn 1.000.000.000');
+            if (input[2].value >= 1000000000) customDialog('SL phải nhỏ hơn 1.000.000.000');
+            if (input[3].value >= 1000000000) customDialog('Giá phải nhỏ hơn 1.000.000.000');
             if (input[1].value != '') x['tenSp'] = input[1].value;
             if (input[2].value != '' && check_num(input[2].value) && input[2].value < 1000000000) x['SL'] = input[2].value;
             if (input[3].value != '' && check_num(input[3].value) && input[3].value < 1000000000) x['GiaCa'] = input[3].value;
@@ -965,7 +1447,7 @@ window.ok = function (x, pActive) {
                     x['Pin'] = chitiet[8];
                     x['BaoHanh'] = chitiet[9];
                     x['TinhTrang'] = chitiet[10];
-                } else alert('Vui lòng nhập đủ 11 chi tiết cách nhau bởi ";" trong chi tiết!');
+                } else customDialog('Vui lòng nhập đủ 11 chi tiết cách nhau bởi ";" trong chi tiết!');
             }
             if (input[5].value != '') x['maDM'] = input[5].value;
             if (input[6].value != '') x['tenDM'] = input[6].value;
@@ -978,7 +1460,7 @@ window.ok = function (x, pActive) {
             }
             productList(pActive);
         }
-    } else alert("mật khẩu sai vui lòng nhập lại!");
+    } else customDialog("mật khẩu sai vui lòng nhập lại!");
 }
 
 window.delSp = function (x, pActive) {
@@ -989,8 +1471,8 @@ window.delSp = function (x, pActive) {
             async: false,
             data: {masp: x},
             success: function (result) {
-                if (result == 1) alert('Xóa thành công');
-                else alert('Xóa thất bại! ' + result);
+                if (result == 1) customDialog('Xóa thành công');
+                else customDialog('Xóa thất bại! ' + result);
             }
         });
         productList(pActive);
@@ -1018,7 +1500,7 @@ window.addSp = function (x) {
     var check = 1;
     for (var i = 1; i < input.length; i++) {
         if (input[i].value == "") {
-            alert("vui lòng nhập vào đầy đủ thông tin!");
+            customDialog("vui lòng nhập vào đầy đủ thông tin!");
             check = 0;
             break;
         }
@@ -1057,76 +1539,126 @@ window.addSp = function (x) {
                             upload(input[0].files[0], input[1].value, 'update');
                         }
                         productList(1);
-                    } else alert('maSP, SL, Đơn giá, Mã chi tiết phải nhỏ hơn 1.000.000.000');
-                } else alert('Vui lòng nhập đủ 11 chi tiết cách nhau bởi ";" trong chi tiết!');
-            } else alert('maSP, SL, Đơn giá, Mã chi tiết phải là số nguyên!');
-        } else alert("mật khẩu sai vui lòng nhập lại!");
+                    } else customDialog('maSP, SL, Đơn giá, Mã chi tiết phải nhỏ hơn 1.000.000.000');
+                } else customDialog('Vui lòng nhập đủ 11 chi tiết cách nhau bởi ";" trong chi tiết!');
+            } else customDialog('maSP, SL, Đơn giá, Mã chi tiết phải là số nguyên!');
+        } else customDialog("mật khẩu sai vui lòng nhập lại!");
     }
 }
 
-window.showAddSp = function () {
-    
+window.updateProduct = function (maSP, pActive) {
+    let modal = document.getElementById('detail-product-' + maSP);
+    let inputs = modal.getElementsByTagName('input');
+    let folder = modal.getElementsByTagName('select')[0].value;
+    let data = [];
+    for (let i = 0; i < inputs.length - 1; i++) {
+        if (inputs[i].value != '') {
+            data.push(inputs[i].value);
+        } else {
+            customDialog('Vui lòng điền đầy đủ thông tin');
+            return;
+        }
+    }
+    if (inputs[0].value != maSP) {
+        customDialog('Vui lòng không chỉnh sửa mã sản phẩm');
+        return;
+    }
+    if (check_num(inputs[13].value)) {
+        if (Number(inputs[13].value) <= 0) {
+            customDialog('Số lượng phải lớn hơn 0');
+            return;
+        }
+    } else {
+        customDialog('Vui lòng nhập đúng định dạng số lượng');
+        inputs[13].focus();
+        return;
+    }
+    data.push(folder);
+    if (inputs[14].files && inputs[14].files[0]) {
+        update(JSON.stringify(data), 'update');
+        upload(inputs[14].files[0], inputs[0].value, 'update', folder);
+        modal.style.display = 'none';
+        productList(pActive);
+    } else {
+        customDialog('Vui lòng điền đầy đủ thông tin');
+        return;
+    }
 }
 window.productDetail = function (x, pActive) {
-var modal = document.getElementById('detail-product-' + x['maSP']);
+    var modal = document.getElementById('detail-product-' + x['maSP']);
     if (modal == null) {
         var mod = '';
         var myModal = document.createElement('div');
         myModal.className = 'modal product';
         myModal.id = 'detail-product-' + x['maSP'];
         mod += '<div class="modal-content" style="width:90%;height:95%;margin:1% 5%;"><div class="container" style="padding:0 20px 10px 20px;">' +
-                '<h1>Thông Tin Chi Tiết Của Sản Phẩm</h1>' +
-                '<hr>' +
-                '<div class="ctleft">'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Mã sản phẩm:</div> <input style="width:60%;text-align:center;" class="ipt-ctsp" disabled type="text" value="'+ x['maSP'] +'"></div>' +
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['tenSp']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Thể Loại</div> <input style="width:60%;text-align:center;" type="text" disabled value="'+x['maDM']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Kích Thước</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Size']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Trọng Lượng:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Weight']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Màu sắc:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Color']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bộ Nhớ Trong:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BoNhoTrong']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bộ Nhớ Đệm:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BoNho']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Hệ điều hành:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['HDH']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['CamTruoc']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['CamSau']+'"></div>'+                
-                '</div>'+
-                '<div class="ctright" style="text-align:center;">'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['Pin']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['BaoHanh']+'"></div>'+
-                '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text" value="'+x['TinhTrang']+'"></div>'+
-                '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Số Lượng:</div> <input style="width:60%;text-align:center;" disabled type="text" value="'+x['SL']+'"></div>'+
-                '<div class="update-sp1"><img src="' + x['HinhAnh'] + '"><input type="file"></div>'+
-                '</div>'+
-                '<div style="clear:left;text-align:center;">'+
-                '<button style="background-color:#333;" class="btn">Cập Nhập Thông tin</button>'+
-                '</div>'+
-                '</div>';
-                mod += '</div></div>';
-                /*'<div id="' + detail['maSP'] + '" class="modalsp"><div class="tendt">' + detail["tenSp"] + '</div>' +
-                    '<div>' +
-                    '<div class="details"><span style="font-size:20px;font-weight:bold;color:#404040;padding:15px">Cấu Hình</span>' +
-                    '<div class="mota">Kích Cỡ: ' + detail["Size"] + '</div>' +
-                    '<div class="mota1">Trọng Lượng: ' + detail["Weight"] + '</div>' +
-                    '<div class="mota">Màu Sắc: ' + detail["Color"] + '</div>' +
-                    '<div class="mota1">Bộ Nhớ Trong: ' + detail["BoNhoTrong"] + '</div>' +
-                    '<div class="mota">Bộ nhớ đệm(Ram): ' + detail["BoNho"] + '</div>' +
-                    '<div class="mota1">Hệ Điều Hành: ' + detail["HDH"] + '</div>' +
-                    '<div class="mota">Cam Trước: ' + detail["CamTruoc"] + '</div>' +
-                    '<div class="mota1">Cam Sau: ' + detail["CamSau"] + '</div>' +
-                    '<div class="mota">Dung Lượng Pin: ' + detail["Pin"] + '</div>' +
-                    '<div class="mota1">Bảo Hành: ' + detail["BaoHanh"] + '</div>' +
-                    '<div class="mota">Tình Trạng Máy: ' + detail["TinhTrang"] + '</div>' +
-                    '<div class="mota1 soLuong">Số Lượng: '+ detail["SL"]+'</div>' +
-                    '</div>' +
-                    '<div class="details1">' +
-                    '<div style="height:100%;width:100%;"><img style="height:100%;width:100%;" src="' + detail['HinhAnh'] + '"></div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>'*/
-        
+            '<h1>Thông Tin Chi Tiết Của Sản Phẩm</h1>' +
+            '<hr>' +
+            '<div class="ctleft">' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Mã sản phẩm:</div> <input style="width:60%;text-align:center;" class="ipt-ctsp" disabled type="text" value="' + x['maSP'] + '"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tên điện thoại:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['tenSp'] + '"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Thể Loại</div> ' + getTL() + '</div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Kích Thước</div> <input style="width:60%;text-align:center;" type="text" value="' + x['Size'] + '"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Trọng Lượng:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['Weight'] + '"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Màu sắc:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['Color'] + '"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bộ Nhớ Trong:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['BoNhoTrong'] + '"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bộ Nhớ Đệm:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['BoNho'] + '"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Hệ điều hành:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['HDH'] + '"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Trước:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['CamTruoc'] + '"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Cam Sau:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['CamSau'] + '"></div>' +
+            '</div>' +
+            '<div class="ctright" style="text-align:center;">' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Dung Lượng Pin:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['Pin'] + '"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Bảo Hành:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['BaoHanh'] + '"></div>' +
+            '<div class="update-sp1"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Tình Trạng Máy:</div> <input style="width:60%;text-align:center;" type="text" value="' + x['TinhTrang'] + '"></div>' +
+            '<div class="update-sp"><div style="width:30%;float:left;padding:8px 15px;margin:10px;">Số Lượng:</div> <input style="width:60%;text-align:center;" disabled type="text" value="' + x['SL'] + '"></div>' +
+            '<div class="update-sp1"><img src="' + x['HinhAnh'] + '"><input type="file"></div>' +
+            '</div>' +
+            '<div style="clear:left;text-align:center;">' +
+            '<button style="background-color:#333;" class="btn" onclick="updateProduct(\'' + x['maSP'] + '\', ' + pActive + ')">Cập Nhập Thông tin</button>' +
+            '</div>' +
+            '</div>';
+        mod += '</div></div>';
+        /*'<div id="' + detail['maSP'] + '" class="modalsp"><div class="tendt">' + detail["tenSp"] + '</div>' +
+            '<div>' +
+            '<div class="details"><span style="font-size:20px;font-weight:bold;color:#404040;padding:15px">Cấu Hình</span>' +
+            '<div class="mota">Kích Cỡ: ' + detail["Size"] + '</div>' +
+            '<div class="mota1">Trọng Lượng: ' + detail["Weight"] + '</div>' +
+            '<div class="mota">Màu Sắc: ' + detail["Color"] + '</div>' +
+            '<div class="mota1">Bộ Nhớ Trong: ' + detail["BoNhoTrong"] + '</div>' +
+            '<div class="mota">Bộ nhớ đệm(Ram): ' + detail["BoNho"] + '</div>' +
+            '<div class="mota1">Hệ Điều Hành: ' + detail["HDH"] + '</div>' +
+            '<div class="mota">Cam Trước: ' + detail["CamTruoc"] + '</div>' +
+            '<div class="mota1">Cam Sau: ' + detail["CamSau"] + '</div>' +
+            '<div class="mota">Dung Lượng Pin: ' + detail["Pin"] + '</div>' +
+            '<div class="mota1">Bảo Hành: ' + detail["BaoHanh"] + '</div>' +
+            '<div class="mota">Tình Trạng Máy: ' + detail["TinhTrang"] + '</div>' +
+            '<div class="mota1 soLuong">Số Lượng: '+ detail["SL"]+'</div>' +
+            '</div>' +
+            '<div class="details1">' +
+            '<div style="height:100%;width:100%;"><img style="height:100%;width:100%;" src="' + detail['HinhAnh'] + '"></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>'*/
+
         myModal.innerHTML = mod;
         document.getElementsByTagName('body')[0].appendChild(myModal);
         modal = myModal;
+        let options = modal.getElementsByTagName('select')[0].getElementsByTagName('option');
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value == x['maDM']) {
+                options[i].selected = 'selected';
+            }
+        }
+        modal.getElementsByTagName('input')[14].onchange = function () {
+            if (this.files && this.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    modal.getElementsByTagName('img')[0].src = e.target.result;
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        }
     }
     modal.style.display = 'block';
     window.addEventListener('click', function (event) {
@@ -1288,12 +1820,12 @@ window.product = function () {
         if (checkPermission('qlsanpham')) {
             var sDate = new moment(new Date()).subtract(1, 'month').format('YYYY-MM-DD');
             var eDate = new moment(new Date()).format('YYYY-MM-DD');
-            document.getElementById('opt').innerHTML = '<input  id="productSearch" style="width:100%;" onKeyUp="productList(1);" type="text" placeholder="Nhập Mã sản phẩm hoặc Tên sản phẩm để tìm kiếm..." name="search">'+
-                                                            '<div style="margin:1%;text-align:center;" id="PDvance"></div>'+
-                                                                '<div style="text-align:center;margin:1% 0;">'+
-                                                                    '<input id="startDate" type="date" onchange="productList(1);" value="' + sDate + '"> - '+
-                                                                    '<input id="endDate" type="date" onchange="productList(1)" value="' + eDate + '">'+
-                                                                '</div>';
+            document.getElementById('opt').innerHTML = '<input  id="productSearch" style="width:100%;" onKeyUp="productList(1);" type="text" placeholder="Nhập Mã sản phẩm hoặc Tên sản phẩm để tìm kiếm..." name="search">' +
+                '<div style="margin:1%;text-align:center;" id="PDvance"></div>' +
+                '<div style="text-align:center;margin:1% 0;">' +
+                '<input id="startDate" type="date" onchange="productList(1);" value="' + sDate + '"> - ' +
+                '<input id="endDate" type="date" onchange="productList(1)" value="' + eDate + '">' +
+                '</div>';
             jq351(function () {
                 productList(1);
             });
@@ -1620,19 +2152,19 @@ window.LsGd = function (lsgdJSON, pActive, pNum) {
             for (var i = 0, count = 1; i < lsgdJSON.length; i++) {
                 if (check) {
                     var ng = new moment(lsgdJSON[i]['Ngaykhoitao']).format('DD/MM/YYYY HH:mm:ss');
-                    dh += '<h3> Đơn hàng ' + format(lsgdJSON[i]['maDH']) + '</h3><div id="' + count + '">'+
-                    '<div class="acc" style="clear:both;">Tên khách hàng: ' + escapeHtml(lsgdJSON[i]['Hovaten']) + '</div>'+
-                    '<div class="nggd" style="clear:both;"><Ngày thanh toán: ' + ng + '</div>'+
-                    '<div style="clear:both;">Địa chỉ giao hàng: ' + escapeHtml(lsgdJSON[i]['Diachi']) + '</div>'+
-                    '<div style="clear:both;">Số điện thoại: ' + lsgdJSON[i]['Sdt'] + '</div>'+
-                    '<div>Tình trạng đơn hàng: ' + escapeHtml(lsgdJSON[i]['Tinhtrang']) + '</div>'+
-                    '<div class="lsgdcover">';
+                    dh += '<h3> Đơn hàng ' + format(lsgdJSON[i]['maDH']) + '</h3><div id="' + count + '">' +
+                        '<div class="acc" style="clear:both;">Tên khách hàng: ' + escapeHtml(lsgdJSON[i]['Hovaten']) + '</div>' +
+                        '<div class="nggd" style="clear:both;"><Ngày thanh toán: ' + ng + '</div>' +
+                        '<div style="clear:both;">Địa chỉ giao hàng: ' + escapeHtml(lsgdJSON[i]['Diachi']) + '</div>' +
+                        '<div style="clear:both;">Số điện thoại: ' + lsgdJSON[i]['Sdt'] + '</div>' +
+                        '<div>Tình trạng đơn hàng: ' + escapeHtml(lsgdJSON[i]['Tinhtrang']) + '</div>' +
+                        '<div class="lsgdcover">';
                     check = false;
                     count++;
                 }
                 if (!check) {
                     dh += '<div class="donHang" style="clear:both;"><div class="col gh"><span onclick="location.assign(\'?productID=' + lsgdJSON[i]["maSP"] + '\');" style="cursor: pointer; font-size:20px;color:black;font-weight:bold;float: left;padding: 8px 0 0 4px;">' + escapeHtml(lsgdJSON[i]['tenSp']) + '</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 7px;">SL: <span style="font-size:18px;color:black;font-weight:normal;">' + lsgdJSON[i]['SL'] + ' Cái</span></div><div class="col gh"><span style="font-size:20px;color:black;font-weight:bold;float: left;padding-top: 8px;">Thành Tiền: <span style="padding-top:7px;border:0;font-style:italic;font-size:18px;color:red;">' + curr.format(lsgdJSON[i]['TongTien']) + '</span></div></div>';
-                   
+
                 }
                 if (i != lsgdJSON.length - 1) if (lsgdJSON[i]['maDH'] != lsgdJSON[i + 1]['maDH']) check = true;
                 if (i == lsgdJSON.length - 1) check = true;
@@ -1661,10 +2193,10 @@ window.xnDh = function (x, input, pActive, id) {
         data: {madh: JSON.stringify(x), check: check},
         success: function (result) {
             if (result == 1) {
-                alert('Xác nhận thành công');
+                customDialog('Xác nhận thành công');
                 xlDhVance(pActive, id);
             } else {
-                alert('Hủy xác nhận thành công');
+                customDialog('Hủy xác nhận thành công');
                 xlDhVance(pActive, id);
             }
         }
@@ -1680,9 +2212,9 @@ window.huyDh = function (x, pActive) {
             data: {madh: JSON.stringify(x)},
             success: function (result) {
                 if (result == 1) {
-                    alert('Hủy đơn đặt hàng thành công');
+                    customDialog('Hủy đơn đặt hàng thành công');
                     xlDhVance(pActive);
-                } else alert('Xóa thất bại! ' + result);
+                } else customDialog('Xóa thất bại! ' + result);
             }
         });
     }
@@ -1748,11 +2280,11 @@ window.xlDhVance = function (pActive, id) {
                                 count++;
                             }
                             if (!check) {
-                                dh += '<div class="donHang" style="clear:both;">'+
-                                '<div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">' + result[i]['tenSp'] + '</span></div>'+
-                                '<div class="col dh" style="width:20%;">SL: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div>'+
-                                '<div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">' + curr.format(result[i]['TongTien']) + '</span></div>'+
-                                '</div>';
+                                dh += '<div class="donHang" style="clear:both;">' +
+                                    '<div class="col dh" style="width:20%;"><span style="font-size:15px;color:black;">' + result[i]['tenSp'] + '</span></div>' +
+                                    '<div class="col dh" style="width:20%;">SL: <span style="font-size:15px;color:black;">' + result[i]['SL'] + ' Cái</span></div>' +
+                                    '<div class="col dh" style="width:20%;">Thành Tiền: <span style="font-size:15px;color:black;">' + curr.format(result[i]['TongTien']) + '</span></div>' +
+                                    '</div>';
                             }
                             if (i != result.length - 2) if (result[i]['maDH'] != result[i + 1]['maDH']) check = true;
                             if (i == result.length - 2) check = true;
@@ -1865,7 +2397,7 @@ window.checkValueC = function (i) {
     var input = document.getElementById("gh" + masp).getElementsByTagName("input");
     var value = input[0].value;
     if (value < 0) {
-        alert("vui lòng nhập vào đúng số");
+        customDialog("vui lòng nhập vào đúng số");
         input[0].value = 1;
     }
     jq351.ajax({
@@ -1976,17 +2508,17 @@ window.addToCart = function () {
     }
     if (checkSL) {
         localStorage.setItem("sanPhamDH", JSON.stringify(sanPhamDH));
-        alert("thêm thành công");
-    } else alert('Bạn đã thêm quá SL cho phép');
+        customDialog("thêm thành công");
+    } else customDialog('Bạn đã thêm quá SL cho phép');
 }
 
 window.checkValue = function (input) {
     if (Number(input) < 0) {
-        alert("vui lòng nhập vào đúng số");
+        customDialog("vui lòng nhập vào đúng số");
         input = 1;
     }
     if (this["SL"] < Number(input)) {
-        alert("xin lỗi, bạn chỉ có thể mua hàng với SL cho phép!");
+        customDialog("xin lỗi, bạn chỉ có thể mua hàng với SL cho phép!");
         input = this['SL'];
     }
 }
@@ -2075,6 +2607,7 @@ window.checkUser = function () {
             }
         }
     });
+    jq351('#ld').hide();
 }
 
 window.menu = function () {

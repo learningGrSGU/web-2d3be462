@@ -14,7 +14,7 @@ export function sortedTable(tag) {
             this.colToSort = this.alias[i];
             table += '<div class="th" onclick=\'sortedTable.call(' + JSON.stringify(this) + ', this)\'><p style="margin:5%;">' + this.headers[i] + '</p></div>';
         }
-        table += '<div class="th">chức năng</div></div>';
+        table += '<div class="th"><p style="margin:5%;">chức năng</p></div></div>';
         for (let i = 0; i < this.result.length; i++) {
             table += '<div class="row" style="height: 70px;" id="' + i + '"><div class="col"><p style="margin:10%;">' + (i + 1) + '</p></div>';
             for (let j = 0; j < this.alias.length; j++) {
@@ -44,7 +44,7 @@ export function sortedTable(tag) {
                     result: this.result[i],
                     pActive: this.pActive
                 });
-                table += '<div class="col" id="' + this.functionCalls[j] + '_' + i + '"><button style="margin:10%;" onclick=\'' + this.functionCalls[j] + '.call(' + JSON.stringify(functionObj[i]) + ', event, true)\'>' + this.buttonName + '</button></div>';
+                table += '<div class="col" id="' + this.functionCalls[j] + '_' + i + '"><button style="margin:10%;" onclick=\'' + this.functionCalls[j] + '.call(' + JSON.stringify(functionObj[i]) + ', event, true)\'><p style="margin:10%;">' + this.buttonName + '</p></button></div>';
             }
             table += '</div>'
         }
@@ -103,13 +103,13 @@ export function sortedTable(tag) {
                     result: this.result[i],
                     pActive: this.pActive
                 });
-                table += '<div class="col" id="' + this.functionCalls[j] + '_' + i + '"><button onclick=\'' + this.functionCalls[j] + '.call(' + JSON.stringify(functionObj[i]) + ', event, true)\'>' + this.buttonName + '</button></div>';
+                table += '<div class="col" id="' + this.functionCalls[j] + '_' + i + '"><button style="margin:10%;" onclick=\'' + this.functionCalls[j] + '.call(' + JSON.stringify(functionObj[i]) + ', event, true)\'><p style="margin:10%;">' + this.buttonName + '</p></button></div>';
             }
             table += '</div>'
         }
         jq351(this.id).append(table);
     }
-    let width = 100/(this.headers.length + 2);
+    let width = 100 / (this.headers.length + 2);
     let theaders = document.getElementsByClassName('th');
     let cols = document.getElementsByClassName('col');
     for (let i = 0; i < cols.length; i++) {

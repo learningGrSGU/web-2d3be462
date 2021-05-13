@@ -54,6 +54,11 @@ class DBconnect
         } else return $this->conn->error;
     }
 
+    public function nextResult()
+    {
+        $this->conn->next_result();
+    }
+
     public function closeConn()
     {
         $this->conn->close();
