@@ -273,7 +273,7 @@ window.vanceOption = function (id, func) {
                 s += '<option value="ALL" selected>Tất cả</option></select>';
                 var span = document.createElement('span');
                 span.innerHTML = 'Chọn Thương Hiệu: ' + s;
-                span.style = 'color:white;background-color:#333;';
+                span.style = 'padding:0 3%;font-size:18px;';
                 jq351(id).append(span);
             }
         });
@@ -281,7 +281,7 @@ window.vanceOption = function (id, func) {
         var span = document.createElement('span');
         span.style.marginLeft = '5px';
         span.innerHTML = 'Chọn Mức Giá: ' + s;
-        span.style = "color:white;background-color:#333;";
+        span.style = "font-size:18px;";
         jq351(id).append(span);
     });
 }
@@ -381,8 +381,8 @@ window.Home = function () {
                                 } else if (total == 0.5) {
                                     rate += "<i class=\"fa fa-star-half-o\"></i>";
                                     total -= 0.5;
-                                } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
-                                else rate += "<i class=\"fa fa-star-o\"></i>";
+                                } else if (total == 0) rate += "<i class=\"fa fa-star\"></i>";
+                                else rate += "<i class=\"fa fa-star\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -427,8 +427,8 @@ window.spmoi = function (pActive) {
                                 } else if (total == 0.5) {
                                     rate += "<i class=\"fa fa-star-half-o\"></i>";
                                     total -= 0.5;
-                                } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
-                                else rate += "<i class=\"fa fa-star-o\"></i>";
+                                } else if (total == 0) rate += "<i class=\"fa fa-star\"></i>";
+                                else rate += "<i class=\"fa fa-star\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -509,8 +509,8 @@ window.Search = function (pActive) {
                                 } else if (total == 0.5) {
                                     rate += "<i class=\"fa fa-star-half-o\"></i>";
                                     total -= 0.5;
-                                } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
-                                else rate += "<i class=\"fa fa-star-o\"></i>";
+                                } else if (total == 0) rate += "<i class=\"fa fa-star\"></i>";
+                                else rate += "<i class=\"fa fa-star\"></i>";
                             }
                             sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(result[i])) + ');\'><img src="' + result[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(result[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
                             if (i % 4 == 3) sp += '</div>';
@@ -2331,7 +2331,7 @@ window.xlDh = function (pNum) {
             } else {
                 var sDate = new moment(new Date()).subtract(1, 'month').format('YYYY-MM-DD');
                 var eDate = new moment(new Date()).format('YYYY-MM-DD');
-                var opt = '<input  id="BillSearch" onKeyUp="xlDhVance(1);" type="text" placeholder="Nhập Mã đơn hàng để tìm" name="search"><div id="DHVance"></div><input id="startDate" type="date" onchange="onchangeTkDH(1)" value="' + sDate + '"><input id="endDate" type="date" onchange="onchangeTkDH(1)" value="' + eDate + '">';
+                var opt = '<input style="width:100%;" id="BillSearch" onKeyUp="xlDhVance(1);" type="text" placeholder="Nhập Mã đơn hàng để tìm" name="search"><div id="DHVance"></div><input id="startDate" type="date" onchange="onchangeTkDH(1)" value="' + sDate + '"><input id="endDate" type="date" onchange="onchangeTkDH(1)" value="' + eDate + '">';
                 document.getElementById("opt").innerHTML = opt;
                 jq351(function () {
                     xlDhVance(1);
@@ -2480,8 +2480,8 @@ window.Cart = function () {
                     }
                 });
             }
-            var thanhtoan = '</div><div style="clear:left;color:red;font-weight:bold;font-size:20px;">Tổng tiền: <span style="color:black;font-style:italic;">' + curr.format(tong) + ' </span></div><button style="float:left;clear:left;border:1px solid black;border-radius:5px;padding:5px;" onclick="thanhToan();">Thanh Toán</button>';
-            var delAll = '<div><button style="border:1px solid black;border-radius:5px;padding:5px;" onclick="delAll();">Xóa đơn hàng</button></div>';
+            var thanhtoan = '</div><div style="clear:left;color:red;font-weight:bold;font-size:20px;">Tổng tiền: <span style="color:black;font-style:italic;">' + curr.format(tong) + ' </span></div><button class="btn" style="float:left;clear:left;border:1px solid black;border-radius:5px;padding:5px;" onclick="thanhToan();">Thanh Toán</button>';
+            var delAll = '<div><button class="btn" style="border:1px solid black;border-radius:5px;padding:5px;" onclick="delAll();">Xóa đơn hàng</button></div>';
             document.getElementById("sp").innerHTML = delAll + sp + thanhtoan;
         }
     }
@@ -2643,8 +2643,8 @@ window.showPageSP = function (sanPhamJSON, pActiveJSON, pNumJSON) {
             } else if (total == 0.5) {
                 rate += "<i class=\"fa fa-star-half-o\"></i>";
                 total -= 0.5;
-            } else if (total == 0) rate += "<i class=\"fa fa-star-o\"></i>";
-            else rate += "<i class=\"fa fa-star-o\"></i>";
+            } else if (total == 0) rate += "<i class=\"fa fa-star\"></i>";
+            else rate += "<i class=\"fa fa-star\"></i>";
         }
         sp += '<div class="col-3 sanPham" onclick=\'showCTSP.apply(' + escapeHtml(JSON.stringify(sanPhamJSON[i])) + ');\'><img src="' + sanPhamJSON[i]["HinhAnh"] + '" class="img"><h4>' + escapeHtml(sanPhamJSON[i]["tenSp"]) + '</h4><div class="rating">' + rate + '</div><p style="text-align:center;width:100%;color:#ff0000;">' + curr + '</p></div>';
         if (i % 4 == 3) sp += '</div>';

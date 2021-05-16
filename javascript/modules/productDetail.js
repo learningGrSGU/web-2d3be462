@@ -38,7 +38,7 @@ export function showCTSP() {
                     '<div class="mota1">Bảo Hành: ' + escapeHtml(detail["BaoHanh"]) + '</div>' +
                     '<div class="mota">Tình Trạng Máy: ' + escapeHtml(detail["TinhTrang"]) + '</div>' +
                     '<div class="mota1 soLuong">Số Lượng:<input style="font-size:16px;width:40%;text-align:center;margin-left:50px;" type="number" onkeyup=\'checkValue.call(' + escapeHtml(JSON.stringify(detail)) + ',detail.value);\' min="1" value="1" max="' + detail["SL"] + '"/></div>' +
-                    '<div class="addToCart"><button class="btnthem" onclick=\'addToCart.call(' + escapeHtml(JSON.stringify(detail)) + ');\'><img style="height:25px;float:left;" src="image/shopping-cart-solid - Copy.png"><span style="font-size:16px;color:white;">Thêm vào giỏ hàng</span></button></div>' +
+                    '<div class="addToCart" style="margin-left:30%;"><button class="btnthem" onclick=\'addToCart.call(' + escapeHtml(JSON.stringify(detail)) + ');\'><img style="height:25px;float:left;" src="image/shopping-cart-solid - Copy.png"><span style="font-size:16px;color:white;">Thêm vào giỏ hàng</span></button></div>' +
                     '</div>' +
                     '<div class="details1">' +
                     '<div style="height:100%;width:100%;"><img style="height:100%;width:100%;" src="' + detail['HinhAnh'] + '"></div>' +

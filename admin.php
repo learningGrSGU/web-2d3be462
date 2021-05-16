@@ -103,9 +103,9 @@
         }
     </script>
 </div>
-<div>
-    <ul style="margin-top: 1%;padding: 0;overflow: hidden;">
-        <li class="admin-menu" style="margin-left: 3%"><a href="?ncc">Nhập Hàng</a></li>
+<div style="padding: 20px; background-color:black; ">
+    <ul style="overflow: hidden;margin:0 7%;">
+        <li class="admin-menu" ><a href="?ncc">Nhập Hàng</a></li>
         <li class="admin-menu"><a href="?qltk">Quản Lý Tài Khoản</a></li>
         <li class="admin-menu"><a href="?dssp">Quản Lý Sản Phẩm</a></li>
         <li class="admin-menu"><a href="?tksp">Thống Kê Đơn Hàng</a></li>
@@ -114,38 +114,53 @@
     </ul>
 </div>
 <div id="id02" class="modal ">
-    <form class="modal-content animate modaldk" method="post" action="php/xuly.php?action=register&admin=1"
+    <form style="width:65%;height:75%;" class="modal-content animate modaldk" method="post" action="php/xuly.php?action=register&admin=1"
           name="register">
         <div class="container" style="padding:0 20px 0 20px;line-height:0.3;">
             <h1 style="color:red;">Vui lòng nhập đầy đủ thông tin để thêm tài khoản!!!!</h1>
             <hr>
+            <div style="width:100%;">
             <label for="ht"><b>Họ và Tên</b></label>
             <div class="Valid check1"></div>
-            <input type="text" placeholder="Nhập họ tên" name="ht">
+            <input style="width:100%;" type="text" placeholder="Nhập họ tên" name="ht">
+            </div>
 
+
+            <div style="width:100%;">
             <label for="username"><b>Tên đăng nhập</b></label>
             <div class="Valid check1"></div>
-            <input onKeyUp="checkUser();" type="text" placeholder="Nhập Username" name="user">
+            <input style="width:100%;" onKeyUp="checkUser();" type="text" placeholder="Nhập Username" name="user">
+            </div>
 
+            <div style="width:100%;">
             <label for="psw"><b>Mật khẩu</b></label>
             <div class="Valid check1"></div>
-            <input type="password" placeholder="Nhập Password" name="pass">
+            <input style="width:100%;" type="password" placeholder="Nhập Password" name="pass">
+            </div>
 
+            <div style="width:100%;">
             <label for="psw-repeat"><b>Nhập lại mật khẩu</b></label>
             <div class="Valid check1"></div>
-            <input type="password" placeholder="Nhập lại Password" name="repass">
+            <input style="width:100%;" type="password" placeholder="Nhập lại Password" name="repass">
+            </div>
 
+            <div style="width:100%;">
             <label for="email"><b>Email</b></label>
             <div class="Valid check1"></div>
-            <input type="text" placeholder="Nhập Email" name="email">
+            <input style="width:100%;" type="text" placeholder="Nhập Email" name="email">
+            </div>
 
+            <div style="width:100%;">
             <label for="sdt"><b>Số điện thoại</b></label>
             <div class="Valid check1"></div>
-            <input type="text" placeholder="Nhập số điện thoại" name="sdt">
+            <input style="width:100%;" type="text" placeholder="Nhập số điện thoại" name="sdt">
+            </div>
 
+            <div style="width:100%;">
             <label for="address"><b>Địa chỉ</b></label>
             <div class="Valid check1"></div>
-            <input type="text" placeholder="Nhập địa chỉ" name="address">
+            <input style="width:100%;" type="text" placeholder="Nhập địa chỉ" name="address">
+            </div> 
         </div>
         <div class="container" style="text-align:center;padding:10px 20px;">
             <button type="button" onClick="document.getElementById('id02').style.display='none'" class="btn">Hủy

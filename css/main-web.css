@@ -217,7 +217,7 @@ small{
 	float: left;
 }
 .admin-menu a{
-  font-size: 18px;
+  font-size: 20px;
 	display: block;
   color: #fff;
   text-align: center;
@@ -225,7 +225,6 @@ small{
   margin:0 5px;
   text-decoration: none;
   background: #ff523b;
-  border-radius: 30px;
   transition: background 0.5s;
 }
 .admin-menu a:hover {
