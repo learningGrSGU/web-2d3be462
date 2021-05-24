@@ -52,12 +52,10 @@
                             <a style="margin-right: 5px;" href="#">
                                 <i class="fas fa-search"></i>
                             </a>
-                            <!--
-                            Chỗ này để chứa kết quả search này :)))))
 
-                            <div id='vance' style='display:none;clear:left;'></div><div id="spSearch"></div><div id="tr"></div>
 
-                            -->
+
+
                         </div>
                     </li>
                     <li><a href="">Trang Chủ</a></li>
@@ -68,6 +66,7 @@
             </nav>
             <a href="?gh"><img src="images/cart.png" width="30px" height="30px"></a>
         </div>
+        <div id='vance' style='display:none;'></div><div id="spSearch"></div><div id="tr"></div>
         <div id="none" class="row">
             <div class="col-1">
                 <h1>Samsung Galaxy A50s</h1>

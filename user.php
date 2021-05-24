@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <title>Phone Shop</title>
     <link rel="stylesheet" type="text/css" href="css/main-web.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous"/>
     <link rel="stylesheet" type="text/css"
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" type="text/css"
@@ -42,6 +45,21 @@
             </div>
             <nav>
                 <ul id="MenuItems">
+                    <li>
+                        <div style="border:1px black solid;border-radius: 5rem;">
+                            <input id="dataSearch" onkeyup="Search(1)" class="search-txt" type="text" name="search-bar"
+                                   placeholder="Tìm Kiếm gì đó...">
+                            <a style="margin-right: 5px;" href="#">
+                                <i class="fas fa-search"></i>
+                            </a>
+                            <!--
+                            Chỗ này để chứa kết quả search này :)))))
+
+                            <div id='vance' style='display:none;clear:left;'></div><div id="spSearch"></div><div id="tr"></div>
+
+                            -->
+                        </div>
+                    </li>
                     <li><a href="">Trang Chủ</a></li>
                     <li><a href="">Giới Thiệu</a></li>
                     <li><a href="">Liên Hệ</a></li>

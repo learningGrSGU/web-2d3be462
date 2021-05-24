@@ -5,7 +5,7 @@ class DBconnect
     private $user = "root";
     private $pass = "";
     private $dbname = "phone";
-    private $server = "localhost:3306";
+    private $server = "127.0.0.1:3306";
     private $conn;
     public static $DB;
 

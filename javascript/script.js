@@ -2331,7 +2331,7 @@ window.xlDh = function (pNum) {
             } else {
                 var sDate = new moment(new Date()).subtract(1, 'month').format('YYYY-MM-DD');
                 var eDate = new moment(new Date()).format('YYYY-MM-DD');
-                var opt = '<input style="width:100%;" id="BillSearch" onKeyUp="xlDhVance(1);" type="text" placeholder="Nhập Mã đơn hàng để tìm" name="search"><div id="DHVance"></div><input id="startDate" type="date" onchange="onchangeTkDH(1)" value="' + sDate + '"><input id="endDate" type="date" onchange="onchangeTkDH(1)" value="' + eDate + '">';
+                var opt = '<input style="width:100%;" id="BillSearch" onKeyUp="xlDhVance(1);" type="text" placeholder="Nhập Mã đơn hàng để tìm" name="search"><div id="DHVance"></div><input id="startDate" type="date" onchange="xlDhVance(1)" value="' + sDate + '"><input id="endDate" type="date" onchange="xlDhVance(1)" value="' + eDate + '">';
                 document.getElementById("opt").innerHTML = opt;
                 jq351(function () {
                     xlDhVance(1);
