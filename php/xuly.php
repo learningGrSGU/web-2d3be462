@@ -1,7 +1,14 @@
 <?php
-session_start();
+if (!headers_sent()) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+}
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
+        case "saveURL":
+            saveURL();
+            break;
         case "getPN":
             getPN();
             break;
@@ -140,7 +147,7 @@ if (isset($_GET['action'])) {
 }
 function test()
 {
-
+    echo $_POST['rating'];
 }
 
 function encrypt()
@@ -170,6 +177,13 @@ function uploadImg()
             }
         } else echo -1;
     } else echo -3;
+}
+
+function saveURL()
+{
+    if (isset($_POST['URL'])) {
+        $_SESSION['URL'] = $_POST['URL'];
+    }
 }
 
 function errorLogin()
@@ -217,7 +231,7 @@ function removeMWSpace($String)
 
 function getUName()
 {
-    echo $_SESSION['name'];
+    if (isset($_SESSION['name'])) echo $_SESSION['name'];
 }
 
 function sendBL()
@@ -871,7 +885,9 @@ function searchSP()
 
 function logout()
 {
+    session_destroy();
     setcookie(session_name(), session_id(), time() - 1, '/');
+    echo getenv('TARGET');
 }
 
 function isLogin()
@@ -880,20 +896,47 @@ function isLogin()
     if (isset($_SESSION['name']) && isset($_SESSION['user']) && isset($_SESSION['pass'])) {
         $sql = "select `MK` from nguoidung where `TK`='" . replace_regex($_SESSION['user']) . "'";
         $pass = DBconnect::getInstance()->execSQL($sql);
+        $URL = '';
         if ($pass[0]['MK'] === $_SESSION['pass']) {
-            if (isset($_GET['checkuser'])) echo 1;
-            else if (isset($_SESSION['role']) && $_SERVER['PHP_SELF'] != '/pttk/admin.php') header('location:/pttk/admin.php');
-            else if (!isset($_SESSION['role']) && $_SERVER['PHP_SELF'] != '/pttk/user.php') header('location:/pttk/user.php');
+            if (isset($_SESSION['URL'])) {
+                $URL = '?' . $_SESSION['URL'];
+                $_SESSION['URL'] = null;
+            }
+            if (getenv('TARGET') === 'production') {
+                if (isset($_GET['checkuser'])) echo 1;
+                else if (isset($_SESSION['role']) && $_SERVER['PHP_SELF'] != '/admin.php') header('location:admin.php');
+                else if (!isset($_SESSION['role']) && $_SERVER['PHP_SELF'] != '/user.php') header('location:user.php' . $URL);
+            } else {
+                if (isset($_GET['checkuser'])) echo 1;
+                else if (isset($_SESSION['role']) && $_SERVER['PHP_SELF'] != '/pttk/admin.php') header('location:/pttk/admin.php');
+                else if (!isset($_SESSION['role']) && $_SERVER['PHP_SELF'] != '/pttk/user.php') header('location:/pttk/user.php' . $URL);
+            }
         } else {
-            if ($_SERVER['PHP_SELF'] != '/pttk/index.php') {
-                echo 0;
-                header('location:/pttk/index.php');
+            if (getenv('TARGET') === 'production') {
+                if ($_SERVER['PHP_SELF'] != '/index.php') {
+                    echo 0;
+                    header('location:index.php' . $URL);
+                }
+            } else {
+                if ($_SERVER['PHP_SELF'] != '/pttk/index.php') {
+                    echo 0;
+                    header('location:/pttk/index.php' . $URL);
+                }
             }
         }
     }
-    if (!(isset($_SESSION['name']) && isset($_SESSION['user']) && isset($_SESSION['pass'])) && $_SERVER['PHP_SELF'] != '/pttk/index.php') {
-        if (isset($_GET['checkuser'])) echo -1;
-        else header('location:/pttk/index.php');
+    if (!(isset($_SESSION['name']) && isset($_SESSION['user']) && isset($_SESSION['pass']))) {
+        if ($_SERVER['PHP_SELF'] != '/pttk/index.php' && getenv('TARGET') !== 'production') {
+            if (isset($_GET['checkuser'])) echo -1;
+            else {
+                header('location:/pttk/index.php');
+            }
+        } else if ($_SERVER['PHP_SELF'] != '/index.php' && getenv('TARGET') === 'production') {
+            if (isset($_GET['checkuser'])) echo -1;
+            else {
+                header('location:index.php');
+            }
+        }
     }
 }
 
@@ -928,8 +971,9 @@ function xulyDK()
                     $_SESSION['pass'] = $cryptedPass;
                     $_SESSION['sql'] = $sql;
                     setcookie(session_name(), session_id(), time() + 172800, '/');
-                    header('location:/pttk/user.php');
-                } else header('location:/pttk/admin.php?qltk');
+                    if (getenv('TARGET') === 'production') header('location:/user.php');
+                    else header('location:/pttk/user.php');
+                }
             }
         }
     }
@@ -952,8 +996,12 @@ function xuLyDN()
                     if ($_POST['remember'] == true) {
                         setcookie(session_name(), session_id(), time() + 172800, '/');
                     }
-                    header('location:/pttk/index.php');
-                } else header('location:/pttk/index.php?errorLock=true');
+                    if (getenv('TARGET') === 'production') header('location:/index.php');
+                    else header('location:/pttk/index.php');
+                } else {
+                    if (getenv('TARGET') === 'production') header('location:/index.php?errorLock=true');
+                    else header('location:/pttk/index.php?errorLock=true');
+                }
             } else {
                 if (!isset($_SESSION['error'])) $_SESSION['error'] = 0;
                 if (!isset($_SESSION['lastUser'])) $_SESSION['lastUser'] = $_POST['user'];
@@ -966,8 +1014,12 @@ function xuLyDN()
                         DBconnect::getInstance()->execUpdate("update nguoidung set `lock/unlock`=0 where `TK`='" . replace_regex($_POST['user']) . "'");
                         session_unset();
                     }
-                    header('location:/pttk/DN.php?error=true&user=' . $_POST['user'] . '&num=' . $_SESSION['error']);
-                } else header('location:/pttk/DN.php?error=true&user=' . $_POST['user']);
+                    if (getenv('TARGET') === 'production') header('location:/DN.php?error=true&user=' . $_POST['user'] . '&num=' . $_SESSION['error']);
+                    else header('location:/pttk/DN.php?error=true&user=' . $_POST['user'] . '&num=' . $_SESSION['error']);
+                } else {
+                    if (getenv('TARGET') === 'production') header('location:/DN.php?error=true&user=' . $_POST['user']);
+                    else header('location:/pttk/DN.php?error=true&user=' . $_POST['user']);
+                }
             }
         }
     }

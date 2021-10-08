@@ -5,12 +5,13 @@ class DBconnect
     private $user = "root";
     private $pass = "";
     private $dbname = "phone";
-    private $server = "127.0.0.1:3306";
+    private $server = "localhost:3306";
     private $conn;
     public static $DB;
 
     public function __construct()
     {
+        if (getenv('TARGET') === 'production') $this->server = "mysqldb";
         $this->connect();
     }
 
@@ -18,7 +19,7 @@ class DBconnect
     {
         $this->conn = new mysqli($this->server, $this->user, $this->pass, $this->dbname);
         $this->conn->set_charset("utf8");
-        if ($this->conn->connect_error) throw new Exception('Lỗi kết nối database');
+        if ($this->conn->connect_error) throw new Exception('Lỗi kết nối database ' . $this->conn->connect_error);
     }
 
     public static function getInstance()

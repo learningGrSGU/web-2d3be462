@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+<?php
+session_start();
+ob_start();
+?>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -55,7 +58,7 @@
                             <!--
                             Chỗ này để chứa kết quả search này :)))))
 
-                            <div id='vance' style='display:none;clear:left;'></div><div id="spSearch"></div><div id="tr"></div>
+                            
 
                             -->
                         </div>
@@ -73,6 +76,7 @@
             </nav>
             <a href="?gh"><img src="images/cart.png" width="30px" height="30px"></a>
         </div>
+<div id='vance' style='display:none;clear:left;'></div><div id="spSearch"></div><div id="tr"></div>
         <div id="none" class="row">
             <div class="col-1">
                 <h1>Samsung Galaxy A50s</h1>
@@ -178,3 +182,4 @@
 </div>
 </body>
 </html>
+<?php ob_end_flush(); ?>

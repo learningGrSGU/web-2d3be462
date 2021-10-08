@@ -1,8 +1,11 @@
-﻿<!doctype html>
+<?php
+session_start();
+ob_start();
+?>
 <html>
 <head>
     <title>Phone Shop(Admin)</title>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" href="css/Js.css" type="text/css">
@@ -190,3 +193,4 @@
 </div>
 </body>
 </html>
+<?php ob_end_flush(); ?>

@@ -2535,9 +2535,12 @@ window.logout = function () {
     jq351.ajax({
         url: 'php/xuly.php?action=logout',
         async: false,
-        type: 'POST',
-        success: function () {
-            location.assign('/pttk/index.php');
+        success: function (env) {
+            if (env == 'production') {
+                location.assign('/index.php');
+            } else {
+                location.assign('/pttk/index.php');
+            }
         }
     });
 }
@@ -2620,8 +2623,13 @@ window.checkUser = function () {
 
 window.menu = function () {
     var s = "";
+    const startIndex = location.href.lastIndexOf('idBrand=');
+    const endIndex = location.href.indexOf('&', startIndex);
+    const brandActive = location.href.substring(startIndex, endIndex).split('=')[1];
+    console.log(brandActive);
     for (var i = 0; i < this.length; i++) {
-        s += '<div class="col-4"><a href="?idBrand=' + this[i]['maDM'] + '&pageActive=1"><img src="' + this[i]['logo'] + '"></a></div>'
+        if (brandActive == this[i]['maDM']) s += `<div class="col-4"><a href="?idBrand=${this[i]['maDM']}&pageActive=1"><img class="ImgActive" src=" ${this[i]['logo']} "></a></div>`
+        else s += `<div class="col-4"><a href="?idBrand=${this[i]['maDM']}&pageActive=1"><img src=" ${this[i]['logo']} "></a></div>`
     }
     document.getElementById("m").innerHTML = s;
 }
